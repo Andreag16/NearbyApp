@@ -10,32 +10,29 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.progetto.nearby.GPSProvider;
 import com.progetto.nearby.R;
+import com.progetto.nearby.Tools;
 import com.progetto.nearby.Filtri.FiltriActivity;
 import com.progetto.nearby.navigationdrawer.NavigationDrawerFragment;
 
 public class HomeActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
 
-	/**
-	 * Fragment managing the behaviors, interactions and presentation of the
-	 * navigation drawer.
-	 */
 	private NavigationDrawerFragment mNavigationDrawerFragment;
 
-	/**
-	 * Used to store the last screen title. For use in
-	 * {@link #restoreActionBar()}.
-	 */
 	private CharSequence mTitle;
 	private HomeFragment homefragment;
 	private FragmentManager fragmentmanager;
-	private static final String tag_fragment = "homefragment";
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
+		
+		Tools.gpsProvider = new GPSProvider(this);
+		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -47,18 +44,17 @@ public class HomeActivity extends Activity implements
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
-		// update the main content by replacing fragments
 		fragmentmanager = getFragmentManager();
 		switch(position)
 		{
 			case 0:
-				if(fragmentmanager.findFragmentByTag(tag_fragment) == null)
+				if(fragmentmanager.findFragmentByTag(HomeFragment.TAG) == null)
 				{
-					homefragment = HomeFragment.newInstance();
+					Bundle bundle = null;
+					homefragment = HomeFragment.newInstance(bundle);
 					fragmentmanager
-					.beginTransaction()
-					.replace(R.id.container,
-						homefragment, tag_fragment).commit();
+						.beginTransaction()
+						.replace(R.id.container, homefragment, HomeFragment.TAG).commit();
 				}
 			break;
 		}
