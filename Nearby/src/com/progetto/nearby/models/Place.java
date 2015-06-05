@@ -6,9 +6,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
-import android.widget.Gallery;
-
 import com.progetto.nearby.Tools;
 
 public class Place {
@@ -41,10 +38,10 @@ public class Place {
 				place.id = obj.getInt(tag_id);
 			place.nome = obj.getString(tag_name);
 			place.description = obj.getString(tag_description);
-//			String gps = obj.getString(tag_gps);
-//			String[] gpssplit = gps.split("+");
-//			place.lat = Float.parseFloat(gpssplit[0]);
-//			place.longit = Float.parseFloat(gpssplit[1]);
+			String gps = obj.getString(tag_gps);
+			String[] gpssplit = gps.split("\\+");
+			place.lat = Float.parseFloat(gpssplit[0]);
+			place.longit = Float.parseFloat(gpssplit[1]);
 			place.telefono = obj.getString(tag_phone);
 			place.città = obj.getString(tag_citta);
 			place.urlImg = Tools.GET_IMAGE_URL + place.id + ".jpg";
