@@ -2,28 +2,20 @@ package com.progetto.nearby;
 
 import com.google.android.gms.maps.model.LatLng;
 
-import android.app.AlertDialog;
 import android.app.Service;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.provider.Settings;
 import android.util.Log;
 
 public class GPSProvider implements LocationListener {
 	
-	private Context mContext;
-	
     private boolean isGPSEnabled = false;
- 
     private boolean isNetworkEnabled = false;
- 
-    // flag for GPS status
     private boolean canGetLocation = false;
  
     private Location location;
@@ -35,19 +27,17 @@ public class GPSProvider implements LocationListener {
  
     // The minimum time between updates in milliseconds
     private static final long MIN_TIME_BW_UPDATES = 20000; // 20sec
- 
+
+    private IGPSCallbacks mListener;
     protected LocationManager locationManager;
 
-	private boolean isActivityDetached;
- 
-    public GPSProvider(Context context) {
-        attachActivity(context);
-        getLocation();
+    public interface IGPSCallbacks {
+    	public void onLocationChanged();
     }
- 
-    public Location getLocation() {
-        try {
-            locationManager = (LocationManager) mContext.getSystemService(Service.LOCATION_SERVICE);
+    
+    public GPSProvider(Context context) {
+    	try {
+            locationManager = (LocationManager) context.getSystemService(Service.LOCATION_SERVICE);
             
             // getting GPS status
             isGPSEnabled = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
@@ -74,10 +64,10 @@ public class GPSProvider implements LocationListener {
                 this.canGetLocation = true;
                 // First get location from Network Provider
                 if (isNetworkEnabled) {
-                    /*locationManager.requestLocationUpdates(
-                            LocationManager.NETWORK_PROVIDER,
-                            MIN_TIME_BW_UPDATES,
-                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);*/
+//                    locationManager.requestLocationUpdates(
+//                            LocationManager.NETWORK_PROVIDER,
+//                            MIN_TIME_BW_UPDATES,
+//                            MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                     Log.d("gps", "Network");
                     if (locationManager != null) {
                         location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -90,10 +80,10 @@ public class GPSProvider implements LocationListener {
                 // if GPS Enabled -> get lat/long using GPS Services
                 if (isGPSEnabled) {
                     if (location == null) {
-                        /*locationManager.requestLocationUpdates(
-                                LocationManager.GPS_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);*/
+//                        locationManager.requestLocationUpdates(
+//                                LocationManager.GPS_PROVIDER,
+//                                MIN_TIME_BW_UPDATES,
+//                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
                         Log.d("gps", "GPS Enabled");
                         if (locationManager != null) {
                             location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -105,12 +95,11 @@ public class GPSProvider implements LocationListener {
                     }
                 }
             }
- 
         } catch (Exception e) {
             e.printStackTrace();
         }
  
-        return location;
+        //return location;
     }
      
     /**
@@ -122,6 +111,10 @@ public class GPSProvider implements LocationListener {
             locationManager.removeUpdates(GPSProvider.this);
             Log.d("gps", "stop using gps");
         }
+    }
+    
+    public void registerListener(IGPSCallbacks listener) {
+    	mListener = listener;
     }
     
     public LatLng getLatLng() {
@@ -152,39 +145,12 @@ public class GPSProvider implements LocationListener {
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
-     
-    /**
-     * Function to show settings alert dialog
-     * On pressing Settings button will lauch Settings Options
-     * */
-    public void showSettingsAlert(){ //TODO sostituire con mio dialog
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-      
-        alertDialog.setTitle("Posizione GPS");
-        alertDialog.setMessage("La connessione GPS è disattivata. Vuoi abilitarla per una posizione più precisa?");
-        
-        alertDialog.setPositiveButton("Impostazioni", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,int which) {
-                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                mContext.startActivity(intent);
-            }
-        });
-
-        alertDialog.setNegativeButton("Annulla", new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-            dialog.cancel();
-            }
-        });
-
-        alertDialog.show();
-    }
  
     @Override
     public void onLocationChanged(Location location) {
     	this.location = location;
-    	if(!isActivityDetached) {
-    		//Tools.calculateAllDistances(mContext, new LatLng(getLatitude(), getLongitude()));
-    	}
+    	if(mListener != null)
+    		mListener.onLocationChanged();
     	Log.d("gps", "on location changed");
     }
  
@@ -192,15 +158,6 @@ public class GPSProvider implements LocationListener {
     public IBinder onBind(Intent arg0) {
         return null;
     }
-    
-	public void detachActivity() {//mai usato, potrebbe servire se non riconosce il context nel calcolo delle distanze
-		isActivityDetached = true;
-	}
-	
-	public void attachActivity(Context context) {
-		mContext = context;
-		isActivityDetached = false;
-	}
 
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras) {

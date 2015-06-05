@@ -258,7 +258,7 @@ public class FiltriActivity extends Activity {
 			
 		} else {
 			Toast.makeText(this, "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
-		}		
+		}
 	}
 
 
