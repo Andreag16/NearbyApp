@@ -48,7 +48,7 @@ public class Place {
 			place.telefono = obj.getString(tag_phone);
 			place.città = obj.getString(tag_citta);
 			place.urlImg = Tools.GET_IMAGE_URL + place.id + ".jpg";
-			//place.gallery.add(place.urlImg);
+			place.gallery.add(place.urlImg);
 			if(obj.has(tag_gallery))
 			{
 				JSONArray gallery = (JSONArray) obj.get(tag_gallery);

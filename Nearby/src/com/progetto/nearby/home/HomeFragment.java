@@ -84,12 +84,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, Loa
 								int arg2, long arg3) {
 							// TODO Auto-generated method stub
 							enterDetails(arg3);
-//							Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
-//					    	//intent.putExtra(DetailPlaceActivity.ID_PLACE, (int)id);
-//					    	Bundle placeBundle = new Bundle();
-//					    	placeBundle.putLong(Place.tag_id, arg3);
-//					    	intent.putExtras(placeBundle);
-//					        startActivity(intent);
 						}
 					});
 				}	
