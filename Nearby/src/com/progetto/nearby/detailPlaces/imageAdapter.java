@@ -26,7 +26,7 @@ public class imageAdapter extends BaseAdapter {
 	private ArrayList<String> gallery;
 	private int idPlace;
 	private ImageView imageView;
-	private LoadImage loadImage;
+	//private LoadImage loadImage;
 	private Bitmap bitmap;
 	
 	public imageAdapter(Context context, ArrayList<String> gallery) {
@@ -78,7 +78,7 @@ public class imageAdapter extends BaseAdapter {
 		return image;
 	}
 	
-	private class LoadImage extends AsyncTask<String, String, Bitmap> {
+	/*private class LoadImage extends AsyncTask<String, String, Bitmap> {
 
 		@Override
 		protected Bitmap doInBackground(String... params) {
@@ -104,6 +104,6 @@ public class imageAdapter extends BaseAdapter {
 				}
 		}
 		
-	}
+	}*/
 
 }

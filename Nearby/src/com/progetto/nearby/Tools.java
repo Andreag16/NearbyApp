@@ -17,6 +17,8 @@ public class Tools {
 	public static final String PREFERNCES_DISTANZA = "distanza";
 	public static final String PREFERNCES_CATEGORIA = "categoria";
 	public static final String PREFERNCES_TIPOLOGIA = "tipologia";
+	public static final String URL_IMMAGINE_DETTAGLIO = "immagine dettaglio";
+	public static final String TAG_DIALOG_IMAGE = "dialog image";
 	
 	public static final int FILTRO_DISTANZA_DEFAULT = 500;
 	

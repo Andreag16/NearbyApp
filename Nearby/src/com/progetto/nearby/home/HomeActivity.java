@@ -108,4 +108,11 @@ public class HomeActivity extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	protected void onDestroy() {
+		Tools.gpsProvider.stopUsingGPS();
+		Tools.gpsProvider = null;
+		super.onDestroy();
+	}
 }
