@@ -4,6 +4,7 @@ import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
@@ -19,7 +20,7 @@ import com.progetto.nearby.models.Place;
 
 public class DetailPlaceActivity extends Activity {
 
-	private Gallery galleryPlace;
+	public static Gallery galleryPlace;
 	private TextView txtNome, txtdescrizione, txtGPS, txtPhone, txtCitta;
 	private imageAdapter imageAdapter;
 	private int idPlace;
@@ -46,8 +47,9 @@ public class DetailPlaceActivity extends Activity {
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
 	}
 
-	private void getPlace(int idPlace) {
+	private void getPlace(final int idPlace) {
 		// TODO Auto-generated method stub
+		if(Tools.isNetworkEnabled(DetailPlaceActivity.this)) {
 		AsyncHttpClient client = new AsyncHttpClient();
 		client.get(Tools.GET_DETAIL_URL + idPlace, new JsonHttpResponseHandler(){
 
@@ -58,6 +60,7 @@ public class DetailPlaceActivity extends Activity {
 				if(response != null)
 				{
 					place = Place.decodeJSON(response);
+					place.id = idPlace;
 					updateDetailGUI();
 				}
 				else
@@ -68,11 +71,13 @@ public class DetailPlaceActivity extends Activity {
 			private void updateDetailGUI() {
 				// TODO Auto-generated method stub
 				Log.d("gg", place.gallery.toString());
-				imageAdapter = new imageAdapter(getApplicationContext(), place.gallery);
+				imageAdapter = new imageAdapter(DetailPlaceActivity.this, place.gallery);
 				galleryPlace.setAdapter(imageAdapter);
+//				galleryPlace.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
+//				galleryPlace.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
 				txtNome.setText(place.nome);
 				txtdescrizione.setText(place.description);
-				txtGPS.setText("" + place.lat + " - " + place.longit);
+				txtGPS.setText("Lat: " + place.lat + " Long: " + place.longit);
 				txtPhone.setText(place.telefono);
 				txtCitta.setText(place.città);
 			}
@@ -99,5 +104,8 @@ public class DetailPlaceActivity extends Activity {
 			}
 			
 		});
+		}
+		else
+			Toast.makeText(DetailPlaceActivity.this, "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
 	}
 }

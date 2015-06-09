@@ -67,7 +67,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 		return rootView;
 	}
 
-	private void getPlaces() {Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
+	private void getPlaces() {//Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
 		if(Tools.isNetworkEnabled(getActivity())) {
 			AsyncHttpClient client = new AsyncHttpClient();
 			client.get(Tools.PLACES_URL, new JsonHttpResponseHandler(){

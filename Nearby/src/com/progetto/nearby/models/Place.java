@@ -34,8 +34,7 @@ public class Place {
 	public static Place decodeJSON(JSONObject obj) {
 		Place place = new Place();
 		try {
-			if(obj.has(tag_id))
-				place.id = obj.getInt(tag_id);
+			place.id = obj.getInt(tag_id);
 			place.nome = obj.getString(tag_name);
 			place.description = obj.getString(tag_description);
 			String gps = obj.getString(tag_gps);
