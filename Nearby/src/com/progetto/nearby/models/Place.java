@@ -48,8 +48,11 @@ public class Place {
 			if(obj.has(tag_gallery))
 			{
 				JSONArray gallery = (JSONArray) obj.get(tag_gallery);
-				for(int i = 0; i < gallery.length(); i++)
-					place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
+				if(gallery.length() > 0)
+				{
+					for(int i = 0; i < gallery.length(); i++)
+						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
+				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

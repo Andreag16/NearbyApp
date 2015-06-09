@@ -25,11 +25,10 @@ import com.progetto.nearby.models.Place;
 
 public class DetailPlaceActivity extends Activity {
 
-	public static Gallery galleryPlace;
-	private LinearLayout scrollViewImages;
+	private LinearLayout scrollImages;
 	private TextView txtNome, txtdescrizione, txtGPS, txtPhone, txtCitta;
 	private imageAdapter imageAdapter;
-	private SmartImageView logo;
+	private SmartImageView logo, image_detail;
 	private int idPlace;
 	private Place place;
 	
@@ -47,7 +46,7 @@ public class DetailPlaceActivity extends Activity {
 	private void setupGUI() {
 		// TODO Auto-generated method stub
 		//galleryPlace = (Gallery) findViewById(R.id.galleryPlace);
-		scrollViewImages = (LinearLayout) findViewById(R.id.images);
+		scrollImages = (LinearLayout) findViewById(R.id.images);
 		logo = (SmartImageView) findViewById(R.id.logo);
 		txtNome = (TextView) findViewById(R.id.txtDetNome);
 		txtdescrizione = (TextView) findViewById(R.id.txtDetDescr);
@@ -79,33 +78,32 @@ public class DetailPlaceActivity extends Activity {
 			
 			private void updateDetailGUI() {
 				// TODO Auto-generated method stub
-				Log.d("gg", place.gallery.toString());
 				logo.setImageUrl(place.gallery.get(0));
-				SmartImageView image = null;
-				LinearLayout.LayoutParams imagesLayout = new LinearLayout.LayoutParams(
-						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
-				imagesLayout.setMargins(5, 0, 5, 0);
-				for(int i = 1; i < place.gallery.size(); i++)
+				if(place.gallery.size() > 1)
 				{
-					image = new SmartImageView(DetailPlaceActivity.this);
-					image.setLayoutParams(imagesLayout);
-					image.setScaleType(ScaleType.CENTER_CROP);
-					image.getLayoutParams().width = 100;
-					image.setImageUrl(place.gallery.get(i));
-					final int x = i;
-					image.setOnClickListener(new OnClickListener() {
+					LinearLayout.LayoutParams imagesLayout = new LinearLayout.LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+					imagesLayout.setMargins(5, 0, 5, 0);
+					for(int i = 1; i < place.gallery.size(); i++)
+					{
+						image_detail = new SmartImageView(DetailPlaceActivity.this);
+						image_detail.setLayoutParams(imagesLayout);
+						image_detail.setScaleType(ScaleType.CENTER_CROP);
+						image_detail.getLayoutParams().width = 100;
+						image_detail.setImageUrl(place.gallery.get(i));
+						final int index_id_dialog = i;
+						image_detail.setOnClickListener(new OnClickListener() {
 						
-						@Override
-						public void onClick(View v) {
-							// TODO Auto-generated method stub
-							DialogImage dialog = DialogImage.newInstance(place.gallery.get(x).toString());
-							dialog.show(getFragmentManager(), Tools.TAG_DIALOG_IMAGE);
-						}
-					});
-					scrollViewImages.addView(image);
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								DialogImage dialog = DialogImage.newInstance(place.gallery.get(index_id_dialog).toString());
+								dialog.show(getFragmentManager(), Tools.TAG_DIALOG_IMAGE);
+							}
+						});
+						scrollImages.addView(image_detail);
+					}
 				}
-				
-				
 				//imageAdapter = new imageAdapter(DetailPlaceActivity.this, place.gallery);
 				//galleryPlace.setAdapter(imageAdapter);
 //				galleryPlace.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
