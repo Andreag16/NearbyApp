@@ -1,6 +1,7 @@
 package com.progetto.nearby.home;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -42,9 +43,11 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	
 	private GoogleMap googleMap;
 	private ListView lstPlaces;
-	private static boolean isFirstTimeOpen = true;
 	private PlacesAdapter adapter;
 	private ArrayList<Place> allPlaces = new ArrayList<Place>();
+	
+	private long lastUpdateMillis = 0;
+	private static boolean isFirstTimeOpen = true;
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -67,8 +70,12 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 		return rootView;
 	}
 
-	private void getPlaces() {Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
-		if(Tools.isNetworkEnabled(getActivity())) {
+	private void getPlaces() {
+		long currentMillis = Calendar.getInstance().getTimeInMillis();
+		if(Tools.isNetworkEnabled(getActivity()) && (currentMillis - lastUpdateMillis) > 20000) {
+			lastUpdateMillis = currentMillis;
+			
+			Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
 			AsyncHttpClient client = new AsyncHttpClient();
 			client.get(Tools.PLACES_URL, new JsonHttpResponseHandler(){
 	
@@ -90,8 +97,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 						decoreMap();
 					}
 					
-					adapter = new PlacesAdapter(getActivity().getApplicationContext(),
-							allPlaces);
+					adapter = new PlacesAdapter(getActivity().getApplicationContext(), allPlaces);
 					lstPlaces.setAdapter(adapter);
 					lstPlaces.setOnItemClickListener(new OnItemClickListener() {
 
@@ -209,10 +215,12 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	}
 	
 	private void decoreMap() {
-		// TODO
-		googleMap.addMarker(new MarkerOptions()
-		.position(new LatLng(45.960862, 12.676953))
-		.title("Prova gesu"));
+		googleMap.clear();
+		for (Place place : allPlaces) {
+			googleMap.addMarker(new MarkerOptions()
+				.position(new LatLng(place.lat, place.longit))
+				.title(place.nome));
+		}
 	}
 
 	private void centerMyPosition() {
