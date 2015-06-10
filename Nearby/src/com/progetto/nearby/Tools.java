@@ -16,9 +16,10 @@ public class Tools {
 	public static final String PREFERENCES_FILE_NAME = "nearbypreferences";
 	public static final String PREFERNCES_DISTANZA = "distanza";
 	public static final String PREFERNCES_CATEGORIA = "categoria";
+	public static final String PREFERNCES_SOTTOCATEGORIA = "sottocategoria";
 	public static final String PREFERNCES_TIPOLOGIA = "tipologia";
 	
-	public static final int FILTRO_DISTANZA_DEFAULT = 500;
+	public static final int FILTRO_DISTANZA_DEFAULT = 1000;
 	
 	
 	public static GPSProvider gpsProvider;

@@ -3,6 +3,10 @@ package com.progetto.nearby.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.progetto.nearby.DatabaseLocale.SubcategoriesTableHelper;
+
+import android.content.ContentValues;
+
 public class Subcategories {
 
 	public static final String tag_id = "id_subcategory";
@@ -12,12 +16,12 @@ public class Subcategories {
 	
 	public int id;
 	public String name;
-	public int id_category;
+	public int category_id;
 	
-	public Subcategories(int id, String name, int id_category) {
+	public Subcategories(int id, String name, int category_id) {
 		this.id = id;
 		this.name = name;
-		this.id_category = id_category;
+		this.category_id = category_id;
 	}
 	
 	public static Subcategories decodeJSON(JSONObject obj) {
@@ -30,5 +34,13 @@ public class Subcategories {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public ContentValues getContentValues() {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(SubcategoriesTableHelper._ID, this.id);
+		contentValues.put(SubcategoriesTableHelper.name, this.name);
+		contentValues.put(SubcategoriesTableHelper.category_id, this.category_id);
+		return contentValues;
 	}
 }

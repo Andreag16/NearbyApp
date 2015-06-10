@@ -3,6 +3,10 @@ package com.progetto.nearby.models;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.progetto.nearby.DatabaseLocale.CategoriesTableHelper;
+
+import android.content.ContentValues;
+
 
 public class Categories {
 	
@@ -28,5 +32,12 @@ public class Categories {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public ContentValues getContentValues() {
+		ContentValues contentValues = new ContentValues();
+		contentValues.put(CategoriesTableHelper._ID, this.id);
+		contentValues.put(CategoriesTableHelper.name, this.name);
+		return contentValues;
 	}
 }

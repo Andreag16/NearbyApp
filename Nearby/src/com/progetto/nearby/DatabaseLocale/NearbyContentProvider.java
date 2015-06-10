@@ -8,9 +8,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-public class ContentProvider extends android.content.ContentProvider {
+public class NearbyContentProvider extends android.content.ContentProvider {
 
-	public static final String authority = "com.progetto.nearby.databaselocale.contentprovider";
+	public static final String authority = "com.progetto.nearby.databaselocale.nearbycontentprovider";
 	
 	public static final String FAVORITES_PATH = "favorites";
 	public static final String CATEGORIES_PATH = "categories";
@@ -44,13 +44,13 @@ public class ContentProvider extends android.content.ContentProvider {
 	static
 	{
 		uriMatcher.addURI(authority, FAVORITES_PATH, allFavorites);
-		uriMatcher.addURI(authority, FAVORITES_PATH, oneFavorite);
+		uriMatcher.addURI(authority, FAVORITES_PATH + "/#", oneFavorite);
 		
 		uriMatcher.addURI(authority, CATEGORIES_PATH, allCategories);
-		uriMatcher.addURI(authority, CATEGORIES_PATH, oneCategory);
+		uriMatcher.addURI(authority, CATEGORIES_PATH + "/#", oneCategory);
 		
 		uriMatcher.addURI(authority, SUBCATEGORIES_PATH, allSubcategories);
-		uriMatcher.addURI(authority, SUBCATEGORIES_PATH, oneSubcategory);
+		uriMatcher.addURI(authority, SUBCATEGORIES_PATH + "/#", oneSubcategory);
 
 	}
 	
@@ -178,34 +178,33 @@ public class ContentProvider extends android.content.ContentProvider {
 		SQLiteQueryBuilder sqlQueryBilder = new SQLiteQueryBuilder();
 		switch(uriMatcher.match(uri))
 		{
-			case allFavorites: 
+			case allFavorites:
 				sqlQueryBilder.setTables(FavoritesTableHelper.tableName);
 				break;
-			case oneFavorite: 
+			case oneFavorite:
 				sqlQueryBilder.setTables(FavoritesTableHelper.tableName);
 				sqlQueryBilder.appendWhere(FavoritesTableHelper._ID + "=" + uri.getLastPathSegment());
 				break;
 				
-			case allCategories: 
+			case allCategories:
 				sqlQueryBilder.setTables(CategoriesTableHelper.tableName);
 				break;
-			case oneCategory: 
+			case oneCategory:
 				sqlQueryBilder.setTables(CategoriesTableHelper.tableName);
 				sqlQueryBilder.appendWhere(CategoriesTableHelper._ID + "=" + uri.getLastPathSegment());
 				break;
 				
-			case allSubcategories: 
+			case allSubcategories:
 				sqlQueryBilder.setTables(SubcategoriesTableHelper.tableName);
 				break;
-			case oneSubcategory: 
+			case oneSubcategory:
 				sqlQueryBilder.setTables(SubcategoriesTableHelper.tableName);
 				sqlQueryBilder.appendWhere(SubcategoriesTableHelper._ID + "=" + uri.getLastPathSegment());
 				break;
 			default:
 				break;
 		}
-		Cursor cursorQuery = sqlQueryBilder.query(db, 
-				projection, selection, selectionArgs, null, null, sortOrder);
+		Cursor cursorQuery = sqlQueryBilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 		cursorQuery.setNotificationUri(getContext().getContentResolver(), uri);
 		return cursorQuery;
 	}

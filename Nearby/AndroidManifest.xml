@@ -53,8 +53,8 @@
         </activity>
 
         <provider
-            android:name=".DatabaseLocale.ContentProvider"
-            android:authorities="com.progetto.nearby.databaselocale.contentprovider"
+            android:name=".DatabaseLocale.NearbyContentProvider"
+            android:authorities="com.progetto.nearby.databaselocale.nearbycontentprovider"
             android:exported="false" >
         </provider>
 

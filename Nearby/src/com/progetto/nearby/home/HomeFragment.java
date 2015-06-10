@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -69,73 +70,88 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 		super.onCreateView(inflater, container, savedInstanceState);
 		return rootView;
 	}
+	
+	@Override
+	public void onResume() {
+		getPlaces();
+		super.onResume();
+	}
 
 	private void getPlaces() {
 		long currentMillis = Calendar.getInstance().getTimeInMillis();
-		if(Tools.isNetworkEnabled(getActivity()) && (currentMillis - lastUpdateMillis) > 20000) {
-			lastUpdateMillis = currentMillis;
-			
-			Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
-			AsyncHttpClient client = new AsyncHttpClient();
-			client.get(Tools.PLACES_URL, new JsonHttpResponseHandler(){
+		if(Tools.isNetworkEnabled(getActivity())) {
+			if((currentMillis - lastUpdateMillis) > 20000) {
+				lastUpdateMillis = currentMillis;
+				
+				Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
+				AsyncHttpClient client = new AsyncHttpClient();
+				int distance = getActivity()
+								.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
+								.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
+				String url = Tools.PLACES_URL + "/" +
+						Tools.gpsProvider.getLatitude() +
+						"+" + Tools.gpsProvider.getLongitude() +
+						"+" + distance;
+				
+				client.get(url, new JsonHttpResponseHandler(){
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
+						JSONObject jsonPlace;
+						allPlaces = new ArrayList<Place>();
+						for(int i = 0; i < response.length(); i++)
+						{
+							try {
+								jsonPlace = response.getJSONObject(i);
+								allPlaces.add(Place.decodeJSON(jsonPlace));
+							} catch (JSONException e) {
+								e.printStackTrace();
+							}
+						}
+						
+						if(googleMap != null) {
+							decoreMap();
+						}
+						
+						adapter = new PlacesAdapter(getActivity().getApplicationContext(), allPlaces);
+						lstPlaces.setAdapter(adapter);
+						lstPlaces.setOnItemClickListener(new OnItemClickListener() {
 	
-				@Override
-				public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
-					JSONObject jsonPlace;
-					allPlaces = new ArrayList<Place>();
-					for(int i = 0; i < response.length(); i++)
-					{
-						try {
-							jsonPlace = response.getJSONObject(i);
-							allPlaces.add(Place.decodeJSON(jsonPlace));
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
+							@Override
+							public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+								// TODO Auto-generated method stub
+								enterDetails(arg3);
+	//							Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+	//					    	//intent.putExtra(DetailPlaceActivity.ID_PLACE, (int)id);
+	//					    	Bundle placeBundle = new Bundle();
+	//					    	placeBundle.putLong(Place.tag_id, arg3);
+	//					    	intent.putExtras(placeBundle);
+	//					        startActivity(intent);
+							}
+						});
+					}	
+					
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+						super.onFailure(statusCode, headers, responseString, throwable);
 					}
 					
-					if(googleMap != null) {
-						decoreMap();
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+						super.onFailure(statusCode, headers, throwable, errorResponse);
 					}
 					
-					adapter = new PlacesAdapter(getActivity().getApplicationContext(), allPlaces);
-					lstPlaces.setAdapter(adapter);
-					lstPlaces.setOnItemClickListener(new OnItemClickListener() {
-
-						@Override
-						public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-							// TODO Auto-generated method stub
-							enterDetails(arg3);
-//							Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
-//					    	//intent.putExtra(DetailPlaceActivity.ID_PLACE, (int)id);
-//					    	Bundle placeBundle = new Bundle();
-//					    	placeBundle.putLong(Place.tag_id, arg3);
-//					    	intent.putExtras(placeBundle);
-//					        startActivity(intent);
-						}
-					});
-				}	
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						String responseString, Throwable throwable) {
-					Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, responseString, throwable);
-				}
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						Throwable throwable, JSONArray errorResponse) {
-					Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						Throwable throwable, JSONObject errorResponse) {
-					Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-			});
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+						super.onFailure(statusCode, headers, throwable, errorResponse);
+					}
+				});
+			}
 		} else {
 			Toast.makeText(getActivity(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
 		}
