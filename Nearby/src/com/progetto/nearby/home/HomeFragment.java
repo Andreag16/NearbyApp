@@ -80,7 +80,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	private void getPlaces() {
 		long currentMillis = Calendar.getInstance().getTimeInMillis();
 		if(Tools.isNetworkEnabled(getActivity())) {
-			if((currentMillis - lastUpdateMillis) > 20000) {
+			if((currentMillis - lastUpdateMillis) > 3000) {
 				lastUpdateMillis = currentMillis;
 				
 				Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
