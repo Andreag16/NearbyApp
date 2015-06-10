@@ -359,13 +359,6 @@ public class FiltriActivity extends Activity {
 		.apply();		
 	}
 	
-	
-	@Override
-	protected void onDestroy() { // Salvo lo stato dei filtri all'uscita dell'activity
-		saveFilters();		
-		super.onDestroy();
-	}
-	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if(item.getItemId() == android.R.id.home) {

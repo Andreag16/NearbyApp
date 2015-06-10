@@ -52,7 +52,9 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		Tools.gpsProvider.registerListener(this);
+		if(Tools.gpsProvider != null)
+			Tools.gpsProvider.registerListener(this);
+		
 		super.onCreate(savedInstanceState);
 	}
 	

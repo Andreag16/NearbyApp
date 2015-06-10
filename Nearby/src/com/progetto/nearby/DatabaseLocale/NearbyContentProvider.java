@@ -59,7 +59,7 @@ public class NearbyContentProvider extends android.content.ContentProvider {
 		int result = 0;
 		String tmpId = null;
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
-		switch(uriMatcher.match(FAVORITES_URI))
+		switch(uriMatcher.match(uri))
 		{
 			case allFavorites:
 				db.delete(FavoritesTableHelper.tableName, selection, selectionArgs);
