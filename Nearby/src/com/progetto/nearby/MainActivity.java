@@ -16,7 +16,17 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		setupGUI();
+	}
+	
+	private void setupGUI() {
+		// TODO Auto-generated method stub
 		btnHome = (Button) findViewById(R.id.btnHome);
+		btnScopri = (Button) findViewById(R.id.btnScopri);
+		btnActions();
+	}
+	private void btnActions() {
+		// TODO Auto-generated method stub
 		btnHome.setOnClickListener(new OnClickListener() {
 			
 			@Override
@@ -25,6 +35,15 @@ public class MainActivity extends Activity {
 				Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
 				startActivity(homeIntent);
 				MainActivity.this.finish();
+			}
+		});
+		
+		btnScopri.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}

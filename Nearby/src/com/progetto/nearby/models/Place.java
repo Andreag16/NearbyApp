@@ -34,8 +34,7 @@ public class Place {
 	public static Place decodeJSON(JSONObject obj) {
 		Place place = new Place();
 		try {
-			if(obj.has(tag_id))
-				place.id = obj.getInt(tag_id);
+			place.id = obj.getInt(tag_id);
 			place.nome = obj.getString(tag_name);
 			place.description = obj.getString(tag_description);
 			String gps = obj.getString(tag_gps);
@@ -45,12 +44,15 @@ public class Place {
 			place.telefono = obj.getString(tag_phone);
 			place.città = obj.getString(tag_citta);
 			place.urlImg = Tools.GET_IMAGE_URL + place.id + ".jpg";
-			//place.gallery.add(place.urlImg);
+			place.gallery.add(place.urlImg);
 			if(obj.has(tag_gallery))
 			{
 				JSONArray gallery = (JSONArray) obj.get(tag_gallery);
-				for(int i = 0; i < gallery.length(); i++)
-					place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
+				if(gallery.length() > 0)
+				{
+					for(int i = 0; i < gallery.length(); i++)
+						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
+				}
 			}
 		} catch (JSONException e) {
 			e.printStackTrace();

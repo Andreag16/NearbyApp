@@ -10,7 +10,7 @@ public class Tools {
 	public static String PLACES_URL = SERVICE_URL + "/test/index.php/places";
 	public static String CATEGORIES_URL = SERVICE_URL + "/test/index.php/categories";
 	public static String SUBCATEGORIES_URL = SERVICE_URL + "/test/index.php/subcategories";
-	public static String GET_IMAGE_URL = "http://nearby.altervista.org/images/";
+	public static String GET_IMAGE_URL = SERVICE_URL + "/images/";
 	public static String GET_DETAIL_URL = SERVICE_URL + "/test/index.php/place/";
 	
 	public static final String PREFERENCES_FILE_NAME = "nearbypreferences";
@@ -18,6 +18,8 @@ public class Tools {
 	public static final String PREFERNCES_CATEGORIA = "categoria";
 	public static final String PREFERNCES_SOTTOCATEGORIA = "sottocategoria";
 	public static final String PREFERNCES_TIPOLOGIA = "tipologia";
+	public static final String URL_IMMAGINE_DETTAGLIO = "immagine dettaglio";
+	public static final String TAG_DIALOG_IMAGE = "dialog image";
 	
 	public static final int FILTRO_DISTANZA_DEFAULT = 1000;
 	
