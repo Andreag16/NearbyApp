@@ -1,11 +1,6 @@
 package com.progetto.nearby.navigationdrawer;
 
 import com.progetto.nearby.R;
-import com.progetto.nearby.R.drawable;
-import com.progetto.nearby.R.id;
-import com.progetto.nearby.R.layout;
-import com.progetto.nearby.R.menu;
-import com.progetto.nearby.R.string;
 
 import android.app.Activity;
 import android.app.ActionBar;
@@ -24,7 +19,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
