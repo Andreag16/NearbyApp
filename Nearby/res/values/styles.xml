@@ -17,5 +17,4 @@
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
 <!--         <item name="homeAsUpIndicator">@drawable/freccia</item> -->
     </style>
-
 </resources>
