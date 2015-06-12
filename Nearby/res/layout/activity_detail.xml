@@ -2,6 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res/com.progetto.nearby"
     tools:context="${relativePackage}.${activityClass}" >
     
     <HorizontalScrollView
@@ -87,9 +88,9 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/llDescrizione"
         android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/llGPS" >
+        android:layout_marginRight="5dp" >
 
         <TextView
             android:id="@+id/lblDetTelephone"
@@ -133,30 +134,69 @@
             android:textColor="#000" />
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/llGPS"
+    <Button
+        android:id="@+id/btnMappa"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_below="@+id/llDescrizione" >
+        android:layout_alignLeft="@+id/llTown"
+        android:layout_below="@+id/llTown"
+        android:background="@drawable/round_button"
+        android:text="Mappa"
+        android:textStyle="bold"
+        android:textColor="#fff" />
 
-        <TextView
-            android:id="@+id/lblDetGPS"
+    <com.hollowsoft.library.slidingdrawer.SlidingDrawer 
+		android:id="@+id/sliding_drawer"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		app:content="@+id/drawer_content"
+		app:handle="@+id/drawer_handle" >
+        
+        <RelativeLayout
+            android:id="@+id/drawer_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Coordinate GPS: "
-            android:textColor="#000"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txtDetGPS"
+            android:clickable="true"
+            android:focusable="false"
+            android:background="@android:color/holo_green_dark"
+            android:layout_gravity="center"
+            android:layout_centerHorizontal="true"
+             >
+            
+            <ListView
+                android:id="@+id/lstOffertsSinglePlace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+				 >
+            </ListView>
+            
+        </RelativeLayout>
+        
+        <LinearLayout
+            android:id="@+id/drawer_handle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="#000" />
-    </LinearLayout>
-
+            android:background="@color/gray_transparent"
+            android:orientation="vertical" >
+            
+	        <TextView
+                android:id="@+id/txtSlide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="OFFERTE"
+                android:textColor="@color/orange"
+                android:gravity="center" >
+            </TextView>
+            
+	        <ImageView
+	            android:id="@+id/drawer_handle_image"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:src="@drawable/hand" />
+	        
+        </LinearLayout>
+        
+        
+    </com.hollowsoft.library.slidingdrawer.SlidingDrawer>
 </RelativeLayout>

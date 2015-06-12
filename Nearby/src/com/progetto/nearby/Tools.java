@@ -8,6 +8,8 @@ public class Tools {
 	
 	public static String SERVICE_URL = "http://nearby.altervista.org";
 	public static String PLACES_URL = SERVICE_URL + "/test/index.php/places";
+	public static String OFFERTS_URl = SERVICE_URL + "/test/index.php/offerbygps";
+	public static String OFFERTS_BY_PLACE = SERVICE_URL + "/test/index.php/offerbyplace/";
 	public static String CATEGORIES_URL = SERVICE_URL + "/test/index.php/categories";
 	public static String SUBCATEGORIES_URL = SERVICE_URL + "/test/index.php/subcategories";
 	public static String GET_IMAGE_URL = SERVICE_URL + "/images/";

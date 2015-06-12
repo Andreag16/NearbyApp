@@ -6,11 +6,15 @@ import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
 import android.app.Activity;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +28,10 @@ import com.progetto.nearby.models.Place;
 public class DetailPlaceActivity extends Activity {
 
 	private LinearLayout scrollImages;
-	private TextView txtNome, txtdescrizione, txtGPS, txtPhone, txtCitta;
+	private TextView txtNome, txtdescrizione, txtPhone, txtCitta;
+	private Button btnMappa;
+	private ListView offerteperposto;
+	private AsyncHttpClient client;
 	private imageAdapter imageAdapter;
 	private SmartImageView logo, image_detail;
 	private int idPlace;
@@ -48,15 +55,16 @@ public class DetailPlaceActivity extends Activity {
 		logo = (SmartImageView) findViewById(R.id.logo);
 		txtNome = (TextView) findViewById(R.id.txtDetNome);
 		txtdescrizione = (TextView) findViewById(R.id.txtDetDescr);
-		txtGPS = (TextView) findViewById(R.id.txtDetGPS);
 		txtPhone = (TextView) findViewById(R.id.txtDetTelephone);
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
+		btnMappa = (Button) findViewById(R.id.btnMappa);
+		offerteperposto = (ListView) findViewById(R.id.lstOffertsSinglePlace);
 	}
 
 	private void getPlace(final int idPlace) {
 		// TODO Auto-generated method stub
 		if(Tools.isNetworkEnabled(DetailPlaceActivity.this)) {
-		AsyncHttpClient client = new AsyncHttpClient();
+		client = new AsyncHttpClient();
 		client.get(Tools.GET_DETAIL_URL + idPlace, new JsonHttpResponseHandler(){
 
 			@Override
@@ -72,6 +80,27 @@ public class DetailPlaceActivity extends Activity {
 				else
 					Toast.makeText(getApplicationContext(), 
 							"Errore", Toast.LENGTH_LONG).show();
+			}
+
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					String responseString, Throwable throwable) {
+				Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+				super.onFailure(statusCode, headers, responseString, throwable);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONArray errorResponse) {
+				Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+				super.onFailure(statusCode, headers, throwable, errorResponse);
+			}
+			
+			@Override
+			public void onFailure(int statusCode, Header[] headers,
+					Throwable throwable, JSONObject errorResponse) {
+				Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+				super.onFailure(statusCode, headers, throwable, errorResponse);
 			}
 			
 			private void updateDetailGUI() {
@@ -102,38 +131,70 @@ public class DetailPlaceActivity extends Activity {
 						scrollImages.addView(image_detail);
 					}
 				}
+				
+				client.get(Tools.OFFERTS_BY_PLACE + place.id, new JsonHttpResponseHandler(){
+
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,
+							JSONArray response) {
+						// TODO Auto-generated method stub
+						Toast.makeText(DetailPlaceActivity.this, response.toString(), Toast.LENGTH_LONG).show();
+						super.onSuccess(statusCode, headers, response);
+					}
+					
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, responseString, throwable);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONArray errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable, errorResponse);
+					}
+
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							Throwable throwable, JSONObject errorResponse) {
+						// TODO Auto-generated method stub
+						super.onFailure(statusCode, headers, throwable, errorResponse);
+					}
+
+					
+					
+				});
 				//imageAdapter = new imageAdapter(DetailPlaceActivity.this, place.gallery);
 				//galleryPlace.setAdapter(imageAdapter);
 //				galleryPlace.getLayoutParams().width = LayoutParams.WRAP_CONTENT;
 //				galleryPlace.getLayoutParams().height = LayoutParams.WRAP_CONTENT;
 				txtNome.setText(place.nome);
 				txtdescrizione.setText(place.description);
-				txtGPS.setText("Lat: " + place.lat + " Long: " + place.longit);
 				txtPhone.setText(place.telefono);
 				txtCitta.setText(place.città);
-			}
+				btnMappa.setOnClickListener(new OnClickListener() {
+					
+					@Override
+					public void onClick(View v) {
+						// TODO Auto-generated method stub
+						// Create a Uri from an intent string. Use the result to create an Intent.
+						//google.streetview:cbll=
+						String url = "http://maps.google.com/maps?"
+								+ "daddr=" + place.lat + "," + place.longit;
+						//Uri gmmIntentUri = Uri.parse("geo:" + place.lat + "," + place.longit);
 
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					String responseString, Throwable throwable) {
-				Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-				super.onFailure(statusCode, headers, responseString, throwable);
+						// Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+						Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+						// Make the Intent explicit by setting the Google Maps package
+						//mapIntent.setPackage("com.google.android.apps.maps");
+
+						// Attempt to start an activity that can handle the Intent
+						startActivity(mapIntent);
+					}
+				});
 			}
-			
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					Throwable throwable, JSONArray errorResponse) {
-				Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-				super.onFailure(statusCode, headers, throwable, errorResponse);
-			}
-			
-			@Override
-			public void onFailure(int statusCode, Header[] headers,
-					Throwable throwable, JSONObject errorResponse) {
-				Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-				super.onFailure(statusCode, headers, throwable, errorResponse);
-			}
-			
 		});
 		}
 		else
