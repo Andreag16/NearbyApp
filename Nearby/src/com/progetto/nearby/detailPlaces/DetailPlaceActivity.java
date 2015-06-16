@@ -1,7 +1,10 @@
 package com.progetto.nearby.detailPlaces;
 
+import java.util.ArrayList;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
@@ -9,12 +12,14 @@ import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView.ScaleType;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,14 +28,18 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.loopj.android.image.SmartImageView;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.models.Offerta;
 import com.progetto.nearby.models.Place;
+import com.progetto.nearby.offerte.OffertaAdapterRV;
 
-public class DetailPlaceActivity extends Activity {
+public class DetailPlaceActivity extends AppCompatActivity {
 
 	private LinearLayout scrollImages;
 	private TextView txtNome, txtdescrizione, txtPhone, txtCitta;
 	private Button btnMappa;
-	private ListView offerteperposto;
+	private RecyclerView rvofferte;
+	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
+	private OffertaAdapterRV adapter;
 	private AsyncHttpClient client;
 	private imageAdapter imageAdapter;
 	private SmartImageView logo, image_detail;
@@ -58,7 +67,9 @@ public class DetailPlaceActivity extends Activity {
 		txtPhone = (TextView) findViewById(R.id.txtDetTelephone);
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
 		btnMappa = (Button) findViewById(R.id.btnMappa);
-		offerteperposto = (ListView) findViewById(R.id.lstOffertsSinglePlace);
+		rvofferte = (RecyclerView) findViewById(R.id.rvoffertsplace);
+		LinearLayoutManager llm = new LinearLayoutManager(DetailPlaceActivity.this);
+		rvofferte.setLayoutManager(llm);
 	}
 
 	private void getPlace(final int idPlace) {
@@ -138,8 +149,17 @@ public class DetailPlaceActivity extends Activity {
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONArray response) {
 						// TODO Auto-generated method stub
-						Toast.makeText(DetailPlaceActivity.this, response.toString(), Toast.LENGTH_LONG).show();
-						super.onSuccess(statusCode, headers, response);
+						for(int i = 0; i < response.length(); i++)
+						{
+							try {
+								offerte.add(Offerta.decodeJSON(response.getJSONObject(i)));
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
+							rvofferte.setAdapter(adapter);
+						}
 					}
 					
 					@Override

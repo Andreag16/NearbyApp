@@ -1,14 +1,20 @@
 package com.progetto.nearby.offerte;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
+
 
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemAnimator;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,13 +27,18 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.GPSProvider.IGPSCallbacks;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.models.Offerta;
 
 public class OfferteFragment extends Fragment implements IGPSCallbacks{
 
 	public static final String TAG = "OFFERTS_FRAGMENT";
-	private ListView listaOfferte;
+	//private ListView listaOfferte;
+	private RecyclerView rv;
+	private OffertaAdapterRV adapter;
+	private ArrayList<Offerta> offerts = new ArrayList<Offerta>();
 	private long lastUpdateMillis = 0;
 	private AsyncHttpClient client;
+	
 	public static OfferteFragment newInstance(Bundle args){
 		OfferteFragment offerte_fragment = new OfferteFragment();
 		offerte_fragment.setArguments(args);
@@ -37,7 +48,7 @@ public class OfferteFragment extends Fragment implements IGPSCallbacks{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Tools.gpsProvider.registerListener(this);
+		//Tools.gpsProvider.registerListener(this);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -46,7 +57,10 @@ public class OfferteFragment extends Fragment implements IGPSCallbacks{
 			Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		View offerte_view = inflater.inflate(R.layout.fragment_offerte, null);
-		listaOfferte = (ListView) offerte_view.findViewById(R.id.listaOfferte);
+		//listaOfferte = (ListView) offerte_view.findViewById(R.id.listaOfferte);
+		rv  = (RecyclerView)offerte_view.findViewById(R.id.rv);
+		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+		rv.setLayoutManager(llm);
 		getOffertsByGPS();
 		return offerte_view;
 	}
@@ -68,8 +82,8 @@ public class OfferteFragment extends Fragment implements IGPSCallbacks{
 				Log.d("distance", ""+ distance);
 				String url = Tools.OFFERTS_URl + "/" +
 						45.9536714 +
-						"+" + 12.6858874 +
-						"+" + distance;
+						"&" + 12.6858874 +
+						"&" + distance;
 				client = new AsyncHttpClient();
 				client.get(url, new JsonHttpResponseHandler(){
 
@@ -77,8 +91,18 @@ public class OfferteFragment extends Fragment implements IGPSCallbacks{
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONArray response) {
 						// TODO Auto-generated method stub
-						Log.d("offerte", response.toString());
-						super.onSuccess(statusCode, headers, response);
+						for(int i = 0; i < response.length(); i++)
+						{
+							try {
+								offerts.add(Offerta.decodeJSON(response.getJSONObject(i)));
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+						}
+						
+						adapter = new OffertaAdapterRV(getActivity(), offerts);
+						rv.setAdapter(adapter);
 					}
 					
 					@Override

@@ -14,6 +14,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -35,7 +36,7 @@ import com.progetto.nearby.DatabaseLocale.SubcategoriesTableHelper;
 import com.progetto.nearby.models.Categories;
 import com.progetto.nearby.models.Subcategories;
 
-public class FiltriActivity extends Activity {
+public class FiltriActivity extends AppCompatActivity {
 
 	/*private TextView text;
 	private Button insert;
@@ -121,7 +122,7 @@ public class FiltriActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_filtri);
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		sharedPreferences = getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 		
