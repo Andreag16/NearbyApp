@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.ActionBar.LayoutParams;
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -41,7 +40,6 @@ public class DetailPlaceActivity extends AppCompatActivity {
 	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
 	private OffertaAdapterRV adapter;
 	private AsyncHttpClient client;
-	private imageAdapter imageAdapter;
 	private SmartImageView logo, image_detail;
 	private int idPlace;
 	private Place place;
@@ -143,7 +141,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 					}
 				}
 				
-				client.get(Tools.OFFERTS_BY_PLACE + place.id, new JsonHttpResponseHandler(){
+				client.get(Tools.OFFERS_BY_PLACE + place.id, new JsonHttpResponseHandler(){
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,

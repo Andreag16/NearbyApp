@@ -3,12 +3,9 @@ package com.progetto.nearby.detailPlaces;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
-import android.content.DialogInterface;
-import android.content.DialogInterface.OnClickListener;
 import android.os.Bundle;
 
 import com.loopj.android.image.SmartImageView;
-import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 
 public class DialogImage extends DialogFragment {
