@@ -177,20 +177,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 						super.onFailure(statusCode, headers, responseString, throwable);
 					}
-					
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONArray errorResponse) {
-						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-						super.onFailure(statusCode, headers, throwable, errorResponse);
-					}
-					
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONObject errorResponse) {
-						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-						super.onFailure(statusCode, headers, throwable, errorResponse);
-					}
 				});
 			}
 		} else {

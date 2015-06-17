@@ -224,20 +224,6 @@ public class FiltriActivity extends AppCompatActivity {
 					Toast.makeText(FiltriActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 					super.onFailure(statusCode, headers, responseString, throwable);
 				}
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						Throwable throwable, JSONArray errorResponse) {
-					Toast.makeText(FiltriActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						Throwable throwable, JSONObject errorResponse) {
-					Toast.makeText(FiltriActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
 			});
 			
 			AsyncHttpClient clientSubcategories = new AsyncHttpClient();
@@ -270,20 +256,6 @@ public class FiltriActivity extends AppCompatActivity {
 						String responseString, Throwable throwable) {
 					Toast.makeText(FiltriActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 					super.onFailure(statusCode, headers, responseString, throwable);
-				}
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						Throwable throwable, JSONArray errorResponse) {
-					Toast.makeText(FiltriActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, throwable, errorResponse);
-				}
-				
-				@Override
-				public void onFailure(int statusCode, Header[] headers,
-						Throwable throwable, JSONObject errorResponse) {
-					Toast.makeText(FiltriActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-					super.onFailure(statusCode, headers, throwable, errorResponse);
 				}
 			});
 			

@@ -13,8 +13,32 @@ import android.os.IBinder;
 import android.util.Log;
 
 public class GPSProvider implements LocationListener {
+
+	@Override
+	public void onLocationChanged(Location location) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderEnabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onProviderDisabled(String provider) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-    private boolean isGPSEnabled = false;
+    /*private boolean isGPSEnabled = false;
     private boolean isNetworkEnabled = false;
     private boolean canGetLocation = false;
  
@@ -102,10 +126,7 @@ public class GPSProvider implements LocationListener {
         //return location;
     }
      
-    /**
-     * Stop using GPS listener
-     * Calling this function will stop using GPS in your app
-     * */
+
     public void stopUsingGPS(){
         if(locationManager != null){
             locationManager.removeUpdates(GPSProvider.this);
@@ -138,10 +159,7 @@ public class GPSProvider implements LocationListener {
         return longitude;
     }
      
-    /**
-     * Function to check GPS/wifi enabled
-     * @return boolean
-     * */
+
     public boolean canGetLocation() {
         return this.canGetLocation;
     }
@@ -175,5 +193,5 @@ public class GPSProvider implements LocationListener {
 	public void onProviderDisabled(String provider) {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 }
