@@ -132,7 +132,7 @@ public class DetailPlaceActivity extends Activity {
 					}
 				}
 				
-				client.get(Tools.OFFERTS_BY_PLACE + place.id, new JsonHttpResponseHandler(){
+				client.get(Tools.OFFERS_BY_PLACE + place.id, new JsonHttpResponseHandler(){
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,

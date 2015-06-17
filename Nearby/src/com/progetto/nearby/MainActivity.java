@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.home.HomeActivity;
 
 public class MainActivity extends Activity {
@@ -17,21 +18,20 @@ public class MainActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		setupGUI();
+		
+		startService(new Intent(this, GpsService.class));
 	}
 	
 	private void setupGUI() {
-		// TODO Auto-generated method stub
 		btnHome = (Button) findViewById(R.id.btnHome);
 		btnScopri = (Button) findViewById(R.id.btnScopri);
 		btnActions();
 	}
 	private void btnActions() {
-		// TODO Auto-generated method stub
 		btnHome.setOnClickListener(new OnClickListener() {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
 				startActivity(homeIntent);
 				MainActivity.this.finish();
@@ -42,7 +42,6 @@ public class MainActivity extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
 				
 			}
 		});

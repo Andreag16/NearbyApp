@@ -9,10 +9,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.location.Location;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,13 +36,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.progetto.nearby.GPSProvider.IGPSCallbacks;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
+import com.progetto.nearby.gpsService.GpsService;
+import com.progetto.nearby.gpsService.GpsService.LocalBinder;
 import com.progetto.nearby.models.Place;
 
-public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGPSCallbacks  {
+public class HomeFragment extends MapFragment implements OnMapReadyCallback, android.location.LocationListener  {
 
 	public static final String TAG = "HOME_FRAGMENT";
 	
@@ -50,10 +55,31 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	private long lastUpdateMillis = 0;
 	private static boolean isFirstTimeOpen = true;
 	
+	
+	GpsService myService;
+    boolean isBound = false;
+
+	private ServiceConnection myConnection = new ServiceConnection() {
+
+	    public void onServiceConnected(ComponentName className, IBinder service) {
+	        LocalBinder binder = (LocalBinder) service;
+	        myService = binder.getService();
+	        isBound = true;
+	        getPlaces();
+	    }
+	    
+	    public void onServiceDisconnected(ComponentName arg0) {
+	        isBound = false;
+	    }
+    };
+	
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		if(Tools.gpsProvider != null)
-			Tools.gpsProvider.registerListener(this);
+		
+		Intent intent = new Intent(getActivity(), GpsService.class);
+        getActivity().bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
+		
 		
 		super.onCreate(savedInstanceState);
 	}
@@ -67,7 +93,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 		((MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 		
 		lstPlaces = (ListView)rootView.findViewById(R.id.lstPlaces);
-		getPlaces();
 		
 		super.onCreateView(inflater, container, savedInstanceState);
 		return rootView;
@@ -87,13 +112,8 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 				
 				Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
 				AsyncHttpClient client = new AsyncHttpClient();
-				int distance = getActivity()
-								.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
-								.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
-				String url = Tools.PLACES_URL + "/" +
-						Tools.gpsProvider.getLatitude() +
-						"+" + Tools.gpsProvider.getLongitude() +
-						"+" + distance;
+				
+				String url = Tools.buildPlacesUrl(getActivity(), myService.getLatitude(), myService.getLongitude());
 				
 				client.get(url, new JsonHttpResponseHandler(){
 					@Override
@@ -121,7 +141,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	
 							@Override
 							public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								// TODO Auto-generated method stub
 								enterDetails(arg3);
 							}
 						});
@@ -196,8 +215,8 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 		googleMap = map;
 		if(googleMap != null) {
 			googleMap.setMyLocationEnabled(true);
-	        	        
-	        if(Tools.gpsProvider.canGetLocation()){
+			
+	        if(myService.isLocationEnabled()){
 	        	centerMyPosition();
 	        } else {
 	        	if(isFirstTimeOpen) {
@@ -237,9 +256,10 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 	}
 
 	private void centerMyPosition() {
+		LatLng latLng = new LatLng(myService.getLatitude(), myService.getLongitude());
     	CameraPosition cameraPosition = new CameraPosition
     									.Builder()
-								        .target(Tools.gpsProvider.getLatLng())
+								        .target(latLng)
 								        .zoom(5.8f)
 								        .build();
     	googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
@@ -254,7 +274,13 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, IGP
 
 
 	@Override
-	public void onLocationChanged() {
-		getPlaces();		
+	public void onLocationChanged(Location location) {
+		getPlaces();
 	}
+	@Override
+	public void onStatusChanged(String provider, int status, Bundle extras) { }
+	@Override
+	public void onProviderEnabled(String provider) { }
+	@Override
+	public void onProviderDisabled(String provider) { }
 }

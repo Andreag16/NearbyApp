@@ -1,10 +1,19 @@
 package com.progetto.nearby.gpsService;
 
+import org.apache.http.Header;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.JsonHttpResponseHandler;
+import com.progetto.nearby.Tools;
+
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
@@ -14,15 +23,25 @@ import android.widget.Toast;
 public class GpsService extends Service {
 	private static final String TAG = "GpsService";
 	private LocationManager mLocationManager = null;
-	private static final int LOCATION_INTERVAL = 1000; // 1 secondo
+	private static final int LOCATION_INTERVAL = 5000; // 1 secondo
 	private static final float LOCATION_DISTANCE = 10; //10 metri
 
-	private class LocationListener implements android.location.LocationListener{
-	    Location mLastLocation;
+	private Location mLastLocation;
+
+	private final IBinder mBinder = new LocalBinder();
+	
+	public class LocalBinder extends Binder {
+        public GpsService getService() {
+            return GpsService.this;
+        }
+    }
+	
+	
+	private class LocationListener implements android.location.LocationListener {
+	    
 	    public LocationListener(String provider)
 	    {
 	        Log.e(TAG, "LocationListener " + provider);
-	        mLastLocation = new Location(provider);
 	    }
 	    @Override
 	    public void onLocationChanged(Location location)
@@ -30,6 +49,53 @@ public class GpsService extends Service {
 	        Log.e(TAG, "onLocationChanged: " + location);
 	        mLastLocation.set(location);
 	        Toast.makeText(getApplicationContext(), "PROVA", Toast.LENGTH_SHORT).show();
+	        
+	        if(Tools.isNetworkEnabled(getApplicationContext())) {
+					AsyncHttpClient client = new AsyncHttpClient();
+					
+					int range = getApplicationContext()
+							.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
+							.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
+					
+					String url = Tools.OFFERS_BY_GPS_URL +
+							mLastLocation.getLatitude() +
+							"&" + mLastLocation.getLongitude() +
+							"&" + range;
+					
+					client.get(url, new JsonHttpResponseHandler(){
+						@Override
+						public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
+							if(response.length() > 0) {
+								Toast.makeText(getApplicationContext(), "" + response.length(), Toast.LENGTH_SHORT).show();
+							} else {
+								Toast.makeText(getApplicationContext(), "nessuna offerta", Toast.LENGTH_SHORT).show();
+							}
+						}	
+						
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								String responseString, Throwable throwable) {
+							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+							super.onFailure(statusCode, headers, responseString, throwable);
+						}
+						
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONArray errorResponse) {
+							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+							super.onFailure(statusCode, headers, throwable, errorResponse);
+						}
+						
+						@Override
+						public void onFailure(int statusCode, Header[] headers,
+								Throwable throwable, JSONObject errorResponse) {
+							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+							super.onFailure(statusCode, headers, throwable, errorResponse);
+						}
+					});
+			} else {
+				Toast.makeText(getApplicationContext(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
+			}
 	    }
 	    @Override
 	    public void onProviderDisabled(String provider)
@@ -47,14 +113,17 @@ public class GpsService extends Service {
 	        Log.e(TAG, "onStatusChanged: " + provider);
 	    }
 	} 
+	
+	
 	LocationListener[] mLocationListeners = new LocationListener[] {
 	        new LocationListener(LocationManager.GPS_PROVIDER),
 	        new LocationListener(LocationManager.NETWORK_PROVIDER)
 	};
+	
 	@Override
 	public IBinder onBind(Intent arg0)
 	{
-	    return null;
+	    return mBinder;
 	}
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
@@ -67,7 +136,7 @@ public class GpsService extends Service {
 	public void onCreate()
 	{
 	    Log.e(TAG, "onCreate");
-	    initializeLocationManager();
+	    initializeLocationManager();	    
 	    try {
 	        mLocationManager.requestLocationUpdates(
 	                LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
@@ -106,6 +175,24 @@ public class GpsService extends Service {
 	    Log.e(TAG, "initializeLocationManager");
 	    if (mLocationManager == null) {
 	        mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+	        mLastLocation = new Location(LocationManager.NETWORK_PROVIDER);
 	    }
+	}
+	
+	
+	public boolean isLocationEnabled() {
+		return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+	}
+	
+	public double getLatitude() {
+		return mLastLocation.getLatitude();
+	}
+	
+	public double getLongitude() {
+		return mLastLocation.getLongitude();
+	}
+	
+	public void registerLocationListener(android.location.LocationListener mListener) {
+		
 	}
 }

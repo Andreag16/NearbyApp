@@ -37,7 +37,6 @@ public class OfferteFragment extends Fragment implements IGPSCallbacks{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
-		Tools.gpsProvider.registerListener(this);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -66,7 +65,7 @@ public class OfferteFragment extends Fragment implements IGPSCallbacks{
 //						"+" + Tools.gpsProvider.getLongitude() +
 //						"+" + distance;
 				Log.d("distance", ""+ distance);
-				String url = Tools.OFFERTS_URl + "/" +
+				String url = Tools.OFFERS_BY_GPS_URL + "/" +
 						45.9536714 +
 						"+" + 12.6858874 +
 						"+" + distance;
