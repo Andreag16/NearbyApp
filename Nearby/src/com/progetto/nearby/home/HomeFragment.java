@@ -65,6 +65,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	        LocalBinder binder = (LocalBinder) service;
 	        myService = binder.getService();
 	        isBound = true;
+	        centerMyPosition();
 	        getPlaces();
 	    }
 	    
@@ -73,7 +74,31 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	    }
     };
 	
-	
+	private void centerMyPosition() {
+		if(googleMap != null) {
+			if(myService.isLocationEnabled()){
+	        	LatLng latLng = new LatLng(myService.getLatitude(), myService.getLongitude());
+	        	CameraPosition cameraPosition = new CameraPosition
+	        									.Builder()
+	    								        .target(latLng)
+	    								        .zoom(5.8f)
+	    								        .build();
+	        	googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+	        } else {
+	        	if(isFirstTimeOpen) {
+	        		showSettingsAlert();
+	        		isFirstTimeOpen = false;
+	        	}
+	        	CameraPosition cameraPosition = new CameraPosition
+						.Builder()
+				        .target(new LatLng(43.028316, 12.460283))
+				        .zoom(5.2f)
+				        .build();
+	        	googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+	        }
+		}
+	}
+    
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -110,7 +135,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 			if((currentMillis - lastUpdateMillis) > 3000) {
 				lastUpdateMillis = currentMillis;
 				
-				Toast.makeText(getActivity(), "GET", Toast.LENGTH_LONG).show();
+				Toast.makeText(getActivity(), "GET places", Toast.LENGTH_LONG).show();
 				AsyncHttpClient client = new AsyncHttpClient();
 				
 				String url = Tools.buildPlacesUrl(getActivity(), myService.getLatitude(), myService.getLongitude());
@@ -216,21 +241,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 		if(googleMap != null) {
 			googleMap.setMyLocationEnabled(true);
 			
-	        if(myService.isLocationEnabled()){
-	        	centerMyPosition();
-	        } else {
-	        	if(isFirstTimeOpen) {
-	        		showSettingsAlert();
-	        		isFirstTimeOpen = false;
-	        	}
-	        	CameraPosition cameraPosition = new CameraPosition
-						.Builder()
-				        .target(new LatLng(43.028316, 12.460283))
-				        .zoom(5.2f)
-				        .build();
-	        	googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-	        }
-	        
 	        googleMap.getUiSettings().setZoomControlsEnabled(true);
 	        //decoreMap();
 	    	googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -254,16 +264,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 				.title(place.nome));
 		}
 	}
-
-	private void centerMyPosition() {
-		LatLng latLng = new LatLng(myService.getLatitude(), myService.getLongitude());
-    	CameraPosition cameraPosition = new CameraPosition
-    									.Builder()
-								        .target(latLng)
-								        .zoom(5.8f)
-								        .build();
-    	googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
 	
 	@Override
 	public void onDestroy() {

@@ -8,25 +8,6 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     tools:context="${relativePackage}.${activityClass}" >
 
-<!--     <TextView -->
-<!--         android:id="@+id/textView1" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_alignParentLeft="true" -->
-<!--         android:layout_alignParentTop="true" -->
-<!--         android:layout_marginLeft="72dp" -->
-<!--         android:layout_marginTop="68dp" -->
-<!--         android:text="TextView" /> -->
-
-<!--     <Button -->
-<!--         android:id="@+id/button1" -->
-<!--         android:layout_width="wrap_content" -->
-<!--         android:layout_height="wrap_content" -->
-<!--         android:layout_alignLeft="@+id/textView1" -->
-<!--         android:layout_below="@+id/textView1" -->
-<!--         android:layout_marginTop="74dp" -->
-<!--         android:text="Button" /> -->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -87,31 +68,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Tipologia" />
-        
-		<RadioGroup
-	        android:id="@+id/rdoTipologia"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content" >
 
-			<RadioButton
-			    android:id="@+id/rbAC"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:tag="AC"
-			    android:text="Attività commerciali" />
+        <CheckBox
+            android:id="@+id/chkAC"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Attività commerciali" />
 
-			<RadioButton
-			    android:id="@+id/rbPOI"
-			    android:layout_width="wrap_content"
-			    android:layout_height="wrap_content"
-			    android:tag="POI"
-			    android:text="Punti d'interesse" />            
-        </RadioGroup>
+        <CheckBox
+            android:id="@+id/chkPOI"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Punti d'interesse" />
 
 		<Button
 		    android:id="@+id/btnCerca"
 		    android:layout_width="match_parent"
 		    android:layout_height="wrap_content"
+		    android:layout_marginTop="30dp"
 		    android:text="Cerca" />
         
     </LinearLayout>

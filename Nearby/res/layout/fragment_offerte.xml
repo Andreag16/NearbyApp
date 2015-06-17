@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ListView
+    <!-- <ListView
         android:id="@+id/listaOfferte"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -13,5 +13,12 @@
         android:layout_alignParentTop="true"
         tools:listitem="@layout/cell_offerta" >
     </ListView>
+     -->
+    <android.support.v7.widget.RecyclerView
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:id="@+id/rv"
+	    tools:listitem="@layout/cell_offerta"
+    />
 
 </RelativeLayout>

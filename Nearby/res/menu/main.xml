@@ -1,6 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.progetto.nearby.MainActivity" >
+    xmlns:yourapp="http://schemas.android.com/apk/res-auto"
+    tools:context="com.progetto.nearby.home.HomeActivity" >
 
     <!--  <item
         android:id="@+id/action_example"
@@ -15,6 +16,7 @@
           android:id="@+id/action_settings"
           android:title="@string/action_settings"
           android:icon="@drawable/ic_action_settings"
-          android:showAsAction="ifRoom" />
+          android:showAsAction="always"
+          yourapp:showAsAction="ifRoom" />
 
 </menu>

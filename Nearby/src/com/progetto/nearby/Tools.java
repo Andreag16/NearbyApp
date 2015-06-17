@@ -11,8 +11,8 @@ public class Tools {
 	public static String PLACES_URL = SERVICE_URL + "test/index.php/places/";
 	public static String OFFERS_BY_GPS_URL = SERVICE_URL + "test/index.php/offerbygps/";
 	public static String OFFERS_BY_PLACE = SERVICE_URL + "test/index.php/offerbyplace/";
-	public static String CATEGORIES_URL = SERVICE_URL + "test/index.php/categories/";
-	public static String SUBCATEGORIES_URL = SERVICE_URL + "test/index.php/subcategories/";
+	public static String CATEGORIES_URL = SERVICE_URL + "test/index.php/categories";
+	public static String SUBCATEGORIES_URL = SERVICE_URL + "test/index.php/subcategories";
 	public static String GET_IMAGE_URL = SERVICE_URL + "images/";
 	public static String GET_DETAIL_URL = SERVICE_URL + "test/index.php/place/";
 	

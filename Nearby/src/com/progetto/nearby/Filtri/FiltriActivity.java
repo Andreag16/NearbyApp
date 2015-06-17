@@ -8,18 +8,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RadioGroup;
+import android.widget.CheckBox;
 import android.widget.SeekBar;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -35,7 +35,7 @@ import com.progetto.nearby.DatabaseLocale.SubcategoriesTableHelper;
 import com.progetto.nearby.models.Categories;
 import com.progetto.nearby.models.Subcategories;
 
-public class FiltriActivity extends Activity {
+public class FiltriActivity extends AppCompatActivity {
 
 	/*private TextView text;
 	private Button insert;
@@ -111,8 +111,9 @@ public class FiltriActivity extends Activity {
 	private SeekBar seekbarDistanza;
 	private Spinner spinnerCategorie;
 	private Spinner spinnerSottocategorie;
-	private RadioGroup radioTipologia;
 	private TextView txtDistanza;
+	private CheckBox chkAC;
+	private CheckBox chkPOI;
 	private Button btnCerca;
 	
 	
@@ -121,16 +122,17 @@ public class FiltriActivity extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_filtri);
 		
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		sharedPreferences = getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
 		
 		seekbarDistanza = (SeekBar)findViewById(R.id.seek_bar_distanza);
 		spinnerCategorie = (Spinner)findViewById(R.id.spinnerCategorie);
 		spinnerSottocategorie = (Spinner)findViewById(R.id.spinnerSottocategorie);
-		radioTipologia = (RadioGroup)findViewById(R.id.rdoTipologia);
 		btnCerca = (Button)findViewById(R.id.btnCerca);
 		txtDistanza = (TextView)findViewById(R.id.txtDistanza);
+		chkAC = (CheckBox)findViewById(R.id.chkAC);
+		chkPOI = (CheckBox)findViewById(R.id.chkPOI);
 		
 		getCategories();
 		
@@ -144,11 +146,9 @@ public class FiltriActivity extends Activity {
 		
 		
 		// Setta radioButton tipologia (Attività commerciale o POI)
-		boolean flag = sharedPreferences.getBoolean(Tools.PREFERNCES_TIPOLOGIA, true);
-		if(flag)
-			radioTipologia.check(R.id.rbAC);
-		else
-			radioTipologia.check(R.id.rbPOI);
+		String tipologia = sharedPreferences.getString(Tools.PREFERNCES_TIPOLOGIA, "all");
+		chkAC.setChecked(tipologia.equals("all") || tipologia.equals("ac"));
+		chkPOI.setChecked(tipologia.equals("all") || tipologia.equals("poi"));
 		
 		
 		btnCerca.setOnClickListener(new View.OnClickListener() {
@@ -345,18 +345,21 @@ public class FiltriActivity extends Activity {
 		}
 		
 		
-		// Salva tipologia (Attività commerciale o POI)
-		// true = selezionato "Attivita commerciale"
-		// false = selezionato "POI"
-		boolean flag = radioTipologia.getCheckedRadioButtonId() == R.id.rbAC;
+		// Salva tipologia (ac poi all)
+		String tipologia = "all";
+		if(chkAC.isChecked() && !chkPOI.isChecked()) {
+			tipologia = "ac";
+		} else if (chkPOI.isChecked() && !chkAC.isChecked()) {
+			tipologia = "poi";
+		}
 		
 		
 		sharedPreferences.edit()
-		.putInt(Tools.PREFERNCES_DISTANZA, distanza)
-		.putInt(Tools.PREFERNCES_CATEGORIA, idCategoria)
-		.putInt(Tools.PREFERNCES_SOTTOCATEGORIA, idSottocategoria)
-		.putBoolean(Tools.PREFERNCES_TIPOLOGIA, flag)
-		.apply();		
+			.putInt(Tools.PREFERNCES_DISTANZA, distanza)
+			.putInt(Tools.PREFERNCES_CATEGORIA, idCategoria)
+			.putInt(Tools.PREFERNCES_SOTTOCATEGORIA, idSottocategoria)
+			.putString(Tools.PREFERNCES_TIPOLOGIA, tipologia)
+			.apply();
 	}
 	
 	@Override

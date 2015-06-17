@@ -48,7 +48,7 @@ public class GpsService extends Service {
 	    {
 	        Log.e(TAG, "onLocationChanged: " + location);
 	        mLastLocation.set(location);
-	        Toast.makeText(getApplicationContext(), "PROVA", Toast.LENGTH_SHORT).show();
+	        Toast.makeText(getApplicationContext(), "cerco offerte", Toast.LENGTH_SHORT).show();
 	        
 	        if(Tools.isNetworkEnabled(getApplicationContext())) {
 					AsyncHttpClient client = new AsyncHttpClient();
