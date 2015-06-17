@@ -2,7 +2,6 @@ package com.progetto.nearby.gpsService;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
-import org.json.JSONObject;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -12,6 +11,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
@@ -37,9 +37,9 @@ public class GpsService extends Service {
     }
 	
 	
-	private class LocationListener implements android.location.LocationListener {
+	private class OfferteLocationListener implements LocationListener {
 	    
-	    public LocationListener(String provider)
+	    public OfferteLocationListener(String provider)
 	    {
 	        Log.e(TAG, "LocationListener " + provider);
 	    }
@@ -78,20 +78,6 @@ public class GpsService extends Service {
 							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 							super.onFailure(statusCode, headers, responseString, throwable);
 						}
-						
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								Throwable throwable, JSONArray errorResponse) {
-							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-						}
-						
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								Throwable throwable, JSONObject errorResponse) {
-							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-							super.onFailure(statusCode, headers, throwable, errorResponse);
-						}
 					});
 			} else {
 				Toast.makeText(getApplicationContext(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
@@ -100,7 +86,7 @@ public class GpsService extends Service {
 	    @Override
 	    public void onProviderDisabled(String provider)
 	    {
-	        Log.e(TAG, "onProviderDisabled: " + provider);            
+	        Log.e(TAG, "onProviderDisabled: " + provider);
 	    }
 	    @Override
 	    public void onProviderEnabled(String provider)
@@ -115,9 +101,9 @@ public class GpsService extends Service {
 	} 
 	
 	
-	LocationListener[] mLocationListeners = new LocationListener[] {
-	        new LocationListener(LocationManager.GPS_PROVIDER),
-	        new LocationListener(LocationManager.NETWORK_PROVIDER)
+	OfferteLocationListener[] mLocationListeners = new OfferteLocationListener[] {
+	        new OfferteLocationListener(LocationManager.GPS_PROVIDER),
+	        new OfferteLocationListener(LocationManager.NETWORK_PROVIDER)
 	};
 	
 	@Override
@@ -192,7 +178,7 @@ public class GpsService extends Service {
 		return mLastLocation.getLongitude();
 	}
 	
-	public void registerLocationListener(android.location.LocationListener mListener) {
+	public void registerLocationListener(LocationListener mListener) {
 		
 	}
 }
