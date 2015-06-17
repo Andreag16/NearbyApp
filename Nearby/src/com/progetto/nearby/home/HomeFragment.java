@@ -18,11 +18,13 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.OnItemTouchListener;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -49,7 +51,8 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	
 	private GoogleMap googleMap;
 	private ListView lstPlaces;
-	private PlacesAdapter adapter;
+	private RecyclerView rvPlaces;
+	private PlaceAdapterRV adapter;
 	private ArrayList<Place> allPlaces = new ArrayList<Place>();
 	
 	private long lastUpdateMillis = 0;
@@ -117,8 +120,10 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 		
 		((MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 		
-		lstPlaces = (ListView)rootView.findViewById(R.id.lstPlaces);
-		
+		//lstPlaces = (ListView)rootView.findViewById(R.id.lstPlaces);
+		rvPlaces = (RecyclerView) rootView.findViewById(R.id.rv_places);
+		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
+		rvPlaces.setLayoutManager(llm);
 		super.onCreateView(inflater, container, savedInstanceState);
 		return rootView;
 	}
@@ -160,15 +165,25 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 						}
 						
 
-						adapter = new PlacesAdapter(getActivity().getApplicationContext(), allPlaces);
-						lstPlaces.setAdapter(adapter);
-						lstPlaces.setOnItemClickListener(new OnItemClickListener() {
-	
-							@Override
-							public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-								enterDetails(arg3);
-							}
-						});
+						adapter = new PlaceAdapterRV(getActivity().getApplicationContext(), allPlaces);
+						rvPlaces.setAdapter(adapter);
+//						rvPlaces.addOnItemTouchListener(
+//								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+//								      @Override public void onItemClick(View view, int position) {
+//								        // do whatever
+//								      }
+//								    })
+//						);
+						
+						
+						//						lstPlaces.setAdapter(adapter);
+//						lstPlaces.setOnItemClickListener(new OnItemClickListener() {
+//	
+//							@Override
+//							public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
+//								enterDetails(arg3);
+//							}
+//						});
 					}	
 					
 					@Override
