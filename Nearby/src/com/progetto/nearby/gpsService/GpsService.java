@@ -5,8 +5,12 @@ import org.json.JSONArray;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.home.HomeActivity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +20,8 @@ import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.os.Vibrator;
+import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -66,6 +72,21 @@ public class GpsService extends Service {
 						@Override
 						public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
 							if(response.length() > 0) {
+								NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+								NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
+								mBuilder.setSmallIcon(R.drawable.ic_local_offer_white_24dp)
+									.setContentTitle("Nuove offerte!")
+									.setContentText("Ci sono " + response.length() + " nuove offerte nella tua zona!");
+								
+								Intent notificationIntent = new Intent(getApplicationContext(), HomeActivity.class);
+							    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+							    
+							    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+							    v.vibrate(500);
+							    
+							    mNotificationManager.notify(9999, mBuilder.build());
+							      
+								
 								Toast.makeText(getApplicationContext(), "" + response.length(), Toast.LENGTH_SHORT).show();
 							} else {
 								Toast.makeText(getApplicationContext(), "nessuna offerta", Toast.LENGTH_SHORT).show();
