@@ -46,9 +46,10 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
 		return offerta_holder;
 	}
 
-	public static class OffertaViewHolder extends RecyclerView.ViewHolder {      
+	public static class OffertaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {      
         CardView cv;
         TextView nomeOfferta, descrizioneOfferta;
+        OnItemClickListener mItemClickListener;
  
         OffertaViewHolder(View itemView) {
             super(itemView);
@@ -56,6 +57,20 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
             nomeOfferta = (TextView)itemView.findViewById(R.id.txtNomeOfferta);
             descrizioneOfferta = (TextView)itemView.findViewById(R.id.txtDescrizioneOfferta);
         }
+
+		@Override
+		public void onClick(View v) {
+			// TODO Auto-generated method stub
+			mItemClickListener.onItemClick(v, getPosition());
+		}
+		
+		public interface OnItemClickListener {
+	        public void onItemClick(View view , int position);
+	    }
+
+	    public void SetOnItemClickListener(final OnItemClickListener mItemClickListener) {
+	        this.mItemClickListener = mItemClickListener;
+	    }
     }
 
 	@Override
