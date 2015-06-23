@@ -21,7 +21,6 @@ import android.support.v7.widget.RecyclerView.OnItemTouchListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -45,7 +44,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	public static final String TAG = "HOME_FRAGMENT";
 	
 	private GoogleMap googleMap;
-	private ListView lstPlaces;
 	private RecyclerView rvPlaces;
 	private PlaceAdapterRV adapter;
 	private ArrayList<Place> allPlaces = new ArrayList<Place>();
@@ -118,18 +116,20 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		rvPlaces = (RecyclerView) rootView.findViewById(R.id.rv_places);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvPlaces.setLayoutManager(llm);
+		rvPlaces.setSaveEnabled(false);
+		rvPlaces.setAdapter(null);
 		
-        getPlaces();
+        //getPlaces();
 		
 		super.onCreateView(inflater, container, savedInstanceState);
 		return rootView;
 	}
 	
-//	@Override
-//	public void onResume() {
-//		getPlaces();
-//		super.onResume();
-//	}
+	@Override
+	public void onResume() {
+		getPlaces();
+		super.onResume();
+	}
 
 	private void getPlaces() {
 		long currentMillis = Calendar.getInstance().getTimeInMillis();
@@ -264,6 +264,23 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 								.title(place.nome));
 			markers.put(marker, place.id);
 		}
+	}
+	
+	@Override
+	public void onDestroyView() {
+		MapFragment f = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+
+		if (f != null) {
+		    try {
+		    	if(googleMap != null)
+		    		googleMap.clear();
+		        getFragmentManager().beginTransaction().remove(f).commit();
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		    }
+		}
+		
+		super.onDestroyView();
 	}
 	
 	@Override

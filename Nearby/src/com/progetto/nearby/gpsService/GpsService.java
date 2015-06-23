@@ -41,12 +41,12 @@ public class GpsService extends Service {
 	    
 	    public OfferteLocationListener(String provider)
 	    {
-	        Log.e(TAG, "LocationListener " + provider);
+	        Log.w(TAG, "LocationListener " + provider);
 	    }
 	    @Override
 	    public void onLocationChanged(Location location)
 	    {
-	        Log.e(TAG, "onLocationChanged: " + location);
+	        Log.w(TAG, "onLocationChanged: " + location);
 	        mLastLocation.set(location);
 	        Toast.makeText(getApplicationContext(), "cerco offerte", Toast.LENGTH_SHORT).show();
 	        
@@ -86,17 +86,17 @@ public class GpsService extends Service {
 	    @Override
 	    public void onProviderDisabled(String provider)
 	    {
-	        Log.e(TAG, "onProviderDisabled: " + provider);
+	        Log.w(TAG, "onProviderDisabled: " + provider);
 	    }
 	    @Override
 	    public void onProviderEnabled(String provider)
 	    {
-	        Log.e(TAG, "onProviderEnabled: " + provider);
+	        Log.w(TAG, "onProviderEnabled: " + provider);
 	    }
 	    @Override
 	    public void onStatusChanged(String provider, int status, Bundle extras)
 	    {
-	        Log.e(TAG, "onStatusChanged: " + provider);
+	        Log.w(TAG, "onStatusChanged: " + provider);
 	    }
 	} 
 	
@@ -114,51 +114,51 @@ public class GpsService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-	    Log.e(TAG, "onStartCommand");
+	    Log.w(TAG, "onStartCommand");
 	    super.onStartCommand(intent, flags, startId);       
 	    return START_STICKY;
 	}
 	@Override
 	public void onCreate()
 	{
-	    Log.e(TAG, "onCreate");
+	    Log.w(TAG, "onCreate");
 	    initializeLocationManager();	    
 	    try {
 	        mLocationManager.requestLocationUpdates(
 	                LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
 	                mLocationListeners[1]);
 	    } catch (java.lang.SecurityException ex) {
-	        Log.i(TAG, "fail to request location update, ignore", ex);
+	        Log.w(TAG, "fail to request location update, ignore", ex);
 	    } catch (IllegalArgumentException ex) {
-	        Log.d(TAG, "network provider does not exist, " + ex.getMessage());
+	        Log.w(TAG, "network provider does not exist, " + ex.getMessage());
 	    }
 	    try {
 	        mLocationManager.requestLocationUpdates(
 	                LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
 	                mLocationListeners[0]);
 	    } catch (java.lang.SecurityException ex) {
-	        Log.i(TAG, "fail to request location update, ignore", ex);
+	        Log.w(TAG, "fail to request location update, ignore", ex);
 	    } catch (IllegalArgumentException ex) {
-	        Log.d(TAG, "gps provider does not exist " + ex.getMessage());
+	        Log.w(TAG, "gps provider does not exist " + ex.getMessage());
 	    }
 	}
 	@Override
 	public void onDestroy()
 	{
-	    Log.e(TAG, "onDestroy");
+	    Log.w(TAG, "onDestroy");
 	    super.onDestroy();
 	    if (mLocationManager != null) {
 	        for (int i = 0; i < mLocationListeners.length; i++) {
 	            try {
 	                mLocationManager.removeUpdates(mLocationListeners[i]);
 	            } catch (Exception ex) {
-	                Log.i(TAG, "fail to remove location listners, ignore", ex);
+	                Log.w(TAG, "fail to remove location listners, ignore", ex);
 	            }
 	        }
 	    }
 	} 
 	private void initializeLocationManager() {
-	    Log.e(TAG, "initializeLocationManager");
+	    Log.w(TAG, "initializeLocationManager");
 	    if (mLocationManager == null) {
 	        mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 	        mLastLocation = new Location(LocationManager.NETWORK_PROVIDER);
