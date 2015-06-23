@@ -1,16 +1,8 @@
 package com.progetto.nearby;
 
-import com.google.android.gms.maps.model.LatLng;
-
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
 import android.location.Location;
 import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
 
 public class GPSProvider implements LocationListener {
 
