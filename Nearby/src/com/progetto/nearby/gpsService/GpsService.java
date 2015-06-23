@@ -166,7 +166,7 @@ public class GpsService extends Service {
 	}
 	
 	
-	public boolean isLocationEnabled() {
+	public static boolean isLocationEnabled() {
 		return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 	

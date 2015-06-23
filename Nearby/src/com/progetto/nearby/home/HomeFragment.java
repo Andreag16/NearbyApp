@@ -11,13 +11,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -42,7 +38,6 @@ import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
 import com.progetto.nearby.gpsService.GpsService;
-import com.progetto.nearby.gpsService.GpsService.LocalBinder;
 import com.progetto.nearby.models.Place;
 
 public class HomeFragment extends MapFragment implements OnMapReadyCallback {
@@ -60,7 +55,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	private static boolean isFirstTimeOpen = true;
 	
 	
-	GpsService myService;
+	/*GpsService myService;
     boolean isBound = false;
 
 	private ServiceConnection myConnection = new ServiceConnection() {
@@ -69,18 +64,17 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	        LocalBinder binder = (LocalBinder) service;
 	        myService = binder.getService();
 	        isBound = true;
-	        centerMyPosition();
-	        getPlaces();
+	        
 	    }
 	    
 	    public void onServiceDisconnected(ComponentName arg0) {
 	        isBound = false;
 	    }
-    };
+    };*/
 	
 	private void centerMyPosition() {
 		if(googleMap != null) {
-			if(myService.isLocationEnabled()){
+			if(GpsService.isLocationEnabled()){
 	        	LatLng latLng = new LatLng(GpsService.getLatitude(), GpsService.getLongitude());
 	        	CameraPosition cameraPosition = new CameraPosition
 	        									.Builder()
@@ -106,10 +100,9 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
-		Intent intent = new Intent(getActivity(), GpsService.class);
-        getActivity().bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
-		
-		
+		/*Intent intent = new Intent(getActivity(), GpsService.class);
+        getActivity().bindService(intent, myConnection, Context.BIND_AUTO_CREATE);*/
+				
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -125,6 +118,9 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		rvPlaces = (RecyclerView) rootView.findViewById(R.id.rv_places);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvPlaces.setLayoutManager(llm);
+		
+        getPlaces();
+		
 		super.onCreateView(inflater, container, savedInstanceState);
 		return rootView;
 	}
@@ -243,7 +239,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		googleMap = map;
 		if(googleMap != null) {
 			googleMap.setMyLocationEnabled(true);
-			
+			centerMyPosition();
 	        googleMap.getUiSettings().setZoomControlsEnabled(true);
 	        //decoreMap();
 	        
@@ -274,8 +270,6 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	public void onDestroy() {
 		if(googleMap != null)
 			googleMap.setMyLocationEnabled(false);
-		if(isBound)
-			getActivity().unbindService(myConnection);
 		super.onDestroy();
 	}
 }
