@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -48,7 +49,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		idPlace = (int) getIntent().getExtras().getLong(Place.tag_id);
 		if(idPlace > 0)
 			getPlace(idPlace);
@@ -141,7 +142,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 					}
 				}
 				
-				client.get(Tools.OFFERS_BY_PLACE + place.id, new JsonHttpResponseHandler(){
+				client.get(Tools.OFFERS_BY_PLACE + idPlace, new JsonHttpResponseHandler(){
 
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
@@ -149,6 +150,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 						// TODO Auto-generated method stub
 						for(int i = 0; i < response.length(); i++)
 						{
+							Log.d("off", response.toString());
 							try {
 								offerte.add(Offerta.decodeJSON(response.getJSONObject(i)));
 							} catch (JSONException e) {

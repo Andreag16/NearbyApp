@@ -21,9 +21,9 @@ import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnItemTouchListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -128,11 +128,11 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 		return rootView;
 	}
 	
-	@Override
-	public void onResume() {
-		getPlaces();
-		super.onResume();
-	}
+//	@Override
+//	public void onResume() {
+//		getPlaces();
+//		super.onResume();
+//	}
 
 	private void getPlaces() {
 		long currentMillis = Calendar.getInstance().getTimeInMillis();
@@ -143,6 +143,8 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 				Toast.makeText(getActivity(), "GET places", Toast.LENGTH_LONG).show();
 				AsyncHttpClient client = new AsyncHttpClient();
 				
+				
+			
 				String url = Tools.buildPlacesUrl(getActivity(), myService.getLatitude(), myService.getLongitude());
 				
 				client.get(url, new JsonHttpResponseHandler(){
@@ -167,13 +169,14 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 
 						adapter = new PlaceAdapterRV(getActivity().getApplicationContext(), allPlaces);
 						rvPlaces.setAdapter(adapter);
-//						rvPlaces.addOnItemTouchListener(
-//								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
-//								      @Override public void onItemClick(View view, int position) {
-//								        // do whatever
-//								      }
-//								    })
-//						);
+						rvPlaces.addOnItemTouchListener(
+								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
+								      @Override public void onItemClick(View view, int position) {
+								       //Log.d("idPl", "" + PlaceAdapterRV.idPlace);
+								       enterDetails(PlaceAdapterRV.idPlace);
+								      }
+								    })
+						);
 						
 						
 						//						lstPlaces.setAdapter(adapter);
