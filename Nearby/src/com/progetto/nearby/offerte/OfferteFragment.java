@@ -58,6 +58,7 @@ public class OfferteFragment extends Fragment {
 		rv  = (RecyclerView)offerte_view.findViewById(R.id.rv);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rv.setLayoutManager(llm);
+		rv.setSaveEnabled(false);
 		getOffertsByGPS();
 		return offerte_view;
 	}

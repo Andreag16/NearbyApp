@@ -71,6 +71,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 		rvofferte = (RecyclerView) findViewById(R.id.rvoffertsplace);
 		LinearLayoutManager llm = new LinearLayoutManager(DetailPlaceActivity.this);
 		rvofferte.setLayoutManager(llm);
+		rvofferte.setSaveEnabled(false);
 	}
 
 	private void getPlace(final int idPlace) {

@@ -68,6 +68,7 @@ public class PlaceAdapterRV extends RecyclerView.Adapter<PlaceAdapterRV.PlaceVie
 		arg0.logo.setImageUrl(places.get(arg1).urlImg);
 		arg0.nomePlace.setText(places.get(arg1).nome);
 		arg0.citta.setText(places.get(arg1).città);
+		arg0.distanza.setText("" + places.get(arg1).distanza + "km");
 	}
 
 	@Override

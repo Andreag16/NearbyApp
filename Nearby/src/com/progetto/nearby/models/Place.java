@@ -17,6 +17,7 @@ public class Place {
 	public static final String tag_phone = "place_phone";
 	public static final String tag_citta = "town_name";
 	public static final String tag_gallery = "gallery";
+	public static final String tag_distanza = "distance";
 	
 	public int id;
 	public String città;
@@ -43,6 +44,7 @@ public class Place {
 			place.longit = Float.parseFloat(gpssplit[1]);
 			place.telefono = obj.getString(tag_phone);
 			place.città = obj.getString(tag_citta);
+			place.distanza = (float)obj.getDouble(tag_distanza);
 			place.urlImg = Tools.GET_IMAGE_URL + place.id + ".jpg";
 			place.gallery.add(place.urlImg);
 			if(obj.has(tag_gallery))
