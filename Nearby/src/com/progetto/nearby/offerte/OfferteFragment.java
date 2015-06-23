@@ -34,7 +34,7 @@ public class OfferteFragment extends Fragment {
 	//private ListView listaOfferte;
 	private RecyclerView rv;
 	private OffertaAdapterRV adapter;
-	private ArrayList<Offerta> offerts = new ArrayList<Offerta>();
+	private ArrayList<Offerta> offerts;
 	private long lastUpdateMillis = 0;
 	private AsyncHttpClient client;
 	
@@ -46,8 +46,9 @@ public class OfferteFragment extends Fragment {
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
 		super.onCreate(savedInstanceState);
+		//setRetainInstance(true);
+		//getOffertsByGPS();
 	}
 
 	@Override
@@ -58,7 +59,7 @@ public class OfferteFragment extends Fragment {
 		rv  = (RecyclerView)offerte_view.findViewById(R.id.rv);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rv.setLayoutManager(llm);
-		rv.setSaveEnabled(false);
+		//rv.setSaveEnabled(false);
 		getOffertsByGPS();
 		return offerte_view;
 	}
@@ -83,8 +84,10 @@ public class OfferteFragment extends Fragment {
 					@Override
 					public void onSuccess(int statusCode, Header[] headers,
 							JSONArray response) {
+						offerts  = new ArrayList<Offerta>();
 						for(int i = 0; i < response.length(); i++)
 						{
+							
 							try {
 								offerts.add(Offerta.decodeJSON(response.getJSONObject(i)));
 							} catch (JSONException e) {

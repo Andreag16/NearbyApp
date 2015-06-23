@@ -37,7 +37,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 	public static final String ID_PLACE = "ID_PLACE";
 	
 	private LinearLayout scrollImages;
-	private TextView txtNome, txtdescrizione, txtPhone, txtCitta;
+	private TextView txtdescrizione, txtPhone, txtCitta;
 	private Button btnMappa;
 	private RecyclerView rvofferte;
 	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
@@ -53,9 +53,9 @@ public class DetailPlaceActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_detail);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		idPlace = (int) getIntent().getExtras().getLong(Place.tag_id);
+		setupGUI();
 		if(idPlace > 0)
 			getPlace(idPlace);
-		setupGUI();
 	}
 
 	private void setupGUI() {
@@ -63,7 +63,6 @@ public class DetailPlaceActivity extends AppCompatActivity {
 		//galleryPlace = (Gallery) findViewById(R.id.galleryPlace);
 		scrollImages = (LinearLayout) findViewById(R.id.images);
 		logo = (SmartImageView) findViewById(R.id.logo);
-		txtNome = (TextView) findViewById(R.id.txtDetNome);
 		txtdescrizione = (TextView) findViewById(R.id.txtDetDescr);
 		txtPhone = (TextView) findViewById(R.id.txtDetTelephone);
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
@@ -118,6 +117,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 				
 				private void updateDetailGUI() {
 					// TODO Auto-generated method stub
+					getSupportActionBar().setTitle(place.nome);
 					logo.setImageUrl(place.gallery.get(0));
 					if(place.gallery.size() > 1)
 					{
@@ -145,7 +145,6 @@ public class DetailPlaceActivity extends AppCompatActivity {
 						}
 					}
 				
-					txtNome.setText(place.nome);
 					txtdescrizione.setText(place.description);
 					txtPhone.setText(place.telefono);
 					txtCitta.setText(place.città);
