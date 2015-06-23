@@ -118,6 +118,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		rvPlaces = (RecyclerView) rootView.findViewById(R.id.rv_places);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvPlaces.setLayoutManager(llm);
+		rvPlaces.setSaveEnabled(false);
 		
         getPlaces();
 		

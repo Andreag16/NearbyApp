@@ -135,7 +135,7 @@ public class NavigationDrawerFragment extends Fragment {
 				GravityCompat.START);
 		// set up the drawer's list view with items and click listener
 
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_black_36dp);
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setHomeButtonEnabled(true);
@@ -283,13 +283,13 @@ public class NavigationDrawerFragment extends Fragment {
 	 * screen.
 	 */
 	private void showGlobalContextActionBar() {
-		ActionBar actionBar = getActionBar();
+		ActionBar actionBar = getSupportActionBar();
 		actionBar.setDisplayShowTitleEnabled(true);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 		actionBar.setTitle(R.string.app_name);
 	}
 
-	private ActionBar getActionBar() {
+	private ActionBar getSupportActionBar() {
 		AppCompatActivity x = (AppCompatActivity) getActivity();
 		return x.getSupportActionBar();
 	}
