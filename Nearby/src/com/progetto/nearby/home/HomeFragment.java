@@ -2,6 +2,8 @@ package com.progetto.nearby.home;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -14,7 +16,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.Settings;
@@ -43,7 +44,7 @@ import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.gpsService.GpsService.LocalBinder;
 import com.progetto.nearby.models.Place;
 
-public class HomeFragment extends MapFragment implements OnMapReadyCallback, android.location.LocationListener  {
+public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 
 	public static final String TAG = "HOME_FRAGMENT";
 	
@@ -51,6 +52,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	private ListView lstPlaces;
 	private PlacesAdapter adapter;
 	private ArrayList<Place> allPlaces = new ArrayList<Place>();
+	private Map<Marker, Integer> markers = new HashMap<Marker, Integer>();
 	
 	private long lastUpdateMillis = 0;
 	private static boolean isFirstTimeOpen = true;
@@ -77,7 +79,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	private void centerMyPosition() {
 		if(googleMap != null) {
 			if(myService.isLocationEnabled()){
-	        	LatLng latLng = new LatLng(myService.getLatitude(), myService.getLongitude());
+	        	LatLng latLng = new LatLng(GpsService.getLatitude(), GpsService.getLongitude());
 	        	CameraPosition cameraPosition = new CameraPosition
 	        									.Builder()
 	    								        .target(latLng)
@@ -138,7 +140,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 				Toast.makeText(getActivity(), "GET places", Toast.LENGTH_LONG).show();
 				AsyncHttpClient client = new AsyncHttpClient();
 				
-				String url = Tools.buildPlacesUrl(getActivity(), myService.getLatitude(), myService.getLongitude());
+				String url = Tools.buildPlacesUrl(getActivity(), GpsService.getLatitude(), GpsService.getLongitude());
 				
 				client.get(url, new JsonHttpResponseHandler(){
 					@Override
@@ -229,25 +231,27 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 			
 	        googleMap.getUiSettings().setZoomControlsEnabled(true);
 	        //decoreMap();
+	        
 	    	googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 				@Override
 				public void onInfoWindowClick(Marker marker) {
-					/*
-					Intent intent = new Intent(getActivity(), DettagliPlaceActivity.class);
-			    	intent.putExtra(DettagliPlaceActivity.ID_PLACE, Tools.markersList.get(marker).id);
+					Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+			    	intent.putExtra(DetailPlaceActivity.ID_PLACE, markers.get(marker));
 			        startActivity(intent);
-			        */
 				}
 			});
 		}
 	}
 	
 	private void decoreMap() {
+		Marker marker;
 		googleMap.clear();
+		markers.clear();
 		for (Place place : allPlaces) {
-			googleMap.addMarker(new MarkerOptions()
-				.position(new LatLng(place.lat, place.longit))
-				.title(place.nome));
+			marker = googleMap.addMarker(new MarkerOptions()
+								.position(new LatLng(place.lat, place.longit))
+								.title(place.nome));
+			markers.put(marker, place.id);
 		}
 	}
 	
@@ -255,18 +259,8 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	public void onDestroy() {
 		if(googleMap != null)
 			googleMap.setMyLocationEnabled(false);
+		if(isBound)
+			getActivity().unbindService(myConnection);
 		super.onDestroy();
 	}
-
-
-	@Override
-	public void onLocationChanged(Location location) {
-		getPlaces();
-	}
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) { }
-	@Override
-	public void onProviderEnabled(String provider) { }
-	@Override
-	public void onProviderDisabled(String provider) { }
 }
