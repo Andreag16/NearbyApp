@@ -34,6 +34,8 @@ import com.progetto.nearby.offerte.OffertaAdapterRV;
 
 public class DetailPlaceActivity extends AppCompatActivity {
 
+	public static final String ID_PLACE = "ID_PLACE";
+	
 	private LinearLayout scrollImages;
 	private TextView txtNome, txtdescrizione, txtPhone, txtCitta;
 	private Button btnMappa;

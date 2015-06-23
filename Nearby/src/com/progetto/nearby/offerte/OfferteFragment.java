@@ -25,6 +25,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.models.Offerta;
 
 public class OfferteFragment extends Fragment {
@@ -72,8 +73,8 @@ public class OfferteFragment extends Fragment {
 
 				Log.d("distance", ""+ distance);
 				String url = Tools.OFFERS_BY_GPS_URL +
-						45.9536714 +
-						"&" + 12.6858874 +
+						GpsService.getLatitude() +
+						"&" + GpsService.getLongitude() +
 						"&" + distance;
 				client = new AsyncHttpClient();
 				client.get(url, new JsonHttpResponseHandler(){

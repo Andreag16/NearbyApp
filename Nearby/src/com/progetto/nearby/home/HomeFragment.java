@@ -2,6 +2,8 @@ package com.progetto.nearby.home;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -9,19 +11,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.ServiceConnection;
-import android.location.Location;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnItemTouchListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,10 +38,9 @@ import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
 import com.progetto.nearby.gpsService.GpsService;
-import com.progetto.nearby.gpsService.GpsService.LocalBinder;
 import com.progetto.nearby.models.Place;
 
-public class HomeFragment extends MapFragment implements OnMapReadyCallback, android.location.LocationListener  {
+public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 
 	public static final String TAG = "HOME_FRAGMENT";
 	
@@ -54,12 +49,13 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	private RecyclerView rvPlaces;
 	private PlaceAdapterRV adapter;
 	private ArrayList<Place> allPlaces = new ArrayList<Place>();
+	private Map<Marker, Integer> markers = new HashMap<Marker, Integer>();
 	
 	private long lastUpdateMillis = 0;
 	private static boolean isFirstTimeOpen = true;
 	
 	
-	GpsService myService;
+	/*GpsService myService;
     boolean isBound = false;
 
 	private ServiceConnection myConnection = new ServiceConnection() {
@@ -68,19 +64,18 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	        LocalBinder binder = (LocalBinder) service;
 	        myService = binder.getService();
 	        isBound = true;
-	        centerMyPosition();
-	        getPlaces();
+	        
 	    }
 	    
 	    public void onServiceDisconnected(ComponentName arg0) {
 	        isBound = false;
 	    }
-    };
+    };*/
 	
 	private void centerMyPosition() {
 		if(googleMap != null) {
-			if(myService.isLocationEnabled()){
-	        	LatLng latLng = new LatLng(myService.getLatitude(), myService.getLongitude());
+			if(GpsService.isLocationEnabled()){
+	        	LatLng latLng = new LatLng(GpsService.getLatitude(), GpsService.getLongitude());
 	        	CameraPosition cameraPosition = new CameraPosition
 	        									.Builder()
 	    								        .target(latLng)
@@ -105,10 +100,9 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
-		Intent intent = new Intent(getActivity(), GpsService.class);
-        getActivity().bindService(intent, myConnection, Context.BIND_AUTO_CREATE);
-		
-		
+		/*Intent intent = new Intent(getActivity(), GpsService.class);
+        getActivity().bindService(intent, myConnection, Context.BIND_AUTO_CREATE);*/
+				
 		super.onCreate(savedInstanceState);
 	}
 	
@@ -124,6 +118,9 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 		rvPlaces = (RecyclerView) rootView.findViewById(R.id.rv_places);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rvPlaces.setLayoutManager(llm);
+		
+        getPlaces();
+		
 		super.onCreateView(inflater, container, savedInstanceState);
 		return rootView;
 	}
@@ -143,9 +140,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 				Toast.makeText(getActivity(), "GET places", Toast.LENGTH_LONG).show();
 				AsyncHttpClient client = new AsyncHttpClient();
 				
-				
-			
-				String url = Tools.buildPlacesUrl(getActivity(), myService.getLatitude(), myService.getLongitude());
+				String url = Tools.buildPlacesUrl(getActivity(), GpsService.getLatitude(), GpsService.getLongitude());
 				
 				client.get(url, new JsonHttpResponseHandler(){
 					@Override
@@ -244,28 +239,30 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 		googleMap = map;
 		if(googleMap != null) {
 			googleMap.setMyLocationEnabled(true);
-			
+			centerMyPosition();
 	        googleMap.getUiSettings().setZoomControlsEnabled(true);
 	        //decoreMap();
+	        
 	    	googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 				@Override
 				public void onInfoWindowClick(Marker marker) {
-					/*
-					Intent intent = new Intent(getActivity(), DettagliPlaceActivity.class);
-			    	intent.putExtra(DettagliPlaceActivity.ID_PLACE, Tools.markersList.get(marker).id);
+					Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+			    	intent.putExtra(DetailPlaceActivity.ID_PLACE, markers.get(marker));
 			        startActivity(intent);
-			        */
 				}
 			});
 		}
 	}
 	
 	private void decoreMap() {
+		Marker marker;
 		googleMap.clear();
+		markers.clear();
 		for (Place place : allPlaces) {
-			googleMap.addMarker(new MarkerOptions()
-				.position(new LatLng(place.lat, place.longit))
-				.title(place.nome));
+			marker = googleMap.addMarker(new MarkerOptions()
+								.position(new LatLng(place.lat, place.longit))
+								.title(place.nome));
+			markers.put(marker, place.id);
 		}
 	}
 	
@@ -275,16 +272,4 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, and
 			googleMap.setMyLocationEnabled(false);
 		super.onDestroy();
 	}
-
-
-	@Override
-	public void onLocationChanged(Location location) {
-		getPlaces();
-	}
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) { }
-	@Override
-	public void onProviderEnabled(String provider) { }
-	@Override
-	public void onProviderDisabled(String provider) { }
 }

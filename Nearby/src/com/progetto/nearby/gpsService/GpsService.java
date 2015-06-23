@@ -22,11 +22,11 @@ import android.widget.Toast;
 
 public class GpsService extends Service {
 	private static final String TAG = "GpsService";
-	private LocationManager mLocationManager = null;
+	private static LocationManager mLocationManager = null;
 	private static final int LOCATION_INTERVAL = 5000; // 1 secondo
 	private static final float LOCATION_DISTANCE = 10; //10 metri
 
-	private Location mLastLocation;
+	private static Location mLastLocation;
 
 	private final IBinder mBinder = new LocalBinder();
 	
@@ -166,19 +166,15 @@ public class GpsService extends Service {
 	}
 	
 	
-	public boolean isLocationEnabled() {
+	public static boolean isLocationEnabled() {
 		return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 	
-	public double getLatitude() {
+	public static double getLatitude() {
 		return mLastLocation.getLatitude();
 	}
 	
-	public double getLongitude() {
+	public static double getLongitude() {
 		return mLastLocation.getLongitude();
-	}
-	
-	public void registerLocationListener(LocationListener mListener) {
-		
 	}
 }

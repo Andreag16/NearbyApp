@@ -8,8 +8,10 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.progetto.nearby.R;
+import com.progetto.nearby.Tools;
 import com.progetto.nearby.Filtri.FiltriActivity;
 import com.progetto.nearby.navigationdrawer.NavigationDrawerFragment;
 import com.progetto.nearby.offerte.OfferteFragment;
@@ -121,9 +123,13 @@ public class HomeActivity extends AppCompatActivity implements
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
-			Intent filtriIntent = new Intent(HomeActivity.this, FiltriActivity.class);
-			startActivity(filtriIntent);
-			return true;
+			if(Tools.isNetworkEnabled(this)) {
+				Intent filtriIntent = new Intent(HomeActivity.this, FiltriActivity.class);
+				startActivity(filtriIntent);
+				return true;
+			} else {
+				Toast.makeText(this, "Nessuna connessione ad internet", Toast.LENGTH_SHORT).show();
+			}
 		}
 		return super.onOptionsItemSelected(item);
 	}
