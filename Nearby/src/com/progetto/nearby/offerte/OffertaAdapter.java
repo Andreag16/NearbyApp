@@ -57,7 +57,7 @@ public class OffertaAdapter extends BaseAdapter {
 		}
 		Offerta offerta = (Offerta) getItem(arg0);
 		OffertaViewHolder getoffertaholder = (OffertaViewHolder) cellofferta.getTag();
-		getoffertaholder.txtNomeOfferta.setText(offerta.nome);
+		getoffertaholder.txtNomeOfferta.setText(offerta.nomeofferta);
 		return cellofferta;
 	}
 

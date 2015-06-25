@@ -81,7 +81,6 @@ public class OfferteFragment extends Fragment {
 						offerts  = new ArrayList<Offerta>();
 						for(int i = 0; i < response.length(); i++)
 						{
-							
 							try {
 								offerts.add(Offerta.decodeJSON(response.getJSONObject(i)));
 							} catch (JSONException e) {

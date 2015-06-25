@@ -8,25 +8,39 @@ import org.json.JSONObject;
 public class Offerta {
 
 	public static final String tag_id = "id_offer";
-	public static final String tag_name = "title";
+	public static final String tag_nomeofferta = "title";
 	public static final String tag_description = "offer_description";
+	public static final String tag_nomeposto = "place_name";
+	public static final String tag_nomecittaposto = "town_name";
 	public static final String tag_distanza = "distance";
 	
 	public int id;
-	public String nome;
+	public String nomeofferta;
 	public String descrizione;
+	public String nomepostoofferta;
+	public String nomecittaofferta;
 	public String distanza;
 	
 	public static Offerta decodeJSON(JSONObject offert) throws JSONException
 	{
 		Offerta offerta = new Offerta();
 		offerta.id = offert.getInt(tag_id);
-		offerta.nome = offert.getString(tag_name);
+		offerta.nomeofferta = offert.getString(tag_nomeofferta);
 		offerta.descrizione = offert.getString(tag_description);
-		if(offert.has(tag_distanza))
+		if(offert.has(tag_nomeposto) && offert.has(tag_nomecittaposto)
+				&& offert.has(tag_distanza))
+		{
+			offerta.nomepostoofferta = offert.getString(tag_nomeposto);
+			offerta.nomecittaofferta = offert.getString(tag_nomecittaposto);
 			offerta.distanza = distance(offert.getDouble(tag_distanza));
+		}
 		else
+		{
+			offerta.nomepostoofferta = "";
+			offerta.nomecittaofferta = "";
 			offerta.distanza = "";
+		}
+			
 		return offerta;
 	}
 	

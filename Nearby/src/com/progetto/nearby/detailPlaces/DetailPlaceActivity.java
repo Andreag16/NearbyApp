@@ -144,6 +144,8 @@ public class DetailPlaceActivity extends AppCompatActivity {
 							scrollImages.addView(image_detail);
 						}
 					}
+					else
+						scrollImages.setVisibility(View.GONE);
 				
 					txtdescrizione.setText(place.description);
 					txtPhone.setText(place.telefono);
