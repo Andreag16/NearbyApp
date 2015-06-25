@@ -30,7 +30,7 @@ public class Place {
 	public float longit;
 	public String telefono;
 	public String tipo;
-	public float distanza;
+	public String distanza;
 	public String urlImg;
 	public ArrayList<String> gallery = new ArrayList<String>();
 	
@@ -57,16 +57,29 @@ public class Place {
 						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
 				}
 			}
-			double dist = obj.getDouble(tag_distanza);
-			//DecimalFormat twoDForm = new DecimalFormat("#,##");
-			//Float d = Float.parseFloat(twoDForm.format(dist));BigDecimal bd = new BigDecimal(Float.toString(d));
-			BigDecimal bd = new BigDecimal(dist);
-	        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP); 
-			
-			place.distanza = bd.floatValue();
+			place.distanza = distance(obj.getDouble(tag_distanza));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return place;
+	}
+	
+	private static String distance(double value)
+	{
+		BigDecimal bd = null;
+		String dist = "";
+		if(value >= 1000)
+		{
+			bd = new BigDecimal(value/1000);
+			bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+			dist = bd.floatValue() + " Km";
+		}
+		else if(value < 1000)
+		{
+			bd = new BigDecimal(value);
+			bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
+			dist = bd.floatValue() + " m";
+		}
+        return dist;
 	}
 }

@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 
 import android.app.Fragment;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -37,18 +38,12 @@ public class OfferteFragment extends Fragment {
 	private ArrayList<Offerta> offerts;
 	private long lastUpdateMillis = 0;
 	private AsyncHttpClient client;
+	private ProgressDialog progressdialog;
 	
 	public static OfferteFragment newInstance(Bundle args){
 		OfferteFragment offerte_fragment = new OfferteFragment();
 		offerte_fragment.setArguments(args);
 		return offerte_fragment;
-	}
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		//setRetainInstance(true);
-		//getOffertsByGPS();
 	}
 
 	@Override
@@ -59,7 +54,6 @@ public class OfferteFragment extends Fragment {
 		rv  = (RecyclerView)offerte_view.findViewById(R.id.rv);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
 		rv.setLayoutManager(llm);
-		//rv.setSaveEnabled(false);
 		getOffertsByGPS();
 		return offerte_view;
 	}

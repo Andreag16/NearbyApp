@@ -166,6 +166,20 @@ public class DetailPlaceActivity extends AppCompatActivity {
 
 				@Override
 				public void onSuccess(int statusCode, Header[] headers,
+						JSONObject response) {
+					// TODO Auto-generated method stub
+					try {
+						offerte.add(Offerta.decodeJSON(response));
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
+					rvofferte.setAdapter(adapter);
+				}
+
+				@Override
+				public void onSuccess(int statusCode, Header[] headers,
 						JSONArray response) {
 					// TODO Auto-generated method stub
 					for(int i = 0; i < response.length(); i++)

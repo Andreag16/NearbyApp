@@ -35,6 +35,10 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
 		// TODO Auto-generated method stub
 		arg0.nomeOfferta.setText(offerts.get(arg1).nome);
 		arg0.descrizioneOfferta.setText(offerts.get(arg1).descrizione);
+		if(!(offerts.get(arg1).distanza == ""))
+			arg0.distanza.setText(offerts.get(arg1).distanza);
+		else
+			arg0.distanza.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
@@ -48,7 +52,7 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
 
 	public static class OffertaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {      
         CardView cv;
-        TextView nomeOfferta, descrizioneOfferta;
+        TextView nomeOfferta, descrizioneOfferta, distanza;
         OnItemClickListener mItemClickListener;
  
         OffertaViewHolder(View itemView) {
@@ -56,6 +60,7 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
             cv = (CardView)itemView.findViewById(R.id.cv);
             nomeOfferta = (TextView)itemView.findViewById(R.id.txtNomeOfferta);
             descrizioneOfferta = (TextView)itemView.findViewById(R.id.txtDescrizioneOfferta);
+            distanza = (TextView) itemView.findViewById(R.id.txtDistanzaOff);
         }
 
 		@Override

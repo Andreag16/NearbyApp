@@ -46,13 +46,6 @@ public class PlaceAdapterRV extends RecyclerView.Adapter<PlaceAdapterRV.PlaceVie
             citta = (TextView)itemView.findViewById(R.id.txtCittaPlace);
             distanza = (TextView)itemView.findViewById(R.id.txtDistanzaPlace);
         }
-
-//		@Override
-//		public void onClick(View v) {
-//			// TODO Auto-generated method stub
-//			enterDetails(idPlace);
-//			Toast.makeText(context, "" + idPlace , Toast.LENGTH_LONG).show();
-//		}
     }
 
 	@Override
@@ -68,7 +61,10 @@ public class PlaceAdapterRV extends RecyclerView.Adapter<PlaceAdapterRV.PlaceVie
 		arg0.logo.setImageUrl(places.get(arg1).urlImg);
 		arg0.nomePlace.setText(places.get(arg1).nome);
 		arg0.citta.setText(places.get(arg1).città);
-		arg0.distanza.setText("" + places.get(arg1).distanza + " km");
+		if(!(places.get(arg1).distanza == ""))
+			arg0.distanza.setText(places.get(arg1).distanza);
+		else
+			arg0.distanza.setVisibility(View.INVISIBLE);
 	}
 
 	@Override
