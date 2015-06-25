@@ -1,5 +1,7 @@
 package com.progetto.nearby.models;
 
+import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -44,7 +46,6 @@ public class Place {
 			place.longit = Float.parseFloat(gpssplit[1]);
 			place.telefono = obj.getString(tag_phone);
 			place.città = obj.getString(tag_citta);
-			place.distanza = (float)obj.getDouble(tag_distanza);
 			place.urlImg = Tools.GET_IMAGE_URL + place.id + ".jpg";
 			place.gallery.add(place.urlImg);
 			if(obj.has(tag_gallery))
@@ -56,6 +57,13 @@ public class Place {
 						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
 				}
 			}
+			double dist = obj.getDouble(tag_distanza);
+			//DecimalFormat twoDForm = new DecimalFormat("#,##");
+			//Float d = Float.parseFloat(twoDForm.format(dist));BigDecimal bd = new BigDecimal(Float.toString(d));
+			BigDecimal bd = new BigDecimal(dist);
+	        bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP); 
+			
+			place.distanza = bd.floatValue();
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

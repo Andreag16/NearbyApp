@@ -10,10 +10,10 @@
         android:id="@+id/horizontalScrollView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/llnome"
         android:layout_alignParentLeft="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="26dp" >
+        android:layout_marginBottom="26dp"
+        android:layout_below="@+id/logo" >
 
         <LinearLayout
             android:id="@+id/images"
@@ -103,32 +103,6 @@
 
         <TextView
             android:id="@+id/txtDetTelephone"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            android:textColor="#000" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/llnome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/logo"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginTop="68dp" >
-
-        <TextView
-            android:id="@+id/lblDetNome"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nome: "
-            android:textColor="#000"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/txtDetNome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="TextView"

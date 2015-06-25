@@ -69,11 +69,12 @@ public class HomeActivity extends AppCompatActivity implements
 				}
 				else
 					offertefragment = (OfferteFragment) fragmentmanager.findFragmentByTag(OfferteFragment.TAG);
-					fragmentmanager
-						.beginTransaction()
-						.replace(R.id.container,  offertefragment, OfferteFragment.TAG)
-						.addToBackStack(null)
-						.commit();
+				
+				fragmentmanager
+					.beginTransaction()
+					.replace(R.id.container,  offertefragment, OfferteFragment.TAG)
+					.addToBackStack(null)
+					.commit();
 			}
 				break;
 			default:
