@@ -34,7 +34,7 @@ import android.widget.Toast;
 public class GpsService extends Service {
 	private static final String TAG = "GpsService";
 	private static LocationManager mLocationManager = null;
-	private static final int LOCATION_INTERVAL = 5000; // 1 secondo
+	private static final int LOCATION_INTERVAL = 5000; // 5 secondi
 	private static final float LOCATION_DISTANCE = 10; //10 metri
 
 	private static Location mLastLocation;

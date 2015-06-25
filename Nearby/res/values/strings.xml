@@ -4,7 +4,8 @@
     <string name="app_name">Nearby</string>
     <string name="title_section1">Home</string>
     <string name="title_section2">Offerte</string>
-    <string name="title_section3">Contatti</string>
+    <string name="title_section3">Realtà aumentata</string>
+    <string name="title_section4">Contatti</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
