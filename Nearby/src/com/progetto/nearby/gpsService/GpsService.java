@@ -1,14 +1,20 @@
 package com.progetto.nearby.gpsService;
 
+import java.util.HashSet;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 import com.progetto.nearby.home.HomeActivity;
+import com.progetto.nearby.models.Offerta;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -21,7 +27,6 @@ import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.Vibrator;
-import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -33,6 +38,8 @@ public class GpsService extends Service {
 	private static final float LOCATION_DISTANCE = 10; //10 metri
 
 	private static Location mLastLocation;
+	
+	public static final int NOTIFICATION_ID = 9999;
 
 	private final IBinder mBinder = new LocalBinder();
 	
@@ -45,6 +52,8 @@ public class GpsService extends Service {
 	
 	private class OfferteLocationListener implements LocationListener {
 	    
+		private HashSet<Integer> lstOfferteVicine = new HashSet<Integer>();
+		
 	    public OfferteLocationListener(String provider)
 	    {
 	        Log.w(TAG, "LocationListener " + provider);
@@ -72,24 +81,27 @@ public class GpsService extends Service {
 						@Override
 						public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
 							if(response.length() > 0) {
-								NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-								NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(getApplicationContext());
-								mBuilder.setSmallIcon(R.drawable.ic_local_offer_white_24dp)
-									.setContentTitle("Nuove offerte!")
-									.setContentText("Ci sono " + response.length() + " nuove offerte nella tua zona!");
+								JSONObject offerta;
+								int idOfferta;
+								int counterNuoveOfferte = 0;
+								HashSet<Integer> lstNuoveOfferte = new HashSet<Integer>(response.length());
+								try {
+									for (int i = 0; i < response.length(); i++) {
+										offerta = response.getJSONObject(i);
+										idOfferta = offerta.getInt(Offerta.tag_id);
+										if(!lstOfferteVicine.contains(idOfferta)) {
+											counterNuoveOfferte++;
+										}
+										lstNuoveOfferte.add(idOfferta);
+									}
+								} catch (JSONException e) { e.printStackTrace(); }
 								
-								Intent notificationIntent = new Intent(getApplicationContext(), HomeActivity.class);
-							    PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
-							    
-							    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-							    v.vibrate(500);
-							    
-							    mNotificationManager.notify(9999, mBuilder.build());
-							      
+								lstOfferteVicine.clear();
+								lstOfferteVicine = lstNuoveOfferte;
 								
-								Toast.makeText(getApplicationContext(), "" + response.length(), Toast.LENGTH_SHORT).show();
-							} else {
-								Toast.makeText(getApplicationContext(), "nessuna offerta", Toast.LENGTH_SHORT).show();
+								if (counterNuoveOfferte > 0) {
+									showNotification(response.length());
+								}
 							}
 						}	
 						
@@ -100,10 +112,32 @@ public class GpsService extends Service {
 							super.onFailure(statusCode, headers, responseString, throwable);
 						}
 					});
+					//Toast.makeText(getApplicationContext(), "Cerco offerte", Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(getApplicationContext(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
 			}
 	    }
+	    
+	    private void showNotification(int numOfferte) {
+	    	Intent notificationIntent = new Intent(getApplicationContext(), HomeActivity.class);
+			PendingIntent pendingIntent = PendingIntent.getActivity(getApplicationContext(), 0, notificationIntent, 0);
+
+			String message = (numOfferte > 1 ? "Ci sono " + numOfferte + " nuove offerte nella tua zona!" : "C'è una nuova offerta nella tua zona");
+			NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+			Notification notification = new Notification.Builder(getApplicationContext())
+				.setContentTitle("Nuove offerte!")
+				.setContentText(message)
+		        .setSmallIcon(R.drawable.ic_local_offer_white_24dp)
+		        .setContentIntent(pendingIntent)
+		        .setAutoCancel(true)
+		        .build();
+		    
+		    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+		    vibrator.vibrate(500);
+		    
+		    mNotificationManager.notify(NOTIFICATION_ID, notification);
+	    }
+	    
 	    @Override
 	    public void onProviderDisabled(String provider)
 	    {
