@@ -23,7 +23,7 @@ public class DrawerItemObject {
     	data.add(home);
     	DrawerItemObject offerte = new DrawerItemObject(1,resources.getString(R.string.title_section2),R.drawable.offerte);
     	data.add(offerte);
-    	DrawerItemObject ar = new DrawerItemObject(2,resources.getString(R.string.title_section3),R.drawable.contatti);
+    	DrawerItemObject ar = new DrawerItemObject(2,resources.getString(R.string.title_section3),R.drawable.ic_visibility_black_36dp);
     	data.add(ar);
     	DrawerItemObject contatti = new DrawerItemObject(3,resources.getString(R.string.title_section4),R.drawable.contatti);
     	data.add(contatti);

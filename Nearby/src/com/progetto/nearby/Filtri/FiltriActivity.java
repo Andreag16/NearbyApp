@@ -17,10 +17,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SeekBar;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -106,7 +106,6 @@ public class FiltriActivity extends AppCompatActivity {
 	public final static String TAG = "FILTRI_ACTIVITY";
 	
 	private SharedPreferences sharedPreferences;
-	private boolean canRefresh = false;
 	
 	private SeekBar seekbarDistanza;
 	private Spinner spinnerCategorie;
@@ -174,7 +173,23 @@ public class FiltriActivity extends AppCompatActivity {
 		spinnerCategorie.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-				refreshSubcategories();
+				Cursor cursor = getContentResolver()
+						.query(NearbyContentProvider.SUBCATEGORIES_URI,
+								null,
+								SubcategoriesTableHelper.category_id + "=" + id + " OR " + SubcategoriesTableHelper.category_id + "=-1",
+								null,
+								SubcategoriesTableHelper.name);
+				cursor.moveToFirst();
+
+				SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(FiltriActivity.this,
+							android.R.layout.simple_spinner_item,
+							cursor,
+							new String[]{SubcategoriesTableHelper.name},
+							new int[]{android.R.id.text1},
+							0);
+				
+				cursorAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+				spinnerSottocategorie.setAdapter(cursorAdapter);
 			}
 			@Override
 			public void onNothingSelected(AdapterView<?> parent) { }
@@ -195,6 +210,8 @@ public class FiltriActivity extends AppCompatActivity {
 					JSONObject jsonCategories;
 					List<String> lstCategorie = new ArrayList<String>();
 					ContentResolver contentProvider = FiltriActivity.this.getContentResolver();
+					lstCategorie.add("Tutte");
+					contentProvider.insert(NearbyContentProvider.CATEGORIES_URI, new Categories(-1, "Tutte").getContentValues());
 					
 					Categories cat;
 					for(int i = 0; i < response.length(); i++)
@@ -203,19 +220,20 @@ public class FiltriActivity extends AppCompatActivity {
 							jsonCategories = response.getJSONObject(i);
 							cat = Categories.decodeJSON(jsonCategories);
 							contentProvider.insert(NearbyContentProvider.CATEGORIES_URI, cat.getContentValues());
-							lstCategorie.add(cat.name);
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
-					}					
-					ArrayAdapter<String> categorieAdapter = new ArrayAdapter<String>(FiltriActivity.this, android.R.layout.simple_spinner_dropdown_item, lstCategorie);
-					spinnerCategorie.setAdapter(categorieAdapter);
-					spinnerCategorie.setSelection(0);
+					}
 					
-					if(canRefresh)
-						refreshSubcategories();
-					else
-						canRefresh = true;
+					Cursor cursor = contentProvider.query(NearbyContentProvider.CATEGORIES_URI, null, null, null, null);
+					SimpleCursorAdapter cursorAdapter = new SimpleCursorAdapter(FiltriActivity.this,
+								android.R.layout.simple_spinner_item,
+								cursor,
+								new String[]{CategoriesTableHelper.name},
+								new int[]{android.R.id.text1},
+								0);
+					
+					spinnerCategorie.setAdapter(cursorAdapter);
 				}
 				
 				@Override
@@ -234,6 +252,7 @@ public class FiltriActivity extends AppCompatActivity {
 					JSONObject jsonSubcategories;
 					Subcategories subcat;
 					ContentResolver contentProvider = FiltriActivity.this.getContentResolver();
+					contentProvider.insert(NearbyContentProvider.SUBCATEGORIES_URI, new Subcategories(-1, "Tutte", -1).getContentValues());
 					
 					for(int i = 0; i < response.length(); i++)
 					{
@@ -245,10 +264,6 @@ public class FiltriActivity extends AppCompatActivity {
 							e.printStackTrace();
 						}
 					}
-					if(canRefresh)
-						refreshSubcategories();
-					else
-						canRefresh = true;
 				}
 				
 				@Override
@@ -264,34 +279,9 @@ public class FiltriActivity extends AppCompatActivity {
 		}
 	}
 
-
-	private void refreshSubcategories() {
-		String categoria = spinnerCategorie.getSelectedItem().toString();
-		
-		Cursor cursor = getContentResolver()
-				.query(NearbyContentProvider.CATEGORIES_URI, null, CategoriesTableHelper.name + "='" + categoria + "'", null, null);
-		if(cursor != null) {
-			cursor.moveToFirst();
-			int category_id = cursor.getInt(cursor.getColumnIndex(CategoriesTableHelper._ID));
-			cursor.close();
-			
-			cursor = getContentResolver()
-					.query(NearbyContentProvider.SUBCATEGORIES_URI, null, SubcategoriesTableHelper.category_id + "=" + category_id, null, SubcategoriesTableHelper.name);
-			cursor.moveToFirst();
-
-			List<String> lstSubcategorie = new ArrayList<String>();
-			do {
-				lstSubcategorie.add(cursor.getString(cursor.getColumnIndex(SubcategoriesTableHelper.name)));
-			} while (cursor.moveToNext());
-			ArrayAdapter<String> categorieAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, lstSubcategorie);
-			spinnerSottocategorie.setAdapter(categorieAdapter);
-			cursor.close();
-		}
-	}
-
 	private void saveFilters() {
-		int idCategoria = sharedPreferences.getInt(Tools.PREFERNCES_CATEGORIA, -1);
-		int idSottocategoria = sharedPreferences.getInt(Tools.PREFERNCES_SOTTOCATEGORIA, -1);
+		long idCategoria = sharedPreferences.getLong(Tools.PREFERNCES_CATEGORIA, -1);
+		long idSottocategoria = sharedPreferences.getLong(Tools.PREFERNCES_SOTTOCATEGORIA, -1);
 		
 		// Salva distanza
 		int distanza = getDistanzaFromIndex(seekbarDistanza.getProgress());
@@ -299,21 +289,24 @@ public class FiltriActivity extends AppCompatActivity {
 		
 		// Salva categoria
 		if(spinnerCategorie.getSelectedItem() != null) {
-			String strCategoria = spinnerCategorie.getSelectedItem().toString();
+			idCategoria = spinnerCategorie.getSelectedItemId();
+			
+			/*String strCategoria = spinnerCategorie.getSelectedItem().toString();
 			Cursor cursor = getContentResolver().query(NearbyContentProvider.CATEGORIES_URI, null, CategoriesTableHelper.name + "='" + strCategoria + "'", null, null);
 			cursor.moveToFirst();
 			idCategoria = cursor.getInt(cursor.getColumnIndex(CategoriesTableHelper._ID));
-			cursor.close();
+			cursor.close();*/
 		}
 		
 		
 		// Salva sottocategoria
 		if(spinnerSottocategorie != null) {
-			String strSottocategoria = spinnerSottocategorie.getSelectedItem().toString();
+			idSottocategoria = spinnerSottocategorie.getSelectedItemId();
+			/*String strSottocategoria = spinnerSottocategorie.getSelectedItem().toString();
 			Cursor cursor = getContentResolver().query(NearbyContentProvider.SUBCATEGORIES_URI, null, SubcategoriesTableHelper.name + "='" + strSottocategoria + "'", null, null);
 			cursor.moveToFirst();
 			idSottocategoria = cursor.getInt(cursor.getColumnIndex(SubcategoriesTableHelper._ID));
-			cursor.close();
+			cursor.close();*/
 		}
 		
 		
@@ -328,8 +321,8 @@ public class FiltriActivity extends AppCompatActivity {
 		
 		sharedPreferences.edit()
 			.putInt(Tools.PREFERNCES_DISTANZA, distanza)
-			.putInt(Tools.PREFERNCES_CATEGORIA, idCategoria)
-			.putInt(Tools.PREFERNCES_SOTTOCATEGORIA, idSottocategoria)
+			.putLong(Tools.PREFERNCES_CATEGORIA, idCategoria)
+			.putLong(Tools.PREFERNCES_SOTTOCATEGORIA, idSottocategoria)
 			.putString(Tools.PREFERNCES_TIPOLOGIA, tipologia)
 			.apply();
 	}

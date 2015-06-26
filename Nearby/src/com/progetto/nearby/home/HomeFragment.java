@@ -11,8 +11,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
@@ -74,10 +76,11 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		if(googleMap != null) {
 			if(GpsService.isLocationEnabled()){
 	        	LatLng latLng = new LatLng(GpsService.getLatitude(), GpsService.getLongitude());
+	        	float zoom = calcGoogleMapsZoom();
 	        	CameraPosition cameraPosition = new CameraPosition
 	        									.Builder()
 	    								        .target(latLng)
-	    								        .zoom(5.8f)
+	    								        .zoom(zoom)
 	    								        .build();
 	        	googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 	        } else {
@@ -95,6 +98,15 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		}
 	}
     
+	private float calcGoogleMapsZoom() {
+		SharedPreferences sharedPreferences = getActivity().getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE);
+		int distance = sharedPreferences.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
+		
+		//float zoom =
+		
+		return 8;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		
@@ -136,7 +148,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 			if((currentMillis - lastUpdateMillis) > 3000) {
 				lastUpdateMillis = currentMillis;
 				
-				Toast.makeText(getActivity(), "GET places", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getActivity(), "GET places", Toast.LENGTH_LONG).show();
 				AsyncHttpClient client = new AsyncHttpClient();
 				
 				String url = Tools.buildPlacesUrl(getActivity(), GpsService.getLatitude(), GpsService.getLongitude());
@@ -166,21 +178,10 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 						rvPlaces.addOnItemTouchListener(
 								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
 								      @Override public void onItemClick(View view, int position) {
-								       //Log.d("idPl", "" + PlaceAdapterRV.idPlace);
 								       enterDetails(PlaceAdapterRV.idPlace);
 								      }
 								    })
 						);
-						
-						
-						//						lstPlaces.setAdapter(adapter);
-//						lstPlaces.setOnItemClickListener(new OnItemClickListener() {
-//	
-//							@Override
-//							public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3) {
-//								enterDetails(arg3);
-//							}
-//						});
 					}	
 					
 					@Override

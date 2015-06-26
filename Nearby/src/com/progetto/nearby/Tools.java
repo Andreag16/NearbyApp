@@ -44,10 +44,10 @@ public class Tools {
 		int range = sharedPreferences
 						.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
 		
-		int idCat = sharedPreferences.getInt(Tools.PREFERNCES_CATEGORIA, -1);
+		long idCat = sharedPreferences.getLong(Tools.PREFERNCES_CATEGORIA, -1);
 		String cat = (idCat == -1 ? "all" : "" + idCat);
 		
-		int idSub = sharedPreferences.getInt(Tools.PREFERNCES_SOTTOCATEGORIA, -1);
+		long idSub = sharedPreferences.getLong(Tools.PREFERNCES_SOTTOCATEGORIA, -1);
 		String sub = (idSub == -1 ? "all" : "" + idSub);
 		
 		String tipo = sharedPreferences.getString(Tools.PREFERNCES_TIPOLOGIA, "all");

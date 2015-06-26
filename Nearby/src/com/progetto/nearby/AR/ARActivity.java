@@ -17,7 +17,6 @@ import com.progetto.nearby.models.Place;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 public class ARActivity extends Activity {
@@ -35,6 +34,11 @@ public class ARActivity extends Activity {
 
 	    world.setDefaultBitmap(R.drawable.beyondar_default_unknow_icon, 0);
 	    world.setGeoPosition(GpsService.getLatitude(), GpsService.getLongitude());
+	    
+	    mBeyondarFragment.setDistanceFactor(8);
+	    mBeyondarFragment.setMaxDistanceToRender(52000);
+	    mBeyondarFragment.setPullCloserDistance(50);
+	    mBeyondarFragment.setPushAwayDistance(30);
 	    
 	    if(Tools.isNetworkEnabled(this)) {
 			AsyncHttpClient client = new AsyncHttpClient();
@@ -57,7 +61,6 @@ public class ARActivity extends Activity {
 								geoObject.setImageUri(place.urlImg);
 								geoObject.setName(place.nome);
 								world.addBeyondarObject(geoObject);
-								Log.w("ar", "" + i);
 						}
 						mBeyondarFragment.setWorld(world);
 					} catch (JSONException e) {	e.printStackTrace(); }
