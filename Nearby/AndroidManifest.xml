@@ -82,8 +82,10 @@
         
         
         <activity
-            android:name=".DetPlaActivity"
-            android:label="@string/title_activity_det_pla" >
+            android:name="com.progetto.nearby.detailPlaces.DetPlaActivity"
+            android:label="@string/title_activity_det_pla"
+            android:theme="@style/AppBaseNoActionBar"
+            android:parentActivityName=".home.HomeActivity" >
         </activity>
     </application>
 

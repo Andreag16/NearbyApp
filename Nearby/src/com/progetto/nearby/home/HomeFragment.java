@@ -20,6 +20,7 @@ import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnItemTouchListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.detailPlaces.DetPlaActivity;
 import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
 import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.models.Place;
@@ -178,7 +180,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 						rvPlaces.addOnItemTouchListener(
 								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
 								      @Override public void onItemClick(View view, int position) {
-								       enterDetails(PlaceAdapterRV.idPlace);
+								       enterDetails(allPlaces.get(position).id);
 								      }
 								    })
 						);
@@ -198,8 +200,12 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	}
 
 	protected void enterDetails(long id) {
+//		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
+//    	Bundle placeBundle = new Bundle();
+//    	placeBundle.putLong(Place.tag_id, id);
+//    	inte.putExtras(placeBundle);
+//		startActivity(inte);
 		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
-    	//intent.putExtra(DetailPlaceActivity.ID_PLACE, (int)id);
     	Bundle placeBundle = new Bundle();
     	placeBundle.putLong(Place.tag_id, id);
     	intent.putExtras(placeBundle);

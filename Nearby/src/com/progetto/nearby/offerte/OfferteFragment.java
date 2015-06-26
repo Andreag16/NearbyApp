@@ -2,6 +2,9 @@ package com.progetto.nearby.offerte;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONArray;

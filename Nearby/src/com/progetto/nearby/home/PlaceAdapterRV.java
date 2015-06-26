@@ -76,12 +76,4 @@ public class PlaceAdapterRV extends RecyclerView.Adapter<PlaceAdapterRV.PlaceVie
 		return placeholder;
 	}
 	
-	private static void enterDetails(long id) {
-		Intent intent = new Intent(context, DetailPlaceActivity.class);
-    	//intent.putExtra(DetailPlaceActivity.ID_PLACE, (int)id);
-    	Bundle placeBundle = new Bundle();
-    	placeBundle.putLong(Place.tag_id, id);
-    	intent.putExtras(placeBundle);
-        context.startActivity(intent);
-	}
 }

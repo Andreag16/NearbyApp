@@ -166,19 +166,19 @@ public class DetailPlaceActivity extends AppCompatActivity {
 			Log.d("url offerta", Tools.OFFERS_BY_PLACE + idPlace);
 			client.get(Tools.OFFERS_BY_PLACE + idPlace, new JsonHttpResponseHandler(){
 
-				@Override
-				public void onSuccess(int statusCode, Header[] headers,
-						JSONObject response) {
-					// TODO Auto-generated method stub
-					try {
-						offerte.add(Offerta.decodeJSON(response));
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
-					rvofferte.setAdapter(adapter);
-				}
+//				@Override
+//				public void onSuccess(int statusCode, Header[] headers,
+//						JSONObject response) {
+//					// TODO Auto-generated method stub
+//					try {
+//						offerte.add(Offerta.decodeJSON(response));
+//					} catch (JSONException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//					adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
+//					rvofferte.setAdapter(adapter);
+//				}
 
 				@Override
 				public void onSuccess(int statusCode, Header[] headers,
@@ -193,9 +193,9 @@ public class DetailPlaceActivity extends AppCompatActivity {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
-						adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
-						rvofferte.setAdapter(adapter);
 					}
+					adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
+					rvofferte.setAdapter(adapter);
 				}
 				
 				@Override
