@@ -36,8 +36,8 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
 		// TODO Auto-generated method stub
 		arg0.nomeOfferta.setText(offerts.get(arg1).nomeofferta);
 		arg0.descrizioneOfferta.setText(offerts.get(arg1).descrizione);
-		if(!(offerts.get(arg1).nomepostoofferta == "") && !(offerts.get(arg1).nomecittaofferta == "")
-				&& !(offerts.get(arg1).distanza == ""))
+		if(!(offerts.get(arg1).nomepostoofferta.equals("")) && !(offerts.get(arg1).nomecittaofferta.equals(""))
+				&& !(offerts.get(arg1).distanza.equals("")))
 		{
 			arg0.distanza.setText(offerts.get(arg1).distanza);
 			arg0.nomeposto.setText(offerts.get(arg1).nomepostoofferta);

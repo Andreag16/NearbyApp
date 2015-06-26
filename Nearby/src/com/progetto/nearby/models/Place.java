@@ -57,7 +57,10 @@ public class Place {
 						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
 				}
 			}
-			place.distanza = distance(obj.getDouble(tag_distanza));
+			if(obj.has(tag_distanza))
+				place.distanza = distance(obj.getDouble(tag_distanza));
+			else
+				place.distanza = "";
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

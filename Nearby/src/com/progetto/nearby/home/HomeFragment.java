@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.OnItemTouchListener;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -167,8 +168,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 						rvPlaces.addOnItemTouchListener(
 								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
 								      @Override public void onItemClick(View view, int position) {
-								       //Log.d("idPl", "" + PlaceAdapterRV.idPlace);
-								       enterDetails(PlaceAdapterRV.idPlace);
+								       enterDetails(allPlaces.get(position).id);
 								      }
 								    })
 						);
@@ -198,16 +198,16 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	}
 
 	protected void enterDetails(long id) {
-		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
-    	Bundle placeBundle = new Bundle();
-    	placeBundle.putLong(Place.tag_id, id);
-    	inte.putExtras(placeBundle);
-		startActivity(inte);
-//		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+//		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
 //    	Bundle placeBundle = new Bundle();
 //    	placeBundle.putLong(Place.tag_id, id);
-//    	intent.putExtras(placeBundle);
-//        startActivity(intent);
+//    	inte.putExtras(placeBundle);
+//		startActivity(inte);
+		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+    	Bundle placeBundle = new Bundle();
+    	placeBundle.putLong(Place.tag_id, id);
+    	intent.putExtras(placeBundle);
+        startActivity(intent);
 	}
 
 	public static HomeFragment newInstance(Bundle args) {

@@ -1,5 +1,7 @@
 package com.progetto.nearby.detailPlaces;
 
+import java.util.ArrayList;
+
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -20,8 +22,11 @@ import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -39,6 +44,10 @@ public class DetPlaActivity extends AppCompatActivity {
 	private AsyncHttpClient client;
 	private Place place;
 	private ActionBar actionBar;
+	private CollapsingToolbarLayout collapsingToolbarLayout;
+	private RecyclerView rvofferte;
+	private OffertaAdapterRV adapter;
+	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +70,12 @@ public class DetPlaActivity extends AppCompatActivity {
 	
 	private void setupGUI() {
 		// TODO Auto-generated method stub
+		collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
 		logo = (SmartImageView) findViewById(R.id.logoo);
+		//rvofferte = (RecyclerView) findViewById(R.id.rvofferte);
+		//LinearLayoutManager llm = new LinearLayoutManager(DetPlaActivity.this);
+		//rvofferte.setLayoutManager(llm);
+		//rvofferte.setSaveEnabled(false);
 	}
 	
 	private void getPlace(int idPlace2) {
@@ -109,6 +123,8 @@ public class DetPlaActivity extends AppCompatActivity {
 				private void updateDetailGUI() {
 					// TODO Auto-generated method stub
 					//actionBar.setTitle(place.nome);
+					if(place.nome != null)
+						collapsingToolbarLayout.setTitle(place.nome);
 					Log.d("aa", place.gallery.get(0));
 					logo.setImageUrl(place.gallery.get(0));
 //					if(place.gallery.size() > 1)
@@ -160,20 +176,6 @@ public class DetPlaActivity extends AppCompatActivity {
 //
 //				@Override
 //				public void onSuccess(int statusCode, Header[] headers,
-//						JSONObject response) {
-//					// TODO Auto-generated method stub
-//					try {
-//						offerte.add(Offerta.decodeJSON(response));
-//					} catch (JSONException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//					adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
-//					rvofferte.setAdapter(adapter);
-//				}
-//
-//				@Override
-//				public void onSuccess(int statusCode, Header[] headers,
 //						JSONArray response) {
 //					// TODO Auto-generated method stub
 //					for(int i = 0; i < response.length(); i++)
@@ -185,9 +187,10 @@ public class DetPlaActivity extends AppCompatActivity {
 //							// TODO Auto-generated catch block
 //							e.printStackTrace();
 //						}
-//						adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
-//						rvofferte.setAdapter(adapter);
 //					}
+//					adapter = new OffertaAdapterRV(DetPlaActivity.this, offerte);
+//					if(adapter != null)
+//						rvofferte.setAdapter(adapter);
 //				}
 //				
 //				@Override

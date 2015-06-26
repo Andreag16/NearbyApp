@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Offerta {
+public class Offerta implements Comparable<Offerta> {
 
 	public static final String tag_id = "id_offer";
 	public static final String tag_nomeofferta = "title";
@@ -61,6 +61,12 @@ public class Offerta {
 			dist = bd.floatValue() + " m";
 		}
         return dist;
+	}
+
+	@Override
+	public int compareTo(Offerta another) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 }
