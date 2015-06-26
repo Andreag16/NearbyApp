@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.progetto.nearby.R;
@@ -33,8 +34,20 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
 	@Override
 	public void onBindViewHolder(OffertaViewHolder arg0, int arg1) {
 		// TODO Auto-generated method stub
-		arg0.nomeOfferta.setText(offerts.get(arg1).nome);
+		arg0.nomeOfferta.setText(offerts.get(arg1).nomeofferta);
 		arg0.descrizioneOfferta.setText(offerts.get(arg1).descrizione);
+		if(!(offerts.get(arg1).nomepostoofferta == "") && !(offerts.get(arg1).nomecittaofferta == "")
+				&& !(offerts.get(arg1).distanza == ""))
+		{
+			arg0.distanza.setText(offerts.get(arg1).distanza);
+			arg0.nomeposto.setText(offerts.get(arg1).nomepostoofferta);
+			arg0.nomecitta.setText(offerts.get(arg1).nomecittaofferta);
+		}
+		else
+		{
+			arg0.nomecitta.setVisibility(View.GONE);
+			arg0.placeinfo.setVisibility(View.GONE);
+		}
 	}
 
 	@Override
@@ -48,7 +61,8 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
 
 	public static class OffertaViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {      
         CardView cv;
-        TextView nomeOfferta, descrizioneOfferta;
+        TextView nomeOfferta, descrizioneOfferta, nomeposto, nomecitta, distanza;
+        RelativeLayout placeinfo;
         OnItemClickListener mItemClickListener;
  
         OffertaViewHolder(View itemView) {
@@ -56,6 +70,10 @@ public class OffertaAdapterRV extends RecyclerView.Adapter<OffertaAdapterRV.Offe
             cv = (CardView)itemView.findViewById(R.id.cv);
             nomeOfferta = (TextView)itemView.findViewById(R.id.txtNomeOfferta);
             descrizioneOfferta = (TextView)itemView.findViewById(R.id.txtDescrizioneOfferta);
+            nomeposto = (TextView)itemView.findViewById(R.id.txtNomePosto);
+            nomecitta = (TextView)itemView.findViewById(R.id.txtCittaOff);
+            distanza = (TextView) itemView.findViewById(R.id.txtDistanzaOff);
+            placeinfo = (RelativeLayout) itemView.findViewById(R.id.infoposto);
         }
 
 		@Override
