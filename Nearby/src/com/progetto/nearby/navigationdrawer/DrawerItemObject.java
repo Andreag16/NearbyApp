@@ -19,12 +19,14 @@ public class DrawerItemObject {
     
     public static ArrayList<DrawerItemObject> createNavigationDrawerArrayOfItems(Resources resources){	
     	ArrayList<DrawerItemObject> data = new ArrayList<DrawerItemObject>();
-    	DrawerItemObject sectiones= new DrawerItemObject(0,resources.getString(R.string.title_section1),R.drawable.home);
-    	data.add(sectiones);
-    	DrawerItemObject notìcias = new DrawerItemObject(1,resources.getString(R.string.title_section2),R.drawable.offerte);
-    	data.add(notìcias);
-    	DrawerItemObject pesquisa_empresa = new DrawerItemObject(2,resources.getString(R.string.title_section3),R.drawable.contatti);
-    	data.add(pesquisa_empresa);
+    	DrawerItemObject home= new DrawerItemObject(0,resources.getString(R.string.title_section1),R.drawable.home);
+    	data.add(home);
+    	DrawerItemObject offerte = new DrawerItemObject(1,resources.getString(R.string.title_section2),R.drawable.offerte);
+    	data.add(offerte);
+    	DrawerItemObject ar = new DrawerItemObject(2,resources.getString(R.string.title_section3),R.drawable.contatti);
+    	data.add(ar);
+    	DrawerItemObject contatti = new DrawerItemObject(3,resources.getString(R.string.title_section4),R.drawable.contatti);
+    	data.add(contatti);
     	return data;
     	}
 }

@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.AR.ARActivity;
 import com.progetto.nearby.Filtri.FiltriActivity;
 import com.progetto.nearby.navigationdrawer.NavigationDrawerFragment;
 import com.progetto.nearby.offerte.OfferteFragment;
@@ -75,6 +76,17 @@ public class HomeActivity extends AppCompatActivity implements
 					.replace(R.id.container,  offertefragment, OfferteFragment.TAG)
 					.addToBackStack(null)
 					.commit();
+			}
+				break;
+			case 2:
+			{
+				Intent aRIntent = new Intent(this, ARActivity.class);
+				startActivity(aRIntent);
+			}
+				break;
+			case 3:
+			{
+				
 			}
 				break;
 			default:

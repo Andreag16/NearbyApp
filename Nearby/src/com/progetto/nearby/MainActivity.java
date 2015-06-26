@@ -7,12 +7,14 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
+import com.progetto.nearby.AR.ARActivity;
 import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.home.HomeActivity;
 
 public class MainActivity extends AppCompatActivity {
 
 	private Button btnHome, btnScopri;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
 		btnScopri = (Button) findViewById(R.id.btnScopri);
 		btnActions();
 	}
+	
 	private void btnActions() {
 		btnHome.setOnClickListener(new OnClickListener() {
 			
@@ -34,7 +37,7 @@ public class MainActivity extends AppCompatActivity {
 			public void onClick(View v) {
 				Intent homeIntent = new Intent(MainActivity.this, HomeActivity.class);
 				startActivity(homeIntent);
-				MainActivity.this.finish();
+				finish();
 			}
 		});
 		
@@ -42,7 +45,8 @@ public class MainActivity extends AppCompatActivity {
 			
 			@Override
 			public void onClick(View v) {
-				
+				Intent aRIntent = new Intent(MainActivity.this, ARActivity.class);
+				startActivity(aRIntent);
 			}
 		});
 	}
