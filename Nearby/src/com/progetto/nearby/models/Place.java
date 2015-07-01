@@ -1,7 +1,6 @@
 package com.progetto.nearby.models;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import org.json.JSONArray;
@@ -20,6 +19,7 @@ public class Place {
 	public static final String tag_citta = "town_name";
 	public static final String tag_gallery = "gallery";
 	public static final String tag_distanza = "distance";
+	public static final String tag_tipo = "type";
 	
 	public int id;
 	public String città;
@@ -61,6 +61,7 @@ public class Place {
 				place.distanza = distance(obj.getDouble(tag_distanza));
 			else
 				place.distanza = "";
+			place.tipo = obj.getString(tag_tipo);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

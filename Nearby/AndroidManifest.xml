@@ -33,7 +33,7 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <service android:name=".gpsService.GpsService" >
+        <service android:name="com.progetto.nearby.GpsService" >
         </service>
 
         <meta-data
@@ -41,22 +41,16 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".MainActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".Filtri.FiltriActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity" >
+            android:label="@string/title_activity_settings" >
         </activity>
         <activity
             android:name=".home.HomeActivity"
             android:label="@string/title_activity_home" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".detailPlaces.DetailPlaceActivity"
@@ -66,6 +60,13 @@
 
         <activity android:name="com.progetto.nearby.AR.ARActivity"></activity>
         
+        <activity
+            android:name="com.progetto.nearby.detailPlaces.DetPlaActivity"
+            android:label="@string/title_activity_det_pla"
+            android:theme="@style/AppBaseNoActionBar"
+            android:parentActivityName=".home.HomeActivity" >
+        </activity>
+
         <provider
             android:name=".DatabaseLocale.NearbyContentProvider"
             android:authorities="com.progetto.nearby.databaselocale.nearbycontentprovider"
@@ -76,17 +77,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBY00f5kJiEtdmvp4LMjgAFR85DuHyRNzY" />
         
-        
         <!-- android:value="AIzaSyBY00f5kJiEtdmvp4LMjgAFR85DuHyRNzY" --><!-- Grando -->
         <!-- android:value="AIzaSyCFZ20LQndN88DTyMGKJtxfySnYYH3ltYs" /> --><!-- Zanchin -->
         
-        
-        <activity
-            android:name="com.progetto.nearby.detailPlaces.DetPlaActivity"
-            android:label="@string/title_activity_det_pla"
-            android:theme="@style/AppBaseNoActionBar"
-            android:parentActivityName=".home.HomeActivity" >
-        </activity>
     </application>
 
 </manifest>

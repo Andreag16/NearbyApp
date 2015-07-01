@@ -1,8 +1,11 @@
 package com.progetto.nearby.home;
 
 import android.app.FragmentManager;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -10,10 +13,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.progetto.nearby.GpsService;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 import com.progetto.nearby.AR.ARActivity;
 import com.progetto.nearby.Filtri.FiltriActivity;
+import com.progetto.nearby.GpsService.LocalBinder;
 import com.progetto.nearby.navigationdrawer.NavigationDrawerFragment;
 import com.progetto.nearby.offerte.OfferteFragment;
 
@@ -27,11 +32,33 @@ public class HomeActivity extends AppCompatActivity implements
 	private OfferteFragment offertefragment;
 	private FragmentManager fragmentmanager;
 	
+	
+	private GpsService myService;
+    public boolean isBound = false;
+	private ServiceConnection myConnection = new ServiceConnection() {
+	    public void onServiceConnected(ComponentName className, IBinder service) {
+	        LocalBinder binder = (LocalBinder) service;
+	        myService = binder.getService();
+	        isBound = true;
+	        homefragment.onServiceConnected();
+	    }
+	    
+	    public void onServiceDisconnected(ComponentName arg0) {
+	        isBound = false;
+	    }
+    };
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		
+		//startService(new Intent(this, GpsService.class));
+		Intent intent = new Intent(this, GpsService.class);
+        bindService(intent, myConnection, BIND_AUTO_CREATE);
 
+		setContentView(R.layout.activity_home);
+		
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
 		mTitle = getTitle();
@@ -39,7 +66,7 @@ public class HomeActivity extends AppCompatActivity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		}
+	}
 
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
@@ -145,5 +172,11 @@ public class HomeActivity extends AppCompatActivity implements
 			}
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		unbindService(myConnection);
 	}
 }

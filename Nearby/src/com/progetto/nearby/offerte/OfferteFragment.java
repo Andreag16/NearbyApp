@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.progetto.nearby.GpsService;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
-import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.models.Offerta;
 
 public class OfferteFragment extends Fragment {

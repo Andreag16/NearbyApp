@@ -25,6 +25,7 @@ public class Tools {
 	public static final String TAG_DIALOG_IMAGE = "dialog image";
 	
 	public static final int FILTRO_DISTANZA_DEFAULT = 1000;
+	public static final String MAIL_ADDRESS = "nearby@altervista.org";
 	
 	
 	private static NetworkInfo networkInfo;

@@ -1,5 +1,6 @@
-package com.progetto.nearby.gpsService;
+package com.progetto.nearby;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
 import org.apache.http.Header;
@@ -7,10 +8,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.maps.model.LatLng;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.R;
-import com.progetto.nearby.Tools;
 import com.progetto.nearby.home.HomeActivity;
 import com.progetto.nearby.models.Offerta;
 
@@ -34,8 +35,8 @@ import android.widget.Toast;
 public class GpsService extends Service {
 	private static final String TAG = "GpsService";
 	private static LocationManager mLocationManager = null;
-	private static final int LOCATION_INTERVAL = 5000; // 5 secondi
-	private static final float LOCATION_DISTANCE = 10; //10 metri
+	private static final int LOCATION_INTERVAL = 20000; // 20 secondi
+	private static final float LOCATION_DISTANCE = 20; //20 metri
 
 	private static Location mLastLocation;
 	
@@ -156,10 +157,11 @@ public class GpsService extends Service {
 	} 
 	
 	
-	OfferteLocationListener[] mLocationListeners = new OfferteLocationListener[] {
+	private static ArrayList<LocationListener> mLocationListeners = new ArrayList<LocationListener>();
+	/*OfferteLocationListener[] mLocationListeners = new OfferteLocationListener[] {
 	        new OfferteLocationListener(LocationManager.GPS_PROVIDER),
 	        new OfferteLocationListener(LocationManager.NETWORK_PROVIDER)
-	};
+	};*/
 	
 	@Override
 	public IBinder onBind(Intent arg0)
@@ -177,11 +179,14 @@ public class GpsService extends Service {
 	public void onCreate()
 	{
 	    Log.w(TAG, "onCreate");
-	    initializeLocationManager();	    
-	    try {
+	    initializeLocationManager();
+	    
+	    registerLocationListener(new OfferteLocationListener(LocationManager.NETWORK_PROVIDER), LocationManager.NETWORK_PROVIDER);
+	    registerLocationListener(new OfferteLocationListener(LocationManager.GPS_PROVIDER), LocationManager.GPS_PROVIDER);
+	    
+	    /*try {
 	        mLocationManager.requestLocationUpdates(
-	                LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-	                mLocationListeners[1]);
+	                LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListeners[1]);
 	    } catch (java.lang.SecurityException ex) {
 	        Log.w(TAG, "fail to request location update, ignore", ex);
 	    } catch (IllegalArgumentException ex) {
@@ -189,13 +194,12 @@ public class GpsService extends Service {
 	    }
 	    try {
 	        mLocationManager.requestLocationUpdates(
-	                LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE,
-	                mLocationListeners[0]);
+	                LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListeners[0]);
 	    } catch (java.lang.SecurityException ex) {
 	        Log.w(TAG, "fail to request location update, ignore", ex);
 	    } catch (IllegalArgumentException ex) {
 	        Log.w(TAG, "gps provider does not exist " + ex.getMessage());
-	    }
+	    }*/
 	}
 	@Override
 	public void onDestroy()
@@ -203,13 +207,21 @@ public class GpsService extends Service {
 	    Log.w(TAG, "onDestroy");
 	    super.onDestroy();
 	    if (mLocationManager != null) {
-	        for (int i = 0; i < mLocationListeners.length; i++) {
+	    	for (LocationListener listener : mLocationListeners) {
+	    		try {
+	                mLocationManager.removeUpdates(listener);
+	            } catch (Exception ex) {
+	                Log.w(TAG, "fail to remove location listners, ignore", ex);
+	            }
+			}
+	    	
+	        /*for (int i = 0; i < mLocationListeners.length; i++) {
 	            try {
 	                mLocationManager.removeUpdates(mLocationListeners[i]);
 	            } catch (Exception ex) {
 	                Log.w(TAG, "fail to remove location listners, ignore", ex);
 	            }
-	        }
+	        }*/
 	    }
 	} 
 	private void initializeLocationManager() {
@@ -225,11 +237,33 @@ public class GpsService extends Service {
 		return mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
 	}
 	
+	public static LatLng getLastKnownLocation() {
+		String provider = "";
+		if(mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+			provider = LocationManager.GPS_PROVIDER;
+		} else if(mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+			provider = LocationManager.NETWORK_PROVIDER;
+		}
+		Location location = mLocationManager.getLastKnownLocation(provider);
+		return new LatLng(location.getLatitude(), location.getLongitude());
+	}
+	
 	public static double getLatitude() {
 		return mLastLocation.getLatitude();
 	}
 	
 	public static double getLongitude() {
 		return mLastLocation.getLongitude();
+	}
+	
+	public static void registerLocationListener(LocationListener listener, String provider) {
+		try {
+	        mLocationManager.requestLocationUpdates(provider, LOCATION_INTERVAL, LOCATION_DISTANCE, listener);
+	        mLocationListeners.add(listener);
+	    } catch (java.lang.SecurityException ex) {
+	        Log.w(TAG, "fail to request location update, ignore", ex);
+	    } catch (IllegalArgumentException ex) {
+	        Log.w(TAG, "network provider does not exist, " + ex.getMessage());
+	    }
 	}
 }
