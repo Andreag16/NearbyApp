@@ -200,16 +200,16 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	}
 
 	protected void enterDetails(long id) {
-//		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
-//    	Bundle placeBundle = new Bundle();
-//    	placeBundle.putLong(Place.tag_id, id);
-//    	inte.putExtras(placeBundle);
-//		startActivity(inte);
-		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
     	Bundle placeBundle = new Bundle();
     	placeBundle.putLong(Place.tag_id, id);
-    	intent.putExtras(placeBundle);
-        startActivity(intent);
+    	inte.putExtras(placeBundle);
+		startActivity(inte);
+//		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+//    	Bundle placeBundle = new Bundle();
+//    	placeBundle.putLong(Place.tag_id, id);
+//    	intent.putExtras(placeBundle);
+//        startActivity(intent);
 	}
 
 	public static HomeFragment newInstance(Bundle args) {
