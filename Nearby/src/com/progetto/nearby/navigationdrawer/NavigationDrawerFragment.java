@@ -119,10 +119,6 @@ public class NavigationDrawerFragment extends Fragment {
 	public void closeDrawer() {
     	mDrawerLayout.closeDrawer(mFragmentContainerView);
     }
-
-	public void closeDrawer() {
-    	mDrawerLayout.closeDrawer(mFragmentContainerView);
-    }
 	
 	/**
 	 * Users of this fragment must call this method to set up the navigation

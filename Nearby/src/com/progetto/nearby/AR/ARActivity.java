@@ -8,7 +8,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.beyondar.android.fragment.BeyondarFragment;
-import com.beyondar.android.view.BeyondarViewAdapter;
 import com.beyondar.android.view.OnClickBeyondarObjectListener;
 import com.beyondar.android.world.BeyondarObject;
 import com.beyondar.android.world.GeoObject;
@@ -22,14 +21,8 @@ import com.progetto.nearby.dettaglioPosto.DettaglioPostoActivity;
 import com.progetto.nearby.models.Place;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 public class ARActivity extends Activity {
@@ -45,7 +38,7 @@ public class ARActivity extends Activity {
         
         final World world = new World(this);
 
-	    world.setDefaultBitmap(R.drawable.beyondar_default_unknow_icon, 0);
+	    world.setDefaultBitmap(R.drawable.ic_place_black_24dp, 0);
 	    world.setGeoPosition(GpsService.getLatitude(), GpsService.getLongitude());
 	    
 	    mBeyondarFragment.setDistanceFactor(8);
@@ -84,7 +77,6 @@ public class ARActivity extends Activity {
 									return;
 								}
 								BeyondarObject beyondarObject = beyondarObjects.get(0);
-								Toast.makeText(ARActivity.this, "Clicked on: " + beyondarObject.getName(), Toast.LENGTH_LONG).show();
 								Intent intent = new Intent(ARActivity.this, DettaglioPostoActivity.class);
 								intent.putExtra(Place.tag_id, beyondarObject.getId());
 								startActivity(intent);
@@ -106,44 +98,4 @@ public class ARActivity extends Activity {
 			Toast.makeText(this, "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
 		}
     }
-    
-    
-    private class CustomARViewAdapter extends BeyondarViewAdapter {
-
-		LayoutInflater inflater;
-
-		public CustomARViewAdapter(Context context) {
-			super(context);
-			inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		}
-
-		@Override
-		public View getView(final BeyondarObject beyondarObject, View recycledView, ViewGroup parent) {
-			/*if (!showViewOn.contains(beyondarObject)) {
-				return null;
-			}*/
-			if (recycledView == null) {
-				recycledView = inflater.inflate(R.layout.ar_object_view, null);
-			}
-
-			TextView textView = (TextView) recycledView.findViewById(R.id.lblPlaceName);
-			textView.setText(beyondarObject.getName());
-			
-			Button button = (Button) recycledView.findViewById(R.id.btnDetail);
-			button.setOnClickListener(new View.OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					Intent intent = new Intent(ARActivity.this, DettaglioPostoActivity.class);
-					intent.putExtra(DettaglioPostoActivity.ID_PLACE, beyondarObject.getId());
-					startActivity(intent);
-				}
-			});
-
-			// Once the view is ready we specify the position
-			setPosition(beyondarObject.getScreenPositionTopRight());
-
-			return recycledView;
-		}
-
-	}
 }
