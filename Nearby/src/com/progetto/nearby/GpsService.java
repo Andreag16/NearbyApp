@@ -39,6 +39,7 @@ public class GpsService extends Service {
 	private static final float LOCATION_DISTANCE = 20; //20 metri
 
 	private static Location mLastLocation;
+	private static ArrayList<LocationListener> mLocationListeners = new ArrayList<LocationListener>();
 	
 	public static final int NOTIFICATION_ID = 9999;
 
@@ -67,54 +68,53 @@ public class GpsService extends Service {
 	        //Toast.makeText(getApplicationContext(), "cerco offerte", Toast.LENGTH_SHORT).show();
 	        
 	        if(Tools.isNetworkEnabled(getApplicationContext())) {
-					AsyncHttpClient client = new AsyncHttpClient();
-					
-					int range = getApplicationContext()
-							.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
-							.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
-					
-					String url = Tools.OFFERS_BY_GPS_URL +
-							mLastLocation.getLatitude() +
-							"&" + mLastLocation.getLongitude() +
-							"&" + range;
-					
-					client.get(url, new JsonHttpResponseHandler(){
-						@Override
-						public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
-							if(response.length() > 0) {
-								JSONObject offerta;
-								int idOfferta;
-								int counterNuoveOfferte = 0;
-								HashSet<Integer> lstNuoveOfferte = new HashSet<Integer>(response.length());
-								try {
-									for (int i = 0; i < response.length(); i++) {
-										offerta = response.getJSONObject(i);
-										idOfferta = offerta.getInt(Offerta.tag_id);
-										if(!lstOfferteVicine.contains(idOfferta)) {
-											counterNuoveOfferte++;
-										}
-										lstNuoveOfferte.add(idOfferta);
+				AsyncHttpClient client = new AsyncHttpClient();
+				
+				int range = getApplicationContext()
+						.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
+						.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
+				
+				String url = Tools.OFFERS_BY_GPS_URL +
+						mLastLocation.getLatitude() +
+						"&" + mLastLocation.getLongitude() +
+						"&" + range;
+				
+				client.get(url, new JsonHttpResponseHandler(){
+					@Override
+					public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
+						if(response.length() > 0) {
+							JSONObject offerta;
+							int idOfferta;
+							int counterNuoveOfferte = 0;
+							HashSet<Integer> lstNuoveOfferte = new HashSet<Integer>(response.length());
+							try {
+								for (int i = 0; i < response.length(); i++) {
+									offerta = response.getJSONObject(i);
+									idOfferta = offerta.getInt(Offerta.tag_id);
+									if(!lstOfferteVicine.contains(idOfferta)) {
+										counterNuoveOfferte++;
 									}
-								} catch (JSONException e) { e.printStackTrace(); }
-								
-								lstOfferteVicine.clear();
-								lstOfferteVicine = lstNuoveOfferte;
-								
-								if (counterNuoveOfferte > 0) {
-									showNotification(response.length());
+									lstNuoveOfferte.add(idOfferta);
 								}
+							} catch (JSONException e) { e.printStackTrace(); }
+							
+							lstOfferteVicine.clear();
+							lstOfferteVicine = lstNuoveOfferte;
+							
+							if (counterNuoveOfferte > 0) {
+								showNotification(response.length());
 							}
-						}	
-						
-						@Override
-						public void onFailure(int statusCode, Header[] headers,
-								String responseString, Throwable throwable) {
-							// TODO toast solo per debug
-							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-							super.onFailure(statusCode, headers, responseString, throwable);
 						}
-					});
-					//Toast.makeText(getApplicationContext(), "Cerco offerte", Toast.LENGTH_LONG).show();
+					}	
+					
+					@Override
+					public void onFailure(int statusCode, Header[] headers,
+							String responseString, Throwable throwable) {
+						// TODO toast solo per debug
+						Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+						super.onFailure(statusCode, headers, responseString, throwable);
+					}
+				});
 			} else {
 				Toast.makeText(getApplicationContext(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
 			}
@@ -158,11 +158,6 @@ public class GpsService extends Service {
 	} 
 	
 	
-	private static ArrayList<LocationListener> mLocationListeners = new ArrayList<LocationListener>();
-	/*OfferteLocationListener[] mLocationListeners = new OfferteLocationListener[] {
-	        new OfferteLocationListener(LocationManager.GPS_PROVIDER),
-	        new OfferteLocationListener(LocationManager.NETWORK_PROVIDER)
-	};*/
 	
 	@Override
 	public IBinder onBind(Intent arg0)
@@ -184,23 +179,6 @@ public class GpsService extends Service {
 	    
 	    registerLocationListener(new OfferteLocationListener(LocationManager.NETWORK_PROVIDER), LocationManager.NETWORK_PROVIDER);
 	    registerLocationListener(new OfferteLocationListener(LocationManager.GPS_PROVIDER), LocationManager.GPS_PROVIDER);
-	    
-	    /*try {
-	        mLocationManager.requestLocationUpdates(
-	                LocationManager.NETWORK_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListeners[1]);
-	    } catch (java.lang.SecurityException ex) {
-	        Log.w(TAG, "fail to request location update, ignore", ex);
-	    } catch (IllegalArgumentException ex) {
-	        Log.w(TAG, "network provider does not exist, " + ex.getMessage());
-	    }
-	    try {
-	        mLocationManager.requestLocationUpdates(
-	                LocationManager.GPS_PROVIDER, LOCATION_INTERVAL, LOCATION_DISTANCE, mLocationListeners[0]);
-	    } catch (java.lang.SecurityException ex) {
-	        Log.w(TAG, "fail to request location update, ignore", ex);
-	    } catch (IllegalArgumentException ex) {
-	        Log.w(TAG, "gps provider does not exist " + ex.getMessage());
-	    }*/
 	}
 	@Override
 	public void onDestroy()
@@ -215,18 +193,10 @@ public class GpsService extends Service {
 	                Log.w(TAG, "fail to remove location listners, ignore", ex);
 	            }
 			}
-	    	
-	        /*for (int i = 0; i < mLocationListeners.length; i++) {
-	            try {
-	                mLocationManager.removeUpdates(mLocationListeners[i]);
-	            } catch (Exception ex) {
-	                Log.w(TAG, "fail to remove location listners, ignore", ex);
-	            }
-	        }*/
+	    	mLocationListeners.clear();
 	    }
-	} 
+	}
 	private void initializeLocationManager() {
-	    Log.w(TAG, "initializeLocationManager");
 	    if (mLocationManager == null) {
 	        mLocationManager = (LocationManager) getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
 	        mLastLocation = new Location(LocationManager.NETWORK_PROVIDER);
@@ -268,5 +238,8 @@ public class GpsService extends Service {
 	    }
 	}
 	
-	
+	public static void unregisterListener(LocationListener listener) {
+		mLocationManager.removeUpdates(listener);
+		mLocationListeners.remove(listener);
+	}
 }

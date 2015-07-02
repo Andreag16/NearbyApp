@@ -288,6 +288,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, Loc
 	public void onDestroy() {
 		if(googleMap != null)
 			googleMap.setMyLocationEnabled(false);
+		GpsService.unregisterListener(this);
 		super.onDestroy();
 	}
 	

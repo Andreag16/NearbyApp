@@ -59,10 +59,9 @@ public class HomeActivity extends AppCompatActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		if(! isBound) {
-			Intent intent = new Intent(this, GpsService.class);
-			bindService(intent, myConnection, BIND_AUTO_CREATE);			
-		}
+		Intent intent = new Intent(this, GpsService.class);
+		//startService(intent);
+		bindService(intent, myConnection, BIND_AUTO_CREATE);
 
 		setContentView(R.layout.activity_home);
 		
@@ -191,7 +190,7 @@ public class HomeActivity extends AppCompatActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		unbindService(myConnection);
+		//unbindService(myConnection);
 	}
 	
 	@Override
