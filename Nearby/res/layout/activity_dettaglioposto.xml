@@ -73,11 +73,61 @@
                     android:id="@+id/relativelayout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" >
+                <TextView
+					        android:id="@+id/txtNomePosto"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_below="@id/txtDetOffNomeOfferta"
+					        android:gravity="center"
+					        android:text="TextView"
+					        android:textAppearance="?android:attr/textAppearanceLarge"
+					        android:textColor="#198C19"
+					        android:textStyle="bold" />
+                
+                <LinearLayout
+	                        android:id="@+id/lllabelinfo"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="35dp"
+	                        android:layout_alignParentRight="true"
+	                        android:layout_below="@id/txtNomePosto"
+	                        android:background="#d3d3d3"
+	                        android:orientation="horizontal"
+	                        android:paddingLeft="5dp"
+	                        android:paddingRight="5dp"
+	                        android:paddingBottom="5dp"
+	                        android:layout_marginTop="20dp" >
 
+	                        <RelativeLayout 
+	                            android:id="@+id/relativelayout1"
+			                    android:layout_width="wrap_content"
+			                    android:layout_height="wrap_content">
+		                        <TextView
+		                            android:id="@+id/textView1"
+		                            android:layout_width="wrap_content"
+		                            android:layout_height="wrap_content"
+		                            android:paddingLeft="10dp"
+		                            android:layout_marginTop="5dp"
+		                            android:text="Info"
+		                            android:textColor="#198C19"
+						        	android:textStyle="bold" />
+	
+		                        <ImageView
+		                            android:id="@+id/imginfo"
+		                            android:layout_width="30dp"
+		                            android:layout_height="30dp"
+		                            android:layout_marginRight="5dp"
+		                            android:layout_alignParentRight="true"
+		                            android:background="@drawable/info" />
+	                        </RelativeLayout>
+	                    </LinearLayout>
+	                    
+                
+                    
                     <LinearLayout
                         android:id="@+id/llDescrizione"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_below="@id/lllabelinfo"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="5dp"
@@ -86,7 +136,7 @@
                         android:layout_marginBottom="5dp" >
 
                         <ImageView
-                            android:id="@+id/imginfo"
+                            android:id="@+id/imginfoo"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:background="@drawable/ic_info_outline_black_24dp" />
@@ -96,7 +146,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#000" />
                     </LinearLayout>
 
@@ -123,7 +173,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#000" />
                     </LinearLayout>
 
@@ -136,8 +186,7 @@
                         android:layout_below="@+id/llTelephone"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp" >
+                        android:layout_marginTop="5dp" >
 
                         <ImageView
                             android:id="@+id/imgcit"
@@ -154,7 +203,7 @@
 	                            android:layout_width="wrap_content"
 	                            android:layout_height="wrap_content"
 	                            android:text="TextView"
-	                            android:textAppearance="?android:attr/textAppearanceLarge"
+	                            android:textAppearance="?android:attr/textAppearanceMedium"
 	                            android:textColor="#000" />
 	                        
 	                        <TextView
@@ -163,8 +212,20 @@
 	                            android:layout_height="wrap_content"
 	                            android:layout_below="@id/txtDetTown"
 	                            android:text="TextView"
-	                            android:textAppearance="?android:attr/textAppearanceLarge"
+	                            android:textAppearance="?android:attr/textAppearanceMedium"
 	                            android:textColor="#000" />
+	                        
+	                        <android.support.design.widget.FloatingActionButton
+						        android:id="@+id/btnMappa"
+						        android:layout_width="wrap_content"
+						        android:layout_height="wrap_content"
+						        android:layout_alignParentBottom="true"
+						        android:layout_alignParentRight="true"
+						        app:layout_anchor="@id/cvinfo"
+						        app:layout_anchorGravity="right"
+						        android:background="@drawable/ic_directions_black_24dp"
+						        android:clickable="true"
+						        android:elevation="10dp" />
                         </RelativeLayout>
                     </LinearLayout>
                     <!-- <LinearLayout
@@ -186,17 +247,7 @@
                             android:textAppearance="?android:attr/textAppearanceLarge"
                             android:textColor="#000" />
                     </LinearLayout> -->
-                    <android.support.design.widget.FloatingActionButton
-					        android:id="@+id/btnMappa"
-					        android:layout_width="wrap_content"
-					        android:layout_height="wrap_content"
-					        android:layout_alignParentBottom="true"
-					        android:layout_alignParentRight="true"
-					        app:layout_anchor="@id/cvinfo"
-					        app:layout_anchorGravity="right"
-					        android:background="@drawable/ic_directions_black_24dp"
-					        android:clickable="true"
-					        android:elevation="10dp" />
+                    
                     <LinearLayout
                         android:id="@+id/llWebsite"
                         android:layout_width="wrap_content"
@@ -206,7 +257,6 @@
                         android:layout_below="@+id/llTown"
                         android:layout_marginLeft="5dp"
                         android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
                         android:layout_marginBottom="5dp" >
 
                         <ImageView
@@ -221,7 +271,7 @@
                             android:layout_height="wrap_content"
                             android:autoLink="web"
                             android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textAppearance="?android:attr/textAppearanceMedium"
                             android:textColor="#000" />
                     </LinearLayout>
                 </RelativeLayout>

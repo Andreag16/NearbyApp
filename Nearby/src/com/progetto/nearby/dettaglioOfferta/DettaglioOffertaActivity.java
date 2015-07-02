@@ -26,13 +26,14 @@ public class DettaglioOffertaActivity extends AppCompatActivity {
 
 	private AsyncHttpClient client;
 	private Offerta offerta;
-	private TextView descrofferta, nomeposto, cittaposto, indirizzoposto;
+	private TextView nomeofferta, descrofferta, nomeposto, cittaposto, indirizzoposto;
 	private FloatingActionButton btnMappa;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dettaglio_offerta);
+		getSupportActionBar().setTitle("Offerta");
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		int idofferta = (int) getIntent().getExtras().getLong(Offerta.tag_id);
 		setupGUI();
@@ -63,7 +64,7 @@ public class DettaglioOffertaActivity extends AppCompatActivity {
 				
 				private void updateDettaglioGUI() {
 					// TODO Auto-generated method stub
-					getSupportActionBar().setTitle(offerta.nomeofferta);
+					nomeofferta.setText(offerta.nomeofferta);
 					descrofferta.setText(offerta.descrizione);
 					nomeposto.setText(offerta.nomepostoofferta);
 					cittaposto.setText(offerta.nomecittaofferta);
@@ -113,6 +114,7 @@ public class DettaglioOffertaActivity extends AppCompatActivity {
 
 	private void setupGUI() {
 		// TODO Auto-generated method stub
+		nomeofferta = (TextView) findViewById(R.id.txtDetOffNomeOfferta);
 		descrofferta = (TextView) findViewById(R.id.txtDescrOff);
 		nomeposto = (TextView) findViewById(R.id.txtDetOffNomePosto);
 		cittaposto = (TextView) findViewById(R.id.txtDetOffertaTown);

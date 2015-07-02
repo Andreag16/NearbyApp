@@ -23,6 +23,7 @@ import com.progetto.nearby.Tools;
 import com.progetto.nearby.AR.ARActivity;
 import com.progetto.nearby.Filtri.FiltriActivity;
 import com.progetto.nearby.GpsService.LocalBinder;
+import com.progetto.nearby.contatti.ContattiFragment;
 import com.progetto.nearby.navigationdrawer.NavigationDrawerFragment;
 import com.progetto.nearby.offerte.OfferteFragment;
 
@@ -35,6 +36,7 @@ public class HomeActivity extends AppCompatActivity implements
 	private HomeFragment homefragment;
 	private OfferteFragment offertefragment;
 	private FragmentManager fragmentmanager;
+	private ContattiFragment contattifragment;
 	
 	
 	public GpsService myService;
@@ -119,14 +121,24 @@ public class HomeActivity extends AppCompatActivity implements
 				break;
 			case 3:
 			{
-				
+				String url = "http://nearby.altervista.org/session/administration.php";
+				Intent areaRiservataIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				startActivity(areaRiservataIntent);
 			}
 				break;
 			case 4:
 			{
-				String url = "http://nearby.altervista.org/session/administration.php";
-				Intent areaRiservataIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-				startActivity(areaRiservataIntent);
+				if(fragmentmanager.findFragmentByTag(ContattiFragment.TAG) == null)
+				{
+					contattifragment = ContattiFragment.newInstance();
+				}
+				else
+					contattifragment = (ContattiFragment) fragmentmanager.findFragmentByTag(ContattiFragment.TAG);
+				
+				fragmentmanager
+					.beginTransaction()
+					.replace(R.id.container, contattifragment, ContattiFragment.TAG)
+					.commit();
 			}
 				break;
 			default:

@@ -135,10 +135,10 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, Loc
 	
 	@Override
 	public void onResume() {
+		super.onResume();
 		//if(googleMap == null)
 			//((MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment)).getMapAsync(this);
 		//centerMyPosition();
-		super.onResume();
 		if(homeActivity.isBound)
 			getPlaces();
 	}
