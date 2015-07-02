@@ -1,12 +1,16 @@
 package com.progetto.nearby.home;
 
+import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.provider.Settings;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -34,14 +38,16 @@ public class HomeActivity extends AppCompatActivity implements
 	private FragmentManager fragmentmanager;
 	
 	
-	private GpsService myService;
+	public GpsService myService;
     public boolean isBound = false;
 	private ServiceConnection myConnection = new ServiceConnection() {
 	    public void onServiceConnected(ComponentName className, IBinder service) {
 	        LocalBinder binder = (LocalBinder) service;
 	        myService = binder.getService();
 	        isBound = true;
-	        homefragment.onServiceConnected();
+	        if(homefragment != null) {
+	        	homefragment.onServiceConnected();
+	        }
 	    }
 	    
 	    public void onServiceDisconnected(ComponentName arg0) {
@@ -54,9 +60,10 @@ public class HomeActivity extends AppCompatActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//startService(new Intent(this, GpsService.class));
-		Intent intent = new Intent(this, GpsService.class);
-        bindService(intent, myConnection, BIND_AUTO_CREATE);
+		if(! isBound) {
+			Intent intent = new Intent(this, GpsService.class);
+			bindService(intent, myConnection, BIND_AUTO_CREATE);			
+		}
 
 		setContentView(R.layout.activity_home);
 		
@@ -86,7 +93,8 @@ public class HomeActivity extends AppCompatActivity implements
 					
 				fragmentmanager
 					.beginTransaction()
-					.replace(R.id.container, homefragment, HomeFragment.TAG).commit();
+					.replace(R.id.container, homefragment, HomeFragment.TAG)
+					.commit();
 			}
 				break;
 			case 1:
@@ -101,8 +109,7 @@ public class HomeActivity extends AppCompatActivity implements
 				
 				fragmentmanager
 					.beginTransaction()
-					.replace(R.id.container,  offertefragment, OfferteFragment.TAG)
-					.addToBackStack(null)
+					.replace(R.id.container, offertefragment, OfferteFragment.TAG)
 					.commit();
 			}
 				break;
@@ -186,5 +193,38 @@ public class HomeActivity extends AppCompatActivity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		unbindService(myConnection);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if(mNavigationDrawerFragment.isDrawerOpen()) {
+			mNavigationDrawerFragment.closeDrawer();
+		} else {
+			FragmentManager fragmentManager = getFragmentManager();
+			Fragment f = fragmentManager.findFragmentByTag(HomeFragment.TAG);
+			
+			if(f != null) { //se sono nel fragment mappa chiedo di chiudere l'app
+				AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+			    
+		        alertDialog.setMessage("Vuoi chiudere Nearby?");
+		        
+		        alertDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog,int which) {
+		                finish();
+		            }
+		        });
+
+		        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            dialog.cancel();
+		            }
+		        });
+
+		        alertDialog.show();
+			} else {
+				mNavigationDrawerFragment.selectItem(0); // Se sono nelle offerte torno alla mappa
+			}
+		}
+		//super.onBackPressed();
 	}
 }

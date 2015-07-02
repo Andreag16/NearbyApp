@@ -1,7 +1,6 @@
 package com.progetto.nearby.offerte;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
@@ -39,7 +38,6 @@ public class OfferteFragment extends Fragment {
 	private RecyclerView rvofferte;
 	private OffertaAdapterRV adapter;
 	private ArrayList<Offerta> offerts;
-	private long lastUpdateMillis = 0;
 	private AsyncHttpClient client;
 	private ProgressDialog progressdialog;
 	
@@ -62,71 +60,65 @@ public class OfferteFragment extends Fragment {
 	}
 
 	private void getOffertsByGPS() {
-		long currentMillis = Calendar.getInstance().getTimeInMillis();
 		if(Tools.isNetworkEnabled(getActivity())) {
-			if((currentMillis - lastUpdateMillis) > 3000) {
-				lastUpdateMillis = currentMillis;
-				int distance = getActivity()
-						.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
-						.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
+			int distance = getActivity()
+					.getSharedPreferences(Tools.PREFERENCES_FILE_NAME, Context.MODE_PRIVATE)
+					.getInt(Tools.PREFERNCES_DISTANZA, Tools.FILTRO_DISTANZA_DEFAULT);
 
-				Log.d("distance", ""+ distance);
-				String url = Tools.OFFERS_BY_GPS_URL +
-						GpsService.getLatitude() +
-						"&" + GpsService.getLongitude() +
-						"&" + distance;
-				client = new AsyncHttpClient();
-				client.get(url, new JsonHttpResponseHandler(){
+			Log.d("distance", ""+ distance);
+			String url = Tools.OFFERS_BY_GPS_URL +
+					GpsService.getLatitude() +
+					"&" + GpsService.getLongitude() +
+					"&" + distance;
+			client = new AsyncHttpClient();
+			client.get(url, new JsonHttpResponseHandler(){
 
-					@Override
-					public void onSuccess(int statusCode, Header[] headers,
-							JSONArray response) {
-						offerts  = new ArrayList<Offerta>();
-						for(int i = 0; i < response.length(); i++)
-						{
-							try {
-								offerts.add(Offerta.decodeJSON(response.getJSONObject(i)));
-							} catch (JSONException e) {
-								e.printStackTrace();
-							}
+				@Override
+				public void onSuccess(int statusCode, Header[] headers,	JSONArray response) {
+					offerts  = new ArrayList<Offerta>();
+					for(int i = 0; i < response.length(); i++)
+					{
+						try {
+							offerts.add(Offerta.decodeJSON(response.getJSONObject(i)));
+						} catch (JSONException e) {
+							e.printStackTrace();
 						}
+					}
+					
+					adapter = new OffertaAdapterRV(getActivity(), offerts);
+					rvofferte.setAdapter(adapter);
+					rvofferte.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+							new OnItemClickListener() {
 						
-						adapter = new OffertaAdapterRV(getActivity(), offerts);
-						rvofferte.setAdapter(adapter);
-						rvofferte.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
-								new OnItemClickListener() {
-							
-							@Override
-							public void onItemClick(View view, int position) {
-								// TODO Auto-generated method stub
-								dettaglioOfferta(offerts.get(position).id);
-							}
-						}));
-					}
-					
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							String responseString, Throwable throwable) {
-						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-						super.onFailure(statusCode, headers, responseString, throwable);
-					}
+						@Override
+						public void onItemClick(View view, int position) {
+							dettaglioOfferta(offerts.get(position).id);
+						}
+					}));
+				}
+				
+				@Override
+				public void onFailure(int statusCode, Header[] headers,
+						String responseString, Throwable throwable) {
+					Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+					super.onFailure(statusCode, headers, responseString, throwable);
+				}
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONArray errorResponse) {
-						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-						super.onFailure(statusCode, headers, throwable, errorResponse);
-					}
+				@Override
+				public void onFailure(int statusCode, Header[] headers,
+						Throwable throwable, JSONArray errorResponse) {
+					Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+					super.onFailure(statusCode, headers, throwable, errorResponse);
+				}
 
-					@Override
-					public void onFailure(int statusCode, Header[] headers,
-							Throwable throwable, JSONObject errorResponse) {
-						Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
-						super.onFailure(statusCode, headers, throwable, errorResponse);
-					}
-					
-				});
-			}
+				@Override
+				public void onFailure(int statusCode, Header[] headers,
+						Throwable throwable, JSONObject errorResponse) {
+					Toast.makeText(getActivity(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+					super.onFailure(statusCode, headers, throwable, errorResponse);
+				}
+				
+			});
 		}
 		else {
 			Toast.makeText(getActivity(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
