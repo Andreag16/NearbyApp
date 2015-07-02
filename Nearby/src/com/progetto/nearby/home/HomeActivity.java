@@ -1,7 +1,10 @@
 package com.progetto.nearby.home;
 
+import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ComponentName;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.net.Uri;
@@ -186,5 +189,38 @@ public class HomeActivity extends AppCompatActivity implements
 	protected void onDestroy() {
 		super.onDestroy();
 		unbindService(myConnection);
+	}
+	
+	@Override
+	public void onBackPressed() {
+		if(mNavigationDrawerFragment.isDrawerOpen()) {
+			mNavigationDrawerFragment.closeDrawer();
+		} else {
+			FragmentManager fragmentManager = getFragmentManager();
+			Fragment f = fragmentManager.findFragmentByTag(HomeFragment.TAG);
+			
+			if(f != null) { //se sono nel fragment mappa chiedo di chiudere l'app
+				AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+			    
+		        alertDialog.setMessage("Vuoi chiudere Nearby?");
+		        
+		        alertDialog.setPositiveButton("Si", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog,int which) {
+		                finish();
+		            }
+		        });
+
+		        alertDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
+		            public void onClick(DialogInterface dialog, int which) {
+		            dialog.cancel();
+		            }
+		        });
+
+		        alertDialog.show();
+			} else {
+				mNavigationDrawerFragment.selectItem(0); // Se sono nelle offerte torno alla mappa
+			}
+		}
+		//super.onBackPressed();
 	}
 }
