@@ -1,4 +1,4 @@
-package com.progetto.nearby.detailPlaces;
+package com.progetto.nearby.dettaglioPosto;
 
 import java.util.ArrayList;
 
@@ -11,6 +11,7 @@ import android.app.ActionBar.LayoutParams;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,13 +33,13 @@ import com.progetto.nearby.models.Offerta;
 import com.progetto.nearby.models.Place;
 import com.progetto.nearby.offerte.OffertaAdapterRV;
 
-public class DetailPlaceActivity extends AppCompatActivity {
+public class DettaglioPostoActivity extends AppCompatActivity {
 
 	public static final String ID_PLACE = "ID_PLACE";
 	
 	private LinearLayout scrollImages;
 	private TextView txtdescrizione, txtPhone, txtCitta;
-	private Button btnMappa;
+	private FloatingActionButton btnMappa;
 	private RecyclerView rvofferte;
 	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
 	private OffertaAdapterRV adapter;
@@ -50,7 +51,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_detail);
+		setContentView(R.layout.activity_dettaglioposto);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		idPlace = (int) getIntent().getExtras().getLong(Place.tag_id);
 		setupGUI();
@@ -66,16 +67,16 @@ public class DetailPlaceActivity extends AppCompatActivity {
 		txtdescrizione = (TextView) findViewById(R.id.txtDetDescr);
 		txtPhone = (TextView) findViewById(R.id.txtDetTelephone);
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
-		btnMappa = (Button) findViewById(R.id.btnMappa);
+		btnMappa = (FloatingActionButton) findViewById(R.id.btnMappa);
 		rvofferte = (RecyclerView) findViewById(R.id.rvoffertsplace);
-		LinearLayoutManager llm = new LinearLayoutManager(DetailPlaceActivity.this);
+		LinearLayoutManager llm = new LinearLayoutManager(DettaglioPostoActivity.this);
 		rvofferte.setLayoutManager(llm);
 		rvofferte.setSaveEnabled(false);
 	}
 
 	private void getPlace(final int idPlace) {
 		// TODO Auto-generated method stub
-		if(Tools.isNetworkEnabled(DetailPlaceActivity.this)) {
+		if(Tools.isNetworkEnabled(DettaglioPostoActivity.this)) {
 			client = new AsyncHttpClient();
 			client.get(Tools.GET_DETAIL_URL + idPlace, new JsonHttpResponseHandler(){
 	
@@ -97,21 +98,21 @@ public class DetailPlaceActivity extends AppCompatActivity {
 				@Override
 				public void onFailure(int statusCode, Header[] headers,
 						String responseString, Throwable throwable) {
-					Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+					Toast.makeText(DettaglioPostoActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 					super.onFailure(statusCode, headers, responseString, throwable);
 				}
 				
 				@Override
 				public void onFailure(int statusCode, Header[] headers,
 						Throwable throwable, JSONArray errorResponse) {
-					Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+					Toast.makeText(DettaglioPostoActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 					super.onFailure(statusCode, headers, throwable, errorResponse);
 				}
 				
 				@Override
 				public void onFailure(int statusCode, Header[] headers,
 						Throwable throwable, JSONObject errorResponse) {
-					Toast.makeText(DetailPlaceActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
+					Toast.makeText(DettaglioPostoActivity.this, "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 					super.onFailure(statusCode, headers, throwable, errorResponse);
 				}
 				
@@ -126,7 +127,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 						imagesLayout.setMargins(5, 0, 5, 0);
 						for(int i = 1; i < place.gallery.size(); i++)
 						{
-							image_detail = new SmartImageView(DetailPlaceActivity.this);
+							image_detail = new SmartImageView(DettaglioPostoActivity.this);
 							image_detail.setLayoutParams(imagesLayout);
 							image_detail.setScaleType(ScaleType.CENTER_CROP);
 							image_detail.getLayoutParams().width = 100;
@@ -194,7 +195,7 @@ public class DetailPlaceActivity extends AppCompatActivity {
 							e.printStackTrace();
 						}
 					}
-					adapter = new OffertaAdapterRV(DetailPlaceActivity.this, offerte);
+					adapter = new OffertaAdapterRV(DettaglioPostoActivity.this, offerte);
 					rvofferte.setAdapter(adapter);
 				}
 				
@@ -221,6 +222,6 @@ public class DetailPlaceActivity extends AppCompatActivity {
 			});
 		}
 		else
-			Toast.makeText(DetailPlaceActivity.this, "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
+			Toast.makeText(DettaglioPostoActivity.this, "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
 	}
 }

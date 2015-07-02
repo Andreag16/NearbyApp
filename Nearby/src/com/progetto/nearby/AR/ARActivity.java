@@ -18,7 +18,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.GpsService;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
-import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
+import com.progetto.nearby.dettaglioPosto.DettaglioPostoActivity;
 import com.progetto.nearby.models.Place;
 
 import android.app.Activity;
@@ -85,7 +85,7 @@ public class ARActivity extends Activity {
 								}
 								BeyondarObject beyondarObject = beyondarObjects.get(0);
 								Toast.makeText(ARActivity.this, "Clicked on: " + beyondarObject.getName(), Toast.LENGTH_LONG).show();
-								Intent intent = new Intent(ARActivity.this, DetailPlaceActivity.class);
+								Intent intent = new Intent(ARActivity.this, DettaglioPostoActivity.class);
 								intent.putExtra(Place.tag_id, beyondarObject.getId());
 								startActivity(intent);
 							}
@@ -133,8 +133,8 @@ public class ARActivity extends Activity {
 			button.setOnClickListener(new View.OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					Intent intent = new Intent(ARActivity.this, DetailPlaceActivity.class);
-					intent.putExtra(DetailPlaceActivity.ID_PLACE, beyondarObject.getId());
+					Intent intent = new Intent(ARActivity.this, DettaglioPostoActivity.class);
+					intent.putExtra(DettaglioPostoActivity.ID_PLACE, beyondarObject.getId());
 					startActivity(intent);
 				}
 			});

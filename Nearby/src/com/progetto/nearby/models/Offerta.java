@@ -24,7 +24,10 @@ public class Offerta implements Comparable<Offerta> {
 	public static Offerta decodeJSON(JSONObject offert) throws JSONException
 	{
 		Offerta offerta = new Offerta();
-		offerta.id = offert.getInt(tag_id);
+		if(offert.has(tag_id))
+			offerta.id = offert.getInt(tag_id);
+		else
+			offerta.id = 0;
 		offerta.nomeofferta = offert.getString(tag_nomeofferta);
 		offerta.descrizione = offert.getString(tag_description);
 		if(offert.has(tag_nomeposto) && offert.has(tag_nomecittaposto)

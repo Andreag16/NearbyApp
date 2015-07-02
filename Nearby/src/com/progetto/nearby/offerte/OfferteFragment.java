@@ -2,25 +2,22 @@ package com.progetto.nearby.offerte;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 
 import org.apache.http.Header;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
-
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -30,13 +27,16 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.GpsService;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.dettaglioOfferta.DettaglioOffertaActivity;
+import com.progetto.nearby.home.RecyclerItemClickListener;
+import com.progetto.nearby.home.RecyclerItemClickListener.OnItemClickListener;
 import com.progetto.nearby.models.Offerta;
 
 public class OfferteFragment extends Fragment {
 
 	public static final String TAG = "OFFERTS_FRAGMENT";
 	//private ListView listaOfferte;
-	private RecyclerView rv;
+	private RecyclerView rvofferte;
 	private OffertaAdapterRV adapter;
 	private ArrayList<Offerta> offerts;
 	private long lastUpdateMillis = 0;
@@ -54,9 +54,9 @@ public class OfferteFragment extends Fragment {
 			Bundle savedInstanceState) {
 		View offerte_view = inflater.inflate(R.layout.fragment_offerte, null);
 		//listaOfferte = (ListView) offerte_view.findViewById(R.id.listaOfferte);
-		rv  = (RecyclerView)offerte_view.findViewById(R.id.rv);
+		rvofferte  = (RecyclerView)offerte_view.findViewById(R.id.rv);
 		LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-		rv.setLayoutManager(llm);
+		rvofferte.setLayoutManager(llm);
 		getOffertsByGPS();
 		return offerte_view;
 	}
@@ -92,7 +92,16 @@ public class OfferteFragment extends Fragment {
 						}
 						
 						adapter = new OffertaAdapterRV(getActivity(), offerts);
-						rv.setAdapter(adapter);
+						rvofferte.setAdapter(adapter);
+						rvofferte.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(),
+								new OnItemClickListener() {
+							
+							@Override
+							public void onItemClick(View view, int position) {
+								// TODO Auto-generated method stub
+								dettaglioOfferta(offerts.get(position).id);
+							}
+						}));
 					}
 					
 					@Override
@@ -121,6 +130,29 @@ public class OfferteFragment extends Fragment {
 		}
 		else {
 			Toast.makeText(getActivity(), "Nessuna connessione disponibile!", Toast.LENGTH_LONG).show();
+		}
+	}
+	
+	private void dettaglioOfferta(long id)
+	{
+		Intent detoffintent = new Intent(getActivity(), DettaglioOffertaActivity.class); 
+		Bundle detoffbundle = new Bundle();
+		detoffbundle.putLong(Offerta.tag_id, id);
+		detoffintent.putExtras(detoffbundle);
+		startActivity(detoffintent);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// TODO Auto-generated method stub
+		switch(item.getItemId())
+		{
+			case android.R.id.home:
+				getActivity().onBackPressed();
+				return true;
+			default:
+				return true;
+			
 		}
 	}
 	

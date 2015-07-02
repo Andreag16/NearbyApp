@@ -1,4 +1,4 @@
-package com.progetto.nearby.detailPlaces;
+package com.progetto.nearby.dettaglioPosto;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

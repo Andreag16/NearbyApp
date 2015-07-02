@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.loopj.android.image.SmartImageView;
 import com.progetto.nearby.R;
-import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
+import com.progetto.nearby.dettaglioPosto.DettaglioPostoActivity;
 import com.progetto.nearby.models.Place;
 
 public class PlaceAdapterRV extends RecyclerView.Adapter<PlaceAdapterRV.PlaceViewHolder> {

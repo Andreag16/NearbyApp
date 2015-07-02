@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.widget.DrawerLayout;
@@ -114,6 +115,13 @@ public class HomeActivity extends AppCompatActivity implements
 			case 3:
 			{
 				
+			}
+				break;
+			case 4:
+			{
+				String url = "http://nearby.altervista.org";
+				Intent areaRiservataIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				startActivity(areaRiservataIntent);
 			}
 				break;
 			default:
