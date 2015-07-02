@@ -38,8 +38,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
-import com.progetto.nearby.detailPlaces.DetPlaActivity;
-import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
+import com.progetto.nearby.dettaglioPosto.DetPlaActivity;
+import com.progetto.nearby.dettaglioPosto.DettaglioPostoActivity;
 import com.progetto.nearby.gpsService.GpsService;
 import com.progetto.nearby.models.Place;
 
@@ -180,7 +180,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 						rvPlaces.addOnItemTouchListener(
 								(OnItemTouchListener) new RecyclerItemClickListener(getActivity(), new RecyclerItemClickListener.OnItemClickListener() {
 								      @Override public void onItemClick(View view, int position) {
-								       enterDetails(allPlaces.get(position).id);
+								       DettaglioPosto(allPlaces.get(position).id);
 								      }
 								    })
 						);
@@ -199,17 +199,17 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 		}
 	}
 
-	protected void enterDetails(long id) {
-		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
-    	Bundle placeBundle = new Bundle();
-    	placeBundle.putLong(Place.tag_id, id);
-    	inte.putExtras(placeBundle);
-		startActivity(inte);
-//		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+	protected void DettaglioPosto(long id) {
+//		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
 //    	Bundle placeBundle = new Bundle();
 //    	placeBundle.putLong(Place.tag_id, id);
-//    	intent.putExtras(placeBundle);
-//        startActivity(intent);
+//    	inte.putExtras(placeBundle);
+//		startActivity(inte);
+		Intent intent = new Intent(getActivity(), DettaglioPostoActivity.class);
+    	Bundle placeBundle = new Bundle();
+    	placeBundle.putLong(Place.tag_id, id);
+    	intent.putExtras(placeBundle);
+        startActivity(intent);
 	}
 
 	public static HomeFragment newInstance(Bundle args) {
@@ -252,9 +252,7 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback {
 	    	googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 				@Override
 				public void onInfoWindowClick(Marker marker) {
-					Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
-			    	intent.putExtra(DetailPlaceActivity.ID_PLACE, markers.get(marker));
-			        startActivity(intent);
+					DettaglioPosto(markers.get(marker));
 				}
 			});
 		}

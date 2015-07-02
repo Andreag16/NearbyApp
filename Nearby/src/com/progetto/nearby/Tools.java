@@ -15,6 +15,7 @@ public class Tools {
 	public static String SUBCATEGORIES_URL = SERVICE_URL + "test/index.php/subcategories";
 	public static String GET_IMAGE_URL = SERVICE_URL + "images/";
 	public static String GET_DETAIL_URL = SERVICE_URL + "test/index.php/place/";
+	public static String GET_DETAIL_OFFERTA_URL = "http://nearby.altervista.org/test/index.php/offerbyid/";
 	
 	public static final String PREFERENCES_FILE_NAME = "nearbypreferences";
 	public static final String PREFERNCES_DISTANZA = "distanza";

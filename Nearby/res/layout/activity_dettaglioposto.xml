@@ -1,0 +1,286 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#EAE6CA"
+    tools:context="${relativePackage}.${activityClass}" >
+
+    <!-- xmlns:app="http://schemas.android.com/apk/res/com.progetto.nearby" -->
+
+    <ScrollView
+        android:id="@+id/scrolldetail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp" >
+
+        <LinearLayout
+            android:id="@+id/linearlayoutdetail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical" >
+
+            <com.loopj.android.image.SmartImageView
+                android:id="@+id/logo"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center" />
+
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cvgallery"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/logo"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:elevation="10dp" >
+
+                <HorizontalScrollView
+                    android:id="@+id/horizontalScrollView1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@+id/logo"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginTop="15dp" >
+
+                    <LinearLayout
+                        android:id="@+id/images"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:orientation="horizontal" >
+                    </LinearLayout>
+                </HorizontalScrollView>
+            </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/cvinfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cvgallery"
+                android:elevation="10dp" >
+
+                <RelativeLayout
+                    android:id="@+id/relativelayout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" >
+
+                    <LinearLayout
+                        android:id="@+id/llDescrizione"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" >
+
+                        <ImageView
+                            android:id="@+id/imginfo"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_info_outline_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/lblDetDescr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Descrizione: "
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#000"
+                            android:textStyle="bold" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llrealDescrizione"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/llDescrizione"
+                        android:layout_alignRight="@+id/llDescrizione"
+                        android:layout_below="@id/llDescrizione"
+                        android:layout_marginLeft="30dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" >
+
+                        <TextView
+                            android:id="@+id/txtDetDescr"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#000" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llTelephone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/llrealDescrizione"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" >
+
+                        <ImageView
+                            android:id="@+id/imgtel"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_local_phone_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/lblDetTelephone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Telefono: "
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#000"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtDetTelephone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#000" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llTown"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@+id/llTelephone"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginBottom="5dp" >
+
+                        <ImageView
+                            android:id="@+id/imgcit"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:background="@drawable/ic_place_black_24dp" />
+
+                        <TextView
+                            android:id="@+id/lblDetTown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Città: "
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#000"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/txtDetTown"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="TextView"
+                            android:textAppearance="?android:attr/textAppearanceLarge"
+                            android:textColor="#000" />
+                    </LinearLayout>
+                    <android.support.design.widget.FloatingActionButton
+					        android:id="@+id/btnMappa"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_alignParentBottom="true"
+					        android:layout_alignParentRight="true"
+					        app:layout_anchor="@id/cvinfo"
+					        app:layout_anchorGravity="right"
+					        android:background="@drawable/ic_directions_black_24dp"
+					        android:clickable="true"
+					        android:elevation="10dp" />
+                </RelativeLayout>
+            </android.support.v7.widget.CardView>
+        </LinearLayout>
+    </ScrollView>
+
+    
+
+    <!--
+    <Button
+        android:id="@+id/btnMappa"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/llTown"
+        android:layout_below="@+id/llTown"
+        android:background="@drawable/round_button"
+        android:text="Mappa"
+        android:textStyle="bold"
+        android:textColor="#fff" />
+    -->
+
+    <com.hollowsoft.library.slidingdrawer.SlidingDrawer
+        android:id="@+id/sliding_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:content="@+id/drawer_content"
+        app:handle="@+id/drawer_handle" >
+
+        <RelativeLayout
+            android:id="@+id/drawer_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_gravity="center"
+            android:background="@android:color/holo_green_dark"
+            android:clickable="true"
+            android:focusable="false" >
+
+            <!--
+            <ListView
+                android:id="@+id/lstOffertsSinglePlace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@android:color/white"
+				 >
+            </ListView>
+            -->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvoffertsplace"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                tools:listitem="@layout/cell_offerta" >
+            </android.support.v7.widget.RecyclerView>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/drawer_handle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/gray_transparent"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/txtSlide"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="OFFERTE"
+                android:textColor="@color/orange" >
+            </TextView>
+
+            <ImageView
+                android:id="@+id/drawer_handle_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/hand" />
+        </LinearLayout>
+    </com.hollowsoft.library.slidingdrawer.SlidingDrawer>
+
+</RelativeLayout>
