@@ -38,7 +38,7 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 	public static final String ID_PLACE = "ID_PLACE";
 	
 	private LinearLayout scrollImages;
-	private TextView txtdescrizione, txtPhone, txtCitta;
+	private TextView txtdescrizione, txtPhone, txtCitta, txtIndirizzo, txtWebsite;
 	private FloatingActionButton btnMappa;
 	private RecyclerView rvofferte;
 	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
@@ -67,6 +67,8 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 		txtdescrizione = (TextView) findViewById(R.id.txtDetDescr);
 		txtPhone = (TextView) findViewById(R.id.txtDetTelephone);
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
+		txtIndirizzo = (TextView) findViewById(R.id.txtDetIndirizzo);
+		txtWebsite = (TextView) findViewById(R.id.txtDetwebsite);
 		btnMappa = (FloatingActionButton) findViewById(R.id.btnMappa);
 		rvofferte = (RecyclerView) findViewById(R.id.rvoffertsplace);
 		LinearLayoutManager llm = new LinearLayoutManager(DettaglioPostoActivity.this);
@@ -151,6 +153,8 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 					txtdescrizione.setText(place.description);
 					txtPhone.setText(place.telefono);
 					txtCitta.setText(place.città);
+					if(!(place.website.equals("")))
+						txtWebsite.setText(place.website);
 					btnMappa.setOnClickListener(new OnClickListener() {
 						
 						@Override
