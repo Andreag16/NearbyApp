@@ -25,10 +25,10 @@ public class DrawerItemObject {
     	data.add(offerte);
     	DrawerItemObject ar = new DrawerItemObject(2,resources.getString(R.string.title_section3),R.drawable.ic_visibility_black_36dp);
     	data.add(ar);
-    	DrawerItemObject contatti = new DrawerItemObject(3,resources.getString(R.string.title_section4),R.drawable.ic_local_phone_black_24dp);
-    	data.add(contatti);
-    	DrawerItemObject areariservata = new DrawerItemObject(4,resources.getString(R.string.title_section5),R.drawable.ic_lock_black_24dp);
+    	DrawerItemObject areariservata = new DrawerItemObject(3,resources.getString(R.string.title_section5),R.drawable.ic_lock_black_24dp);
     	data.add(areariservata);
+    	DrawerItemObject contatti = new DrawerItemObject(4,resources.getString(R.string.title_section4),R.drawable.ic_local_phone_black_24dp);
+    	data.add(contatti);
     	return data;
     	}
 }
