@@ -23,6 +23,7 @@ import com.progetto.nearby.Tools;
 import com.progetto.nearby.AR.ARActivity;
 import com.progetto.nearby.Filtri.FiltriActivity;
 import com.progetto.nearby.GpsService.LocalBinder;
+import com.progetto.nearby.contatti.ContattiFragment;
 import com.progetto.nearby.navigationdrawer.NavigationDrawerFragment;
 import com.progetto.nearby.offerte.OfferteFragment;
 
@@ -35,16 +36,19 @@ public class HomeActivity extends AppCompatActivity implements
 	private HomeFragment homefragment;
 	private OfferteFragment offertefragment;
 	private FragmentManager fragmentmanager;
+	private ContattiFragment contattifragment;
 	
 	
-	private GpsService myService;
+	public GpsService myService;
     public boolean isBound = false;
 	private ServiceConnection myConnection = new ServiceConnection() {
 	    public void onServiceConnected(ComponentName className, IBinder service) {
 	        LocalBinder binder = (LocalBinder) service;
 	        myService = binder.getService();
 	        isBound = true;
-	        homefragment.onServiceConnected();
+	        if(homefragment != null) {
+	        	homefragment.onServiceConnected();
+	        }
 	    }
 	    
 	    public void onServiceDisconnected(ComponentName arg0) {
@@ -57,9 +61,10 @@ public class HomeActivity extends AppCompatActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		
-		//startService(new Intent(this, GpsService.class));
-		Intent intent = new Intent(this, GpsService.class);
-        bindService(intent, myConnection, BIND_AUTO_CREATE);
+		if(! isBound) {
+			Intent intent = new Intent(this, GpsService.class);
+			bindService(intent, myConnection, BIND_AUTO_CREATE);			
+		}
 
 		setContentView(R.layout.activity_home);
 		
@@ -89,7 +94,8 @@ public class HomeActivity extends AppCompatActivity implements
 					
 				fragmentmanager
 					.beginTransaction()
-					.replace(R.id.container, homefragment, HomeFragment.TAG).commit();
+					.replace(R.id.container, homefragment, HomeFragment.TAG)
+					.commit();
 			}
 				break;
 			case 1:
@@ -104,8 +110,7 @@ public class HomeActivity extends AppCompatActivity implements
 				
 				fragmentmanager
 					.beginTransaction()
-					.replace(R.id.container,  offertefragment, OfferteFragment.TAG)
-					.addToBackStack(null)
+					.replace(R.id.container, offertefragment, OfferteFragment.TAG)
 					.commit();
 			}
 				break;
@@ -117,14 +122,24 @@ public class HomeActivity extends AppCompatActivity implements
 				break;
 			case 3:
 			{
-				
+				String url = "http://nearby.altervista.org/session/administration.php";
+				Intent areaRiservataIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+				startActivity(areaRiservataIntent);
 			}
 				break;
 			case 4:
 			{
-				String url = "http://nearby.altervista.org";
-				Intent areaRiservataIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-				startActivity(areaRiservataIntent);
+				if(fragmentmanager.findFragmentByTag(ContattiFragment.TAG) == null)
+				{
+					contattifragment = ContattiFragment.newInstance();
+				}
+				else
+					contattifragment = (ContattiFragment) fragmentmanager.findFragmentByTag(ContattiFragment.TAG);
+				
+				fragmentmanager
+					.beginTransaction()
+					.replace(R.id.container, contattifragment, ContattiFragment.TAG)
+					.commit();
 			}
 				break;
 			default:

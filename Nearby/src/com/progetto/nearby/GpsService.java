@@ -109,6 +109,7 @@ public class GpsService extends Service {
 						@Override
 						public void onFailure(int statusCode, Header[] headers,
 								String responseString, Throwable throwable) {
+							// TODO toast solo per debug
 							Toast.makeText(getApplicationContext(), "Errore nel recupero dei dati", Toast.LENGTH_LONG).show();
 							super.onFailure(statusCode, headers, responseString, throwable);
 						}
@@ -266,4 +267,6 @@ public class GpsService extends Service {
 	        Log.w(TAG, "network provider does not exist, " + ex.getMessage());
 	    }
 	}
+	
+	
 }

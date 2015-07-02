@@ -5,28 +5,35 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.content.Intent;
+import android.net.Uri;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
 import com.progetto.nearby.models.Offerta;
 
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.MenuItem;
-import android.widget.TextView;
-import android.widget.Toast;
-
 public class DettaglioOffertaActivity extends AppCompatActivity {
 
 	private AsyncHttpClient client;
 	private Offerta offerta;
-	private TextView descrofferta, nomeposto;
+	private TextView nomeofferta, descrofferta, nomeposto, cittaposto, indirizzoposto;
+	private FloatingActionButton btnMappa;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_dettaglio_offerta);
+		getSupportActionBar().setTitle("Offerta");
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		int idofferta = (int) getIntent().getExtras().getLong(Offerta.tag_id);
 		setupGUI();
@@ -57,9 +64,25 @@ public class DettaglioOffertaActivity extends AppCompatActivity {
 				
 				private void updateDettaglioGUI() {
 					// TODO Auto-generated method stub
-					getSupportActionBar().setTitle(offerta.nomeofferta);
+					nomeofferta.setText(offerta.nomeofferta);
 					descrofferta.setText(offerta.descrizione);
 					nomeposto.setText(offerta.nomepostoofferta);
+					cittaposto.setText(offerta.nomecittaofferta);
+					indirizzoposto.setText(offerta.indirizzoposto);
+					btnMappa.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							if(offerta.lat > 0 && offerta.longit > 0)
+							{
+								String url = "http://maps.google.com/maps?"
+										+ "daddr=" + offerta.lat + "," + offerta.longit;
+								Intent mapIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+								startActivity(mapIntent);
+							}
+						}
+					});
 				}
 
 				@Override
@@ -91,8 +114,12 @@ public class DettaglioOffertaActivity extends AppCompatActivity {
 
 	private void setupGUI() {
 		// TODO Auto-generated method stub
+		nomeofferta = (TextView) findViewById(R.id.txtDetOffNomeOfferta);
 		descrofferta = (TextView) findViewById(R.id.txtDescrOff);
 		nomeposto = (TextView) findViewById(R.id.txtDetOffNomePosto);
+		cittaposto = (TextView) findViewById(R.id.txtDetOffertaTown);
+		indirizzoposto = (TextView) findViewById(R.id.txtDetOffertaIndirizzo);
+		btnMappa = (FloatingActionButton) findViewById(R.id.btnMappaOfferta);
 	}
 	
 	@Override

@@ -21,6 +21,7 @@ public class Place {
 	public static final String tag_distanza = "distance";
 	public static final String tag_tipo = "type";
 	public static final String tag_website = "website";
+	public static final String tag_indirizzo = "place_address";
 	
 	public int id;
 	public String città;
@@ -34,6 +35,7 @@ public class Place {
 	public String distanza;
 	public String urlImg;
 	public String website;
+	public String indirizzo;
 	public ArrayList<String> gallery = new ArrayList<String>();
 	
 	public static Place decodeJSON(JSONObject obj) {
@@ -59,13 +61,21 @@ public class Place {
 						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
 				}
 			}
+			if(obj.has(tag_indirizzo))
+				place.indirizzo = obj.getString(tag_indirizzo);
+			else
+				place.indirizzo = "";
+			if(obj.has(tag_website))
+				place.website = obj.getString(tag_website);
+			else
+				place.website = "";
+			
 			if(obj.has(tag_distanza))
 				place.distanza = distance(obj.getDouble(tag_distanza));
 			else
 				place.distanza = "";
 			place.tipo = obj.getString(tag_tipo);
-			if(obj.has(tag_website))
-				place.website = obj.getString(tag_website);
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

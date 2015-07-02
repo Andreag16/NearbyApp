@@ -5,192 +5,184 @@
     android:layout_height="match_parent"
     android:background="#EAE6CA"
     tools:context="${relativePackage}.${activityClass}" >
-
-    <TextView 
-        android:id="@+id/txtNomeOfferta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textColor="#009700"
-        android:paddingBottom="30dp"/>
     
-    <android.support.v7.widget.CardView
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/cvinfo"
+    <ScrollView
+        android:id="@+id/scrolldetail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtNomeOfferta"
-        android:elevation="10dp" >
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingBottom="10dp" >
+        
+	    <android.support.v7.widget.CardView
+	        xmlns:android="http://schemas.android.com/apk/res/android"
+	        android:id="@+id/cvinfo"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" >
+	        
+	                <RelativeLayout
+	                    android:id="@+id/relativelayout"
+	                    android:layout_width="wrap_content"
+	                    android:layout_height="wrap_content" >
+	
+	                    <TextView
+					        android:id="@+id/txtDetOffNomeOfferta"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:gravity="center"
+					        android:text="TextView"
+					        android:textAppearance="?android:attr/textAppearanceLarge"
+					        android:textColor="#198C19"
+					        android:textStyle="bold" />
+	                    
+	                    <TextView
+					        android:id="@+id/txtDetOffNomePosto"
+					        android:layout_width="wrap_content"
+					        android:layout_height="wrap_content"
+					        android:layout_below="@id/txtDetOffNomeOfferta"
+					        android:gravity="center"
+					        android:text="TextView"
+					        android:textAppearance="?android:attr/textAppearanceLarge"
+					        android:textColor="#0000FF"
+					        android:textStyle="italic" />
 
-                <RelativeLayout
-                    android:id="@+id/relativelayout"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" >
+	                    <LinearLayout
+	                        android:id="@+id/lllabelinfo"
+	                        android:layout_width="match_parent"
+	                        android:layout_height="35dp"
+	                        android:layout_alignParentRight="true"
+	                        android:layout_below="@id/txtDetOffNomePosto"
+	                        android:background="#d3d3d3"
+	                        android:orientation="horizontal"
+	                        android:paddingLeft="5dp"
+	                        android:paddingRight="5dp"
+	                        android:paddingBottom="5dp"
+	                        android:layout_marginTop="20dp" >
 
-                    <LinearLayout
-                        android:id="@+id/llDescrizione"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp" >
+	                        <RelativeLayout 
+	                            android:id="@+id/relativelayout1"
+			                    android:layout_width="wrap_content"
+			                    android:layout_height="wrap_content">
+		                        <TextView
+		                            android:id="@+id/textView1"
+		                            android:layout_width="wrap_content"
+		                            android:layout_height="wrap_content"
+		                            android:paddingLeft="10dp"
+		                            android:layout_marginTop="5dp"
+		                            android:text="Info"
+		                            android:textColor="#198C19"
+						        	android:textStyle="bold" />
+	
+		                        <ImageView
+		                            android:id="@+id/imginfo"
+		                            android:layout_width="30dp"
+		                            android:layout_height="30dp"
+		                            android:layout_marginRight="5dp"
+		                            android:layout_alignParentRight="true"
+		                            android:background="@drawable/info" />
+	                        </RelativeLayout>
+	                    </LinearLayout>
+	                    <LinearLayout
+	                        android:id="@+id/llDescrizione"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_below="@id/lllabelinfo"
+	                        android:layout_alignParentLeft="true"
+	                        android:layout_alignParentRight="true"
+	                        android:layout_marginRight="5dp"
+	                        android:layout_marginTop="5dp" >
+	
+	                        <TextView
+	                            android:id="@+id/txtDescrOff"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:drawableLeft="@drawable/ic_info_outline_black_24dp"
+	                            android:drawablePadding="5dp"
+	                            android:text="TextView"
+	                            android:textAppearance="?android:attr/textAppearanceMedium"
+	                            android:textColor="#000" />
+	                    </LinearLayout>
+	
+	                   <!--  <LinearLayout
+	                        android:id="@+id/llnomeposto"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_alignParentLeft="true"
+	                        android:layout_alignParentRight="true"
+	                        android:layout_marginLeft="30dp"
+	                        android:layout_below="@+id/llDescrizione">
+	
+	                         <TextView
+	                            android:id="@+id/lblNomePostoOfferta"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+	                            android:drawablePadding="5dp"
+	                            android:text="Nome posto: "
+	                            android:textAppearance="?android:attr/textAppearanceLarge"
+	                            android:textColor="#000"
+	                            android:textStyle="bold" /> 
+	
+	                        <TextView
+	                            android:id="@+id/txtDetOffNomePosto1"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content"
+	                            android:text="TextView"
+	                            android:textAppearance="?android:attr/textAppearanceLarge"
+	                            android:textColor="#000" />
+	                    </LinearLayout>
+	 -->
+	                    <LinearLayout
+	                        android:id="@+id/llTown"
+	                        android:layout_width="wrap_content"
+	                        android:layout_height="wrap_content"
+	                        android:layout_alignParentLeft="true"
+	                        android:layout_alignParentRight="true"
+	                        android:layout_below="@+id/llDescrizione"
+	                        android:layout_marginRight="5dp"
+	                        android:layout_marginTop="5dp"
+	                        android:layout_marginBottom="5dp" >
 
-                        <ImageView
-                            android:id="@+id/imginfo"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/ic_info_outline_black_24dp" />
-
-                        <TextView
-                            android:id="@+id/lblDetDescr"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Descrizione: "
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000"
-                            android:textStyle="bold" />
+	                        <ImageView
+	                            android:id="@+id/imgposto"
+	                            android:layout_width="30dp"
+	                            android:layout_height="30dp"
+	                            android:layout_marginTop="10dp"
+	                            android:background="@drawable/ic_place_black_24dp" />
+							<RelativeLayout 
+							    android:id="@+id/relposto"
+	                            android:layout_width="wrap_content"
+	                            android:layout_height="wrap_content">
+		                        <TextView
+		                            android:id="@+id/txtDetOffertaTown"
+		                            android:layout_width="wrap_content"
+		                            android:layout_height="wrap_content"
+		                            android:text="TextView"
+		                            android:textAppearance="?android:attr/textAppearanceMedium"
+		                            android:textColor="#000" />
+		                        
+		                        <TextView
+		                            android:id="@+id/txtDetOffertaIndirizzo"
+		                            android:layout_width="wrap_content"
+		                            android:layout_height="wrap_content"
+		                            android:layout_below="@id/txtDetOffertaTown"
+		                            android:text="TextView"
+		                            android:textAppearance="?android:attr/textAppearanceMedium"
+		                            android:textColor="#000" />
+                        </RelativeLayout>
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llrealDescrizione"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignLeft="@+id/llDescrizione"
-                        android:layout_alignRight="@+id/llDescrizione"
-                        android:layout_below="@id/llDescrizione"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp" >
-
-                        <TextView
-                            android:id="@+id/txtDescrOff"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llnomeposto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/llrealDescrizione"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp" >
-
-                        <ImageView
-                            android:id="@+id/imgtel"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/ic_local_phone_black_24dp" />
-
-                        <TextView
-                            android:id="@+id/lblNomePostoOfferta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Nome posto: "
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtDetOffNomePosto"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000" />
-                    </LinearLayout>
-                    
-                    <LinearLayout
-                        android:id="@+id/llIndirizzoPosto"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/llCitta"
-                        android:layout_marginLeft="5dp"
-                        android:layout_marginRight="5dp"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp" >
-
-                        <ImageView
-                            android:id="@+id/imgind"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/ic_place_black_24dp" />
-
-                        <TextView
-                            android:id="@+id/lblIndirizzo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Indirizzo: "
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtIndirizzo"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/llCitta"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentLeft="true"
-                        android:layout_below="@+id/llnomeposto" >
-
-                        <ImageView
-                            android:id="@+id/imgcit"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:background="@drawable/ic_place_black_24dp" />
-
-                        <TextView
-                            android:id="@+id/lblDetTown"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Città: "
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/txtDetTown"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="TextView"
-                            android:textAppearance="?android:attr/textAppearanceLarge"
-                            android:textColor="#000" />
-                    </LinearLayout>
-
                     <android.support.design.widget.FloatingActionButton
-                        android:id="@+id/btnMappa"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_below="@+id/llIndirizzoPosto"
-                        app:layout_anchor="@id/cvinfo"
-                        app:layout_anchorGravity="right"
-                        android:background="@drawable/ic_directions_black_24dp"
-                        android:clickable="true"
-                        android:elevation="10dp" />
-
-                </RelativeLayout>
-            </android.support.v7.widget.CardView>
-
+							    android:id="@+id/btnMappaOfferta"
+							    android:layout_width="match_parent"
+							    android:layout_height="wrap_content"
+							    android:layout_below="@id/llTown"
+							    app:layout_anchor="@id/llTown"
+							    app:layout_anchorGravity="right"
+							    android:background="@drawable/ic_directions_black_24dp"
+							    android:clickable="true"
+							    android:elevation="10dp" />
+	                </RelativeLayout>
+	            </android.support.v7.widget.CardView>
+	</ScrollView>
 </RelativeLayout>
