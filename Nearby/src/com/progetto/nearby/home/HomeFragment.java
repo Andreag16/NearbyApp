@@ -44,6 +44,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.progetto.nearby.GpsService;
 import com.progetto.nearby.R;
 import com.progetto.nearby.Tools;
+import com.progetto.nearby.detailPlaces.DetPlaActivity;
 import com.progetto.nearby.detailPlaces.DetailPlaceActivity;
 import com.progetto.nearby.models.Place;
 
@@ -195,16 +196,16 @@ public class HomeFragment extends MapFragment implements OnMapReadyCallback, Loc
 	}
 
 	protected void enterDetails(long id) {
-//		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
-//    	Bundle placeBundle = new Bundle();
-//    	placeBundle.putLong(Place.tag_id, id);
-//    	inte.putExtras(placeBundle);
-//		startActivity(inte);
-		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+		Intent inte = new Intent(getActivity(), DetPlaActivity.class);
     	Bundle placeBundle = new Bundle();
     	placeBundle.putLong(Place.tag_id, id);
-    	intent.putExtras(placeBundle);
-        startActivity(intent);
+    	inte.putExtras(placeBundle);
+		startActivity(inte);
+//		Intent intent = new Intent(getActivity(), DetailPlaceActivity.class);
+//    	Bundle placeBundle = new Bundle();
+//    	placeBundle.putLong(Place.tag_id, id);
+//    	intent.putExtras(placeBundle);
+//        startActivity(intent);
 	}
 
 	public static HomeFragment newInstance(Bundle args) {

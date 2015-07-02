@@ -64,6 +64,7 @@
             android:name="com.progetto.nearby.detailPlaces.DetPlaActivity"
             android:label="@string/title_activity_det_pla"
             android:theme="@style/AppBaseNoActionBar"
+            android:screenOrientation="portrait"
             android:parentActivityName=".home.HomeActivity" >
         </activity>
 
@@ -75,10 +76,10 @@
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyBY00f5kJiEtdmvp4LMjgAFR85DuHyRNzY" />
+            android:value="AIzaSyCFZ20LQndN88DTyMGKJtxfySnYYH3ltYs" />
         
         <!-- android:value="AIzaSyBY00f5kJiEtdmvp4LMjgAFR85DuHyRNzY" --><!-- Grando -->
-        <!-- android:value="AIzaSyCFZ20LQndN88DTyMGKJtxfySnYYH3ltYs" /> --><!-- Zanchin -->
+        <!-- android:value="AIzaSyCFZ20LQndN88DTyMGKJtxfySnYYH3ltYs" /> --><!-- Zanca -->
         
     </application>
 

@@ -20,6 +20,7 @@ public class Place {
 	public static final String tag_gallery = "gallery";
 	public static final String tag_distanza = "distance";
 	public static final String tag_tipo = "type";
+	public static final String tag_website = "website";
 	
 	public int id;
 	public String città;
@@ -32,6 +33,7 @@ public class Place {
 	public String tipo;
 	public String distanza;
 	public String urlImg;
+	public String website;
 	public ArrayList<String> gallery = new ArrayList<String>();
 	
 	public static Place decodeJSON(JSONObject obj) {
@@ -62,6 +64,8 @@ public class Place {
 			else
 				place.distanza = "";
 			place.tipo = obj.getString(tag_tipo);
+			if(obj.has(tag_website))
+				place.website = obj.getString(tag_website);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
