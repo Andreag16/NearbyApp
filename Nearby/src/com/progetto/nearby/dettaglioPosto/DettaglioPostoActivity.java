@@ -155,6 +155,7 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 					txtPhone.setText(place.telefono);
 					txtCitta.setText(place.città);
 					txtWebsite.setText(place.website);
+					txtIndirizzo.setText(place.indirizzo);
 					txtPhone.setOnClickListener(new OnClickListener() {
 						
 						@Override
