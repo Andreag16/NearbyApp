@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -37,7 +38,7 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 
 	public static final String ID_PLACE = "ID_PLACE";
 	
-	private LinearLayout scrollImages;
+	private LinearLayout scrollImages, infocitta, infowebsite;
 	private TextView txtNomePosto, txtdescrizione, txtPhone, txtCitta, txtIndirizzo, txtWebsite;
 	private FloatingActionButton btnMappa;
 	private RecyclerView rvofferte;
@@ -45,6 +46,7 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 	private OffertaAdapterRV adapter;
 	private AsyncHttpClient client;
 	private SmartImageView logo, image_detail;
+	private CardView cardviewgallery;
 	private int idPlace;
 	private Place place;
 	
@@ -70,7 +72,10 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 		txtIndirizzo = (TextView) findViewById(R.id.txtDetIndirizzo);
 		txtWebsite = (TextView) findViewById(R.id.txtDetwebsite);
 		btnMappa = (FloatingActionButton) findViewById(R.id.btnMappa);
+		infocitta = (LinearLayout) findViewById(R.id.llTown);
+		infowebsite = (LinearLayout) findViewById(R.id.llWebsite);
 		rvofferte = (RecyclerView) findViewById(R.id.rvoffertsplace);
+		cardviewgallery = (CardView) findViewById(R.id.cvgallery);
 		LinearLayoutManager llm = new LinearLayoutManager(DettaglioPostoActivity.this);
 		rvofferte.setLayoutManager(llm);
 		rvofferte.setSaveEnabled(false);
@@ -121,7 +126,10 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 				private void updateDetailGUI() {
 					// TODO Auto-generated method stub
 					getSupportActionBar().setTitle(place.nome);
-					logo.setImageUrl(place.gallery.get(0));
+					if(place.gallery.get(0).equals(""))
+						logo.setVisibility(View.GONE);
+					else
+						logo.setImageUrl(place.gallery.get(0));
 					if(place.gallery.size() > 1)
 					{
 						LinearLayout.LayoutParams imagesLayout = new LinearLayout.LayoutParams(
@@ -148,14 +156,25 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 						}
 					}
 					else
+					{
+						cardviewgallery.setVisibility(View.GONE);
 						scrollImages.setVisibility(View.GONE);
-				
+					}
 					txtNomePosto.setText(place.nome);
 					txtdescrizione.setText(place.description);
 					txtPhone.setText(place.telefono);
-					txtCitta.setText(place.città);
-					txtWebsite.setText(place.website);
-					txtIndirizzo.setText(place.indirizzo);
+					if(place.telefono.equals("") && place.indirizzo.equals(""))
+						infocitta.setVisibility(View.GONE);
+					else
+					{
+						txtCitta.setText(place.città);
+						txtIndirizzo.setText(place.indirizzo);
+					}
+					if(place.website.equals(""))
+						infowebsite.setVisibility(View.GONE);
+					else
+						txtWebsite.setText(place.website);
+					
 					txtPhone.setOnClickListener(new OnClickListener() {
 						
 						@Override
