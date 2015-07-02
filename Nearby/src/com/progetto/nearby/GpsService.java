@@ -27,7 +27,6 @@ import android.location.LocationManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.os.Vibrator;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -56,10 +55,6 @@ public class GpsService extends Service {
 	    
 		private HashSet<Integer> lstOfferteVicine = new HashSet<Integer>();
 		
-	    public OfferteLocationListener(String provider)
-	    {
-	        Log.w(TAG, "LocationListener " + provider);
-	    }
 	    @Override
 	    public void onLocationChanged(Location location)
 	    {
@@ -134,27 +129,15 @@ public class GpsService extends Service {
 		        .setAutoCancel(true)
 		        .build();
 		    
-		    Vibrator vibrator = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-		    vibrator.vibrate(500);
-		    
 		    mNotificationManager.notify(NOTIFICATION_ID, notification);
 	    }
 	    
 	    @Override
-	    public void onProviderDisabled(String provider)
-	    {
-	        Log.w(TAG, "onProviderDisabled: " + provider);
-	    }
+	    public void onProviderDisabled(String provider) { }
 	    @Override
-	    public void onProviderEnabled(String provider)
-	    {
-	        Log.w(TAG, "onProviderEnabled: " + provider);
-	    }
+	    public void onProviderEnabled(String provider) { }
 	    @Override
-	    public void onStatusChanged(String provider, int status, Bundle extras)
-	    {
-	        Log.w(TAG, "onStatusChanged: " + provider);
-	    }
+	    public void onStatusChanged(String provider, int status, Bundle extras) { }
 	} 
 	
 	
@@ -167,18 +150,16 @@ public class GpsService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId)
 	{
-	    Log.w(TAG, "onStartCommand");
 	    super.onStartCommand(intent, flags, startId);       
 	    return START_STICKY;
 	}
 	@Override
 	public void onCreate()
 	{
-	    Log.w(TAG, "onCreate");
 	    initializeLocationManager();
 	    
-	    registerLocationListener(new OfferteLocationListener(LocationManager.NETWORK_PROVIDER), LocationManager.NETWORK_PROVIDER);
-	    registerLocationListener(new OfferteLocationListener(LocationManager.GPS_PROVIDER), LocationManager.GPS_PROVIDER);
+	    registerLocationListener(new OfferteLocationListener(), LocationManager.NETWORK_PROVIDER);
+	    registerLocationListener(new OfferteLocationListener(), LocationManager.GPS_PROVIDER);
 	}
 	@Override
 	public void onDestroy()
@@ -190,7 +171,7 @@ public class GpsService extends Service {
 	    		try {
 	                mLocationManager.removeUpdates(listener);
 	            } catch (Exception ex) {
-	                Log.w(TAG, "fail to remove location listners, ignore", ex);
+	                ex.printStackTrace();
 	            }
 			}
 	    	mLocationListeners.clear();
@@ -232,9 +213,9 @@ public class GpsService extends Service {
 	        mLocationManager.requestLocationUpdates(provider, LOCATION_INTERVAL, LOCATION_DISTANCE, listener);
 	        mLocationListeners.add(listener);
 	    } catch (java.lang.SecurityException ex) {
-	        Log.w(TAG, "fail to request location update, ignore", ex);
+	        Log.w(TAG, "register fail", ex);
 	    } catch (IllegalArgumentException ex) {
-	        Log.w(TAG, "network provider does not exist, " + ex.getMessage());
+	        Log.w(TAG, "" + ex.getMessage());
 	    }
 	}
 	
