@@ -66,6 +66,8 @@ public class Place {
 			place.tipo = obj.getString(tag_tipo);
 			if(obj.has(tag_website))
 				place.website = obj.getString(tag_website);
+			else
+				place.website = "";
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
