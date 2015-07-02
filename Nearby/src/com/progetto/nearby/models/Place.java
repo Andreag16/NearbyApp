@@ -59,15 +59,17 @@ public class Place {
 						place.gallery.add(Tools.GET_IMAGE_URL + gallery.getString(i));
 				}
 			}
+			if(obj.has(tag_website))
+				place.website = obj.getString(tag_website);
+			else
+				place.website = "";
+			
 			if(obj.has(tag_distanza))
 				place.distanza = distance(obj.getDouble(tag_distanza));
 			else
 				place.distanza = "";
 			place.tipo = obj.getString(tag_tipo);
-			if(obj.has(tag_website))
-				place.website = obj.getString(tag_website);
-			else
-				place.website = "";
+			
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

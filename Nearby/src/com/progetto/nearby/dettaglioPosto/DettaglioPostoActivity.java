@@ -38,7 +38,7 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 	public static final String ID_PLACE = "ID_PLACE";
 	
 	private LinearLayout scrollImages;
-	private TextView txtdescrizione, txtPhone, txtCitta, txtIndirizzo, txtWebsite;
+	private TextView txtNomePosto, txtdescrizione, txtPhone, txtCitta, txtIndirizzo, txtWebsite;
 	private FloatingActionButton btnMappa;
 	private RecyclerView rvofferte;
 	private ArrayList<Offerta> offerte = new ArrayList<Offerta>();
@@ -61,9 +61,9 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 
 	private void setupGUI() {
 		// TODO Auto-generated method stub
-		//galleryPlace = (Gallery) findViewById(R.id.galleryPlace);
 		scrollImages = (LinearLayout) findViewById(R.id.images);
 		logo = (SmartImageView) findViewById(R.id.logo);
+		txtNomePosto = (TextView) findViewById(R.id.txtNomePosto);
 		txtdescrizione = (TextView) findViewById(R.id.txtDetDescr);
 		txtPhone = (TextView) findViewById(R.id.txtDetTelephone);
 		txtCitta = (TextView) findViewById(R.id.txtDetTown);
@@ -150,11 +150,22 @@ public class DettaglioPostoActivity extends AppCompatActivity {
 					else
 						scrollImages.setVisibility(View.GONE);
 				
+					txtNomePosto.setText(place.nome);
 					txtdescrizione.setText(place.description);
 					txtPhone.setText(place.telefono);
 					txtCitta.setText(place.città);
-					if(!(place.website.equals("")))
-						txtWebsite.setText(place.website);
+					txtWebsite.setText(place.website);
+					txtPhone.setOnClickListener(new OnClickListener() {
+						
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							Intent intent = new Intent(Intent.ACTION_CALL);
+			                String phone_no= txtPhone.getText().toString().trim();
+			                intent.setData(Uri.parse("tel:"+phone_no));
+			                startActivity(intent);
+						}
+					});
 					btnMappa.setOnClickListener(new OnClickListener() {
 						
 						@Override
